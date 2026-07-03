@@ -17,13 +17,20 @@
         background: rgba(255, 255, 255, 0.05);
         border-left: 3px solid #0d6efd; /* Azul corporativo */
     }
+
+    /* En tu app.blade.php o en un archivo CSS */
+@media (min-width: 768px) {
+    main {
+        margin-left: 260px; /* Igual al width del sidebar */
+    }
+}
 </style>
 
 @auth
     @if(auth()->user()->role === 'admin')
         <div class="modern-sidebar vh-100 position-fixed">
             <div class="p-4">
-                <h5 class="text-white fw-bold">ORION<span class="text-primary">.OS</span></h5>
+                <h5 class="text-white fw-bold">OLLIN<span class="text-primary">TEM</span></h5>
             </div>
             <nav class="nav flex-column mt-2">
                 <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
@@ -42,5 +49,23 @@
                 </form>
             </div>
         </div>
+        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary">
+    <i class="bi bi-moon-fill"></i>
+</button>
+
+<script>
+    const btn = document.getElementById('theme-toggle');
+    btn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        // Guardar preferencia en LocalStorage
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+    });
+
+    // Cargar preferencia al iniciar
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+</script>
     @endif
 @endauth

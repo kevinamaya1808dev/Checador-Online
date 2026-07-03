@@ -20,19 +20,37 @@
         .card-header { background-color: #212529 !important; border-bottom: 1px solid #3e444a !important; color: #ffffff; }
         .form-control { background-color: #1a1d21; border: 1px solid #4b5563; color: #ffffff; }
         .form-control:focus { border-color: #3b82f6; box-shadow: none; }
+
+        /* En tu app.blade.php o en un archivo CSS */
+@media (min-width: 768px) {
+    main {
+        margin-left: 260px; /* Igual al width del sidebar */
+    }
+}
     </style>
 </head>
 <body>
-    <div id="app" class="main-wrapper">
-        
-        @auth
-            @include('layouts.sidebar') 
-        @endauth
+    <div id="app" class="main-wrapper" style="display: flex;">
+    @auth
+        @include('layouts.sidebar')
+    @endauth
 
-        <main class="content-area">
-            @yield('content')
-        </main>
-        
-    </div>
+    <main class="content-area" style="flex: 1; min-width: 0; padding: 2rem;">
+        @yield('content')
+    </main>
+</div>
 </body>
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-bs-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-bs-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    }
+
+    // Cargar preferencia guardada
+    const savedTheme = localStorage.getItem('theme') || 'dark'; // 'dark' por defecto
+    document.documentElement.setAttribute('data-bs-theme', savedTheme);
+</script>
 </html>

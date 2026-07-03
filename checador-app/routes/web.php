@@ -7,9 +7,10 @@ use App\Http\Controllers\BecarioController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 
@@ -21,6 +22,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/exportar', [AdminController::class, 'exportarReporte'])->name('admin.exportar');
 });
+
+Route::put('/admin/user/{id}', [App\Http\Controllers\HomeController::class, 'update'])->name('users.update');
+
 
 Route::middleware(['auth', 'role:becario'])->group(function () {
     Route::get('/becario/dashboard', [BecarioController::class, 'index'])->name('becario.dashboard');   
@@ -38,10 +42,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 // Agrega esto en routes/web.php
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/login');
-})->name('logout');
+Route::post('/logout', function () { Auth::logout(); return redirect('/login'); })->name('logout');
 
 Route::post('/admin/becarios/store', [AdminController::class, 'storeBecario'])->name('admin.becarios.store');
 

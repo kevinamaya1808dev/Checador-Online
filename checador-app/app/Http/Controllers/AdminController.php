@@ -3,25 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function index() 
-    {
-        // Traemos las asistencias con el usuario relacionado para evitar errores de carga
-        $asistencias = Asistencia::with('user')->latest()->get();
-        
-        return view('admin.dashboard', compact('asistencias'));
-    }
+   public function index() 
+{
+    $hoy = now()->toDateString();
+    
+    // Cambiamos '->where' por '->latest()' para traer todo y que se vea bien
+    $asistencias = Asistencia::with(['user.pausas' => function($query) use ($hoy) {
+        $query->where('fecha', $hoy)->whereNull('fin_pausa');
+    }])->latest()->get(); // <-- 'latest()' trae todo ordenado por fecha
+
+    return view('admin.dashboard', compact('asistencias'));
+}
 
     public function storeBecario(Request $request) 
 {
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users',
-        'password' => 'required|min:8',
+        'password' => 'required|min:8|confirmed',
     ]);
 
     \App\Models\User::create([
@@ -53,6 +58,19 @@ public function exportarReporte()
         "Content-type" => "text/csv",
         "Content-Disposition" => "attachment; filename=$filename",
     ]);
+}
+
+public function update(Request $request, $id)
+{
+    $request->validate(['name' => 'required', 'role' => 'required']);
+    
+    $user = User::findOrFail($id);
+    $user->update([
+        'name' => $request->name,
+        'role' => $request->role,
+    ]);
+
+    return back()->with('success', 'Usuario actualizado con éxito.');
 }
 
 }
