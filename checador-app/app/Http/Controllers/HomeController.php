@@ -2,27 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
-        return view('home');
+        // Pasamos todos los usuarios a la vista
+        $usuarios = User::all();
+        return view('home', compact('usuarios'));
+    }
+
+    public function storeUser(Request $request)
+    {
+        $request->validate(['name' => 'required', 'email' => 'required|email|unique:users', 'password' => 'required|min:6']);
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
+        return back()->with('success', 'Usuario creado.');
+    }
+
+    public function deleteUser($id)
+    {
+        if ($id == 1) {
+        return back()->with('error', 'No puedes eliminar al administrador principal.');
+        }
+
+        User::findOrFail($id)->delete();
+        return back()->with('success', 'Usuario eliminado.');
+    }
+
+    public function toggleAdmin($id)
+    {
+        $user = User::findOrFail($id);
+        $user->role = ($user->role === 'admin') ? 'becario' : 'admin';
+        $user->save();
+        return back()->with('success', 'Permisos actualizados.');
     }
 }

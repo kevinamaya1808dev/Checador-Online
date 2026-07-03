@@ -4,8 +4,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BecarioController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,12 +19,15 @@ Route::post('/checar', [BecarioController::class, 'store'])->name('becario.checa
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/exportar', [AdminController::class, 'exportarReporte'])->name('admin.exportar');
 });
 
 Route::middleware(['auth', 'role:becario'])->group(function () {
     Route::get('/becario/dashboard', [BecarioController::class, 'index'])->name('becario.dashboard');   
-    Route::post('/asistencia/entrada', [AsistenciaController::class, 'registrarEntrada'])->name('asistencia.entrada');
-    Route::post('/asistencia/salida', [AsistenciaController::class, 'registrarSalida'])->name('asistencia.salida');
+    Route::post('/entrada', [BecarioController::class, 'registrarEntrada'])->name('becario.checar');
+    Route::post('/salida', [BecarioController::class, 'registrarSalida'])->name('becario.salida');
+    Route::post('/iniciar-pausa', [BecarioController::class, 'iniciarPausa'])->name('becario.iniciarPausa');
+    Route::post('/finalizar-pausa', [BecarioController::class, 'finalizarPausa'])->name('becario.finalizarPausa');
 });
 
 // Rutas de Login
@@ -40,3 +44,10 @@ Route::post('/logout', function () {
 })->name('logout');
 
 Route::post('/admin/becarios/store', [AdminController::class, 'storeBecario'])->name('admin.becarios.store');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::post('/home/user/store', [HomeController::class, 'storeUser'])->name('users.store');
+    Route::post('/home/user/toggle/{id}', [HomeController::class, 'toggleAdmin'])->name('users.toggle');
+    Route::delete('/home/user/{id}', [HomeController::class, 'deleteUser'])->name('users.delete');
+});

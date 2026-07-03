@@ -4,45 +4,51 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card bg-dark text-light border border-secondary shadow-lg">
-                <div class="card-header border-bottom border-secondary text-center py-4">
-                    <h4 class="mb-0 text-uppercase fw-bold">Panel de Asistencia</h4>
-                    <small class="text-secondary">{{ now()->format('d/m/Y') }}</small>
+            <div class="card bg-dark text-white border border-secondary shadow-lg">
+                <div class="card-header py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Control de Jornada</h4>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-box-arrow-right"></i> Salir
+                            </button>
+                        </form>
+                    </div>
                 </div>
-
+                
                 <div class="card-body p-4">
                     <div class="d-grid gap-3 mb-4">
                         <form action="{{ route('becario.checar') }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-outline-info w-100 btn-lg">Registrar Entrada</button>
+                            <button class="btn btn-outline-primary btn-lg w-100">REGISTRAR ENTRADA</button>
                         </form>
-                        
-                        <form action="{{ route('becario.checar') }}" method="POST">
+                        <form action="{{ route('becario.salida') }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-outline-warning w-100 btn-lg">Registrar Salida</button>
+                            <button class="btn btn-outline-warning btn-lg w-100">REGISTRAR SALIDA</button>
                         </form>
                     </div>
 
                     <hr class="border-secondary">
 
-                    <div class="mt-4">
-                        <button class="btn btn-outline-secondary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#pausaCollapse">
-                            <i class="bi bi-cup-hot"></i> Pausa de Descanso
-                        </button>
-
-                        <div class="collapse mt-3" id="pausaCollapse">
-                            <div class="card card-body bg-secondary text-white border-0">
-                                <form action="#" method="POST">
-                                    <label class="mb-2">Motivo de la pausa:</label>
-                                    <select class="form-select bg-dark text-white border-0 mb-3" name="motivo">
-                                        <option value="almuerzo">Almuerzo</option>
-                                        <option value="personal">Asuntos Personales</option>
-                                        <option value="reunion">Reunión de Emergencia</option>
-                                    </select>
-                                    <button type="submit" class="btn btn-primary w-100">Iniciar Pausa</button>
-                                </form>
-                            </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#pausaMenu">INICIAR PAUSA</button>
+                        
+                        <div class="collapse" id="pausaMenu">
+                            <form action="{{ route('becario.iniciarPausa') }}" method="POST" class="mt-2">
+                                @csrf
+                                <select name="motivo" class="form-select bg-dark text-white mb-2">
+                                    <option value="Almuerzo">Almuerzo</option>
+                                    <option value="Personal">Personal</option>
+                                </select>
+                                <button class="btn btn-primary w-100">CONFIRMAR PAUSA</button>
+                            </form>
                         </div>
+
+                        <form action="{{ route('becario.finalizarPausa') }}" method="POST">
+                            @csrf
+                            <button class="btn btn-outline-success w-100">FINALIZAR PAUSA</button>
+                        </form>
                     </div>
                 </div>
             </div>

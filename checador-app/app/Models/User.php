@@ -22,4 +22,7 @@ class User extends Authenticatable
     }
 
     public function asistencias() { return $this->hasMany(Asistencia::class); }
+    
+    public function pausas() {return $this->hasMany(Pausa::class);
+}
 }

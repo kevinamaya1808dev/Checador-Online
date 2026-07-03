@@ -14,8 +14,8 @@ return new class extends Migration
     Schema::create('asistencias', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->timestamp('hora_entrada')->nullable();
-        $table->timestamp('hora_salida')->nullable();
+        $table->time('hora_entrada')->nullable();
+        $table->time('hora_salida')->nullable();
         $table->date('fecha');
         $table->timestamps();
     });

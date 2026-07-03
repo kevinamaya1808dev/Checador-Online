@@ -11,12 +11,17 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nombre Completo</label>
-                        <input type="text" name="name" class="form-control bg-dark text-white border-secondary" required>
+                        <input type="text" name="name" id="nombre_becario" class="form-control bg-dark text-white border-secondary" 
+                               onkeyup="generarEmailAuto()" required>
                     </div>
+
                     <div class="mb-3">
-                        <label class="form-label">Correo Electrónico</label>
-                        <input type="email" name="email" class="form-control bg-dark text-white border-secondary" required>
+                        <label class="form-label">Correo Corporativo</label>
+                        <input type="email" name="email" id="email_corporativo" class="form-control bg-dark text-white border-secondary" 
+                               readonly required>
+                        <small class="text-secondary">El correo se genera automáticamente.</small>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label">Contraseña Temporal</label>
                         <input type="password" name="password" class="form-control bg-dark text-white border-secondary" required>
@@ -31,3 +36,12 @@
         </div>
     </div>
 </div>
+
+<script>
+function generarEmailAuto() {
+    let nombre = document.getElementById('nombre_becario').value;
+    // Convierte a minúsculas, quita espacios y agrega el dominio
+    let email = nombre.toLowerCase().replace(/\s+/g, '.');
+    document.getElementById('email_corporativo').value = email + "@empresa.com";
+}
+</script>

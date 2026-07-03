@@ -5,10 +5,13 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-white fw-bold">Panel de Control: Asistencias</h2>
         <div class="d-flex gap-2">
+            <!-- Botón para abrir el modal -->
             <button type="button" class="btn btn-outline-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#modalRegistrarBecario">
                 <i class="bi bi-person-plus"></i> + Nuevo Becario
             </button>
-            <a href="#" class="btn btn-primary shadow-sm">
+            
+            <!-- Botón de Exportar (Asegúrate de tener esta ruta en web.php) -->
+            <a href="{{ route('admin.exportar') }}" class="btn btn-primary shadow-sm">
                 <i class="bi bi-file-earmark-arrow-down"></i> Exportar Reporte
             </a>
         </div>
@@ -25,7 +28,7 @@
                             <th>Entrada</th>
                             <th>Salida</th>
                             <th>Estado</th>
-                            <th class="text-end pe-4">Acciones</th>
+                            <!-- Acciones eliminadas de aquí -->
                         </tr>
                     </thead>
                     <tbody>
@@ -33,8 +36,10 @@
                         <tr>
                             <td class="ps-4 fw-bold">{{ $a->user->name }}</td>
                             <td class="text-muted">{{ $a->fecha }}</td>
-                            <td>{{ $a->hora_entrada ? \Carbon\Carbon::parse($a->hora_entrada)->format('H:i') : '--:--' }}</td>
-                            <td>{{ $a->hora_salida ? \Carbon\Carbon::parse($a->hora_salida)->format('H:i') : 'Pendiente' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($a->hora_entrada)->format('h:i A') }}</td>
+                            <td>
+                                {{ $a->hora_salida ? \Carbon\Carbon::parse($a->hora_salida)->format('h:i A') : 'No ha salido' }}
+                            </td>
                             <td>
                                 @if($a->hora_salida)
                                     <span class="badge bg-success">Completado</span>
@@ -42,10 +47,7 @@
                                     <span class="badge bg-warning text-dark">Activo</span>
                                 @endif
                             </td>
-                            <td class="text-end pe-4">
-                                <button class="btn btn-sm btn-outline-info me-2">Editar</button>
-                                <button class="btn btn-sm btn-outline-danger">Eliminar</button>
-                            </td>
+                            <!-- Celda de acciones eliminada para mantener diseño limpio -->
                         </tr>
                         @endforeach
                     </tbody>
@@ -56,5 +58,4 @@
 </div>
 
 @include('admin.modals.registrar-becario')
-
 @endsection
