@@ -13,5 +13,6 @@
 /* Esto le dice a Tailwind que busque la clase .dark en el HTML */
 @custom-variant dark (&:where(.dark, .dark *));
 
+
 }
 

@@ -31,7 +31,6 @@
                                 <span class="input-group-text bg-secondary text-white border-secondary">@ollintem.com.mx</span>
                             </div>
                             <input type="hidden" name="email" id="email_corporativo">
-                            <small class="text-secondary">Se genera automáticamente.</small>
                         </div>
                     </div>
                     <div class="mb-3">

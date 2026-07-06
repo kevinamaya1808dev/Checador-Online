@@ -28,7 +28,8 @@
 
 @auth
     @if(auth()->user()->role === 'admin')
-        <div class="modern-sidebar vh-100 position-fixed">
+        <div class="modern-sidebar vh-100 position-fixed transition-all duration-300" x-show="sidebarOpen">
+
             <div class="p-4">
                 <h5 class="text-white fw-bold">OLLIN<span class="text-primary">CHECK</span></h5>
             </div>

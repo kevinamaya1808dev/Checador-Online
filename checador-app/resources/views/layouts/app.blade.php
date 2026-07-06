@@ -27,37 +27,32 @@
         margin-left: 260px; /* Igual al width del sidebar */
     }
 }
+    
+
     </style>
 </head>
-<body>
-    <div id="app" class="main-wrapper" style="display: flex;">
-    @auth
-        @include('layouts.sidebar')
-    @endauth
+<body x-data="{ sidebarOpen: true }">
 
-    <main class="content-area" style="flex: 1; min-width: 0; padding: 2rem;">
-        @yield('content')
-    </main>
-</div>
-</body>
+    <div id="app" class="main-wrapper" style="display: flex;">
+        
+       @auth
+    @if(auth()->user()->role === 'admin')
+        <div x-show="sidebarOpen" class="sidebar-wrapper">
+            @include('layouts.sidebar')
+        </div>
+    @endif
+@endauth
+
+      <main
+    class="content-area flex-grow-1 {{ auth()->check() && auth()->user()->role === 'admin' ? 'p-4' : 'p-0' }}"
+    style="
+        min-width:0;
+        {{ auth()->check() && auth()->user()->role === 'admin' ? 'margin-left:260px;' : 'margin-left:0;' }}
+    "
+>
+            @yield('content')
+        </main>
+    </div>
+</body> 
 </html>
 
-<script>
-    // Función para alternar el tema
-    function toggleTheme() {
-        if (document.documentElement.classList.contains('dark')) {
-            document.documentElement.classList.remove('dark');
-            localStorage.theme = 'light';
-        } else {
-            document.documentElement.classList.add('dark');
-            localStorage.theme = 'dark';
-        }
-    }
-
-    // Aplicar el tema guardado al cargar la página
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark')
-    } else {
-        document.documentElement.classList.remove('dark')
-    }
-</script>
