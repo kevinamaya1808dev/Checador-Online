@@ -30,7 +30,7 @@
     @if(auth()->user()->role === 'admin')
         <div class="modern-sidebar vh-100 position-fixed">
             <div class="p-4">
-                <h5 class="text-white fw-bold">OLLIN<span class="text-primary">TEM</span></h5>
+                <h5 class="text-white fw-bold">OLLIN<span class="text-primary">CHECK</span></h5>
             </div>
             <nav class="nav flex-column mt-2">
                 <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
@@ -49,7 +49,9 @@
                 </form>
             </div>
         </div>
-        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary">
+
+       
+       
     <i class="bi bi-moon-fill"></i>
 </button>
 

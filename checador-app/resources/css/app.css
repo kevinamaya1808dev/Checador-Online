@@ -7,4 +7,11 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
         /* resources/sass/app.scss */
+        
+        @import "tailwindcss";
+
+/* Esto le dice a Tailwind que busque la clase .dark en el HTML */
+@custom-variant dark (&:where(.dark, .dark *));
+
 }
+

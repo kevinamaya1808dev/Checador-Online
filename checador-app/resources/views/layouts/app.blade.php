@@ -40,17 +40,24 @@
     </main>
 </div>
 </body>
+</html>
+
 <script>
+    // Función para alternar el tema
     function toggleTheme() {
-        const html = document.documentElement;
-        const currentTheme = html.getAttribute('data-bs-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        html.setAttribute('data-bs-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        if (document.documentElement.classList.contains('dark')) {
+            document.documentElement.classList.remove('dark');
+            localStorage.theme = 'light';
+        } else {
+            document.documentElement.classList.add('dark');
+            localStorage.theme = 'dark';
+        }
     }
 
-    // Cargar preferencia guardada
-    const savedTheme = localStorage.getItem('theme') || 'dark'; // 'dark' por defecto
-    document.documentElement.setAttribute('data-bs-theme', savedTheme);
+    // Aplicar el tema guardado al cargar la página
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
 </script>
-</html>
