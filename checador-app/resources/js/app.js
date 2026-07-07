@@ -1,4 +1,8 @@
 import './bootstrap';
+
+import './dashboard-clock';
+import './dashboard-timers';
+import './dashboard';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 import { initTheme, toggleTheme } from './theme-switcher';

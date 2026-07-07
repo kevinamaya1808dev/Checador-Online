@@ -5,6 +5,7 @@ use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BecarioController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 ;
@@ -52,3 +53,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/home/user/toggle/{id}', [HomeController::class, 'toggleAdmin'])->name('users.toggle');
     Route::delete('/home/user/{id}', [HomeController::class, 'deleteUser'])->name('users.delete');
 });
+
