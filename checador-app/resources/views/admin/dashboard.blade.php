@@ -59,15 +59,22 @@
             </span>
         </td>
         <td class="py-3">
-            <span class="badge rounded-pill text-bg-warning bg-opacity-25 text-warning px-3 py-2">
-                <i class="bi bi-cup-hot me-1"></i>--
-            </span>
-        </td>
+    <span class="badge rounded-pill text-bg-warning bg-opacity-25 text-warning px-3 py-2">
+        <i class="bi bi-cup-hot me-1"></i>
+
+        {{ $a->tiempoPausas() }}
+
+    </span>
+</td>
         <td class="py-3">
-            <span class="badge rounded-pill text-bg-info bg-opacity-25 text-info px-3 py-2">
-                <i class="bi bi-stopwatch me-1"></i>--
-            </span>
-        </td>
+    <span class="badge rounded-pill text-bg-info bg-opacity-25 text-info px-3 py-2">
+
+        <i class="bi bi-stopwatch me-1"></i>
+
+        {{ $a->formatoTiempo($a->tiempoTrabajado()) }}
+
+    </span>
+</td>
         <td class="py-3">
             @if($a->hora_salida)
                 <span class="badge rounded-pill text-bg-secondary px-3 py-2">Turno terminado</span>
