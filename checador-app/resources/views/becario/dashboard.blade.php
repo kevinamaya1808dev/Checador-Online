@@ -263,27 +263,85 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('becario.finalizarPausa') }}" method="POST" class="m-0">
-                        @csrf
-                        <button type="submit" class="btn-reset accion-item accion-blue" @disabled(!$puedeReanudar)>
-                            <span class="accion-icon"><i class="bi bi-play-fill"></i></span>
-                            <span>
-                                <span class="d-block fw-bold accion-title">Finalizar pausa</span>
-                                <span class="d-block small text-secondary">Reanuda tus actividades</span>
-                            </span>
-                        </button>
-                    </form>
+                    <form
+    id="formFinalizarPausa"
+    action="{{ route('becario.finalizarPausa') }}"
+    method="POST"
+    class="m-0">
 
-                    <form action="{{ route('becario.salida') }}" method="POST" class="m-0">
-                        @csrf
-                        <button type="submit" class="btn-reset accion-item accion-red" @disabled(!$puedeSalir)>
-                            <span class="accion-icon"><i class="bi bi-box-arrow-left"></i></span>
-                            <span>
-                                <span class="d-block fw-bold accion-title">Registrar salida</span>
-                                <span class="d-block small text-secondary">Finaliza tu turno</span>
-                            </span>
-                        </button>
-                    </form>
+    @csrf
+
+    <button
+        type="button"
+        class="btn-reset accion-item accion-blue"
+        data-bs-toggle="modal"
+        data-bs-target="#modalFinalizarPausa"
+        @disabled(!$puedeReanudar)>
+
+        <span class="accion-icon">
+            <i class="bi bi-play-fill"></i>
+        </span>
+
+        <span>
+
+            <span class="d-block fw-bold accion-title">
+
+                Finalizar pausa
+
+            </span>
+
+            <span class="d-block small text-secondary">
+
+                Reanuda tus actividades
+
+            </span>
+
+        </span>
+
+    </button>
+
+</form>
+
+                    <form
+    id="formSalida"
+    action="{{ route('becario.salida') }}"
+    method="POST"
+    class="m-0">
+
+    @csrf
+
+    <button
+        type="button"
+        class="btn-reset accion-item accion-red"
+        data-bs-toggle="modal"
+        data-bs-target="#modalSalida"
+        @disabled(!$puedeSalir)>
+
+        <span class="accion-icon">
+
+            <i class="bi bi-box-arrow-left"></i>
+
+        </span>
+
+        <span>
+
+            <span class="d-block fw-bold accion-title">
+
+                Registrar salida
+
+            </span>
+
+            <span class="d-block small text-secondary">
+
+                Finaliza tu turno
+
+            </span>
+
+        </span>
+
+    </button>
+
+</form>
 
                 </div>
 
@@ -299,6 +357,10 @@
 
     </div>
 </div>
+
+{{-- Modals --}}
+@include('becario.modals.confirmar_descanso')
+@include('becario.modals.finalizar_turno')
 
 <script>
     // Datos reales del backend para calcular los tiempos en vivo.
@@ -396,6 +458,33 @@
             actualizarReloj();
             calcularTiempos();
         }, 1000);
+
+        // Confirmar finalizar pausa
+const btnConfirmarPausa = document.getElementById('confirmarFinalizarPausa');
+
+if (btnConfirmarPausa) {
+
+    btnConfirmarPausa.addEventListener('click', () => {
+
+        document.getElementById('formFinalizarPausa').submit();
+
+    });
+
+}
+
+// Confirmar salida
+const btnConfirmarSalida = document.getElementById('confirmarSalida');
+
+if (btnConfirmarSalida) {
+
+    btnConfirmarSalida.addEventListener('click', () => {
+
+        document.getElementById('formSalida').submit();
+
+    });
+
+}
     });
 </script>
+
 @endsection
