@@ -3,7 +3,7 @@
 @section('content')
 <style>
     body {
-        background-color: #020617; /* slate-950, igual que antes */
+        background-color: #020617; /* slate-950 */
     }
 
     .glass-card {
@@ -46,7 +46,7 @@
     .hand-hour { width: 6px; height: 60px; margin-left: -3px; background: linear-gradient(#2563eb, #93c5fd); z-index: 2; }
     .hand-min  { width: 4px; height: 88px; margin-left: -2px; background: linear-gradient(#22d3ee, #fff); z-index: 3; }
 
-    /* --- Botones de acción (mismos <form>, solo vestidos distinto) --- */
+    /* --- Botones de acción --- */
     .btn-reset {
         background: none; border: none; padding: 0; margin: 0;
         text-align: left; width: 100%; color: inherit; font: inherit; cursor: pointer;
@@ -56,9 +56,16 @@
         border-radius: 14px; padding: 1rem;
         border: 1px solid rgba(255,255,255,.08);
         background: rgba(15, 23, 42, 0.6);
-        transition: transform .2s ease, background .2s ease;
+        transition: transform .2s ease, background .2s ease, opacity .2s ease;
     }
     .accion-item:hover { transform: translateY(-3px); }
+    .accion-item:disabled,
+    .accion-item[disabled] {
+        opacity: .3;
+        cursor: not-allowed;
+        pointer-events: none;
+        transform: none;
+    }
     .accion-icon {
         width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
         display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #fff;
@@ -74,7 +81,60 @@
     .accion-red   { border-color: rgba(239,68,68,.4); }
     .accion-red .accion-icon { background: #dc2626; box-shadow: 0 0 15px rgba(185,28,28,.5); }
     .accion-red .accion-title { color: #fca5a5; }
+
+    /* --- Notificaciones toast --- */
+    .toast-container { z-index: 1090; }
+    .toast {
+        border-radius: 14px;
+        overflow: hidden;
+        min-width: 280px;
+    }
 </style>
+
+@php
+    // $estado esperado desde el controlador: 'inactivo' | 'trabajando' | 'pausado' | 'terminado'
+    $estadoRaw = $estado ?? null;
+    $estado    = $estadoRaw ?? 'inactivo';
+    $gating    = ! is_null($estadoRaw); // solo bloqueamos botones cuando el backend ya manda el estado real
+
+    $estadoInfo = [
+        'inactivo'   => ['label' => 'Esperando turno',  'desc' => 'Aún no has registrado tu entrada.',   'color' => 'secondary', 'icon' => 'bi-hourglass-split'],
+        'trabajando' => ['label' => 'Trabajando',        'desc' => 'Tu turno está activo.',                'color' => 'success',   'icon' => 'bi-briefcase-fill'],
+        'pausado'    => ['label' => 'En pausa',          'desc' => 'Descanso en curso.',                   'color' => 'warning',   'icon' => 'bi-cup-hot'],
+        'terminado'  => ['label' => 'Turno finalizado',  'desc' => 'Registro guardado correctamente.',     'color' => 'danger',    'icon' => 'bi-flag-fill'],
+    ][$estado] ?? ['label' => ucfirst($estado), 'desc' => '', 'color' => 'secondary', 'icon' => 'bi-question-circle'];
+
+    $puedeEntrada  = ! $gating || $estado === 'inactivo';
+    $puedePausar   = ! $gating || $estado === 'trabajando';
+    $puedeReanudar = ! $gating || $estado === 'pausado';
+    $puedeSalir = ! $gating || $estado === 'trabajando';
+@endphp
+
+{{-- NOTIFICACIONES: aparecen a un costado y se autodestruyen a los 3s --}}
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    @if (session('success'))
+        <div class="toast text-white glass-card border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex align-items-center">
+                <div class="toast-body d-flex align-items-center gap-2">
+                    <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                    {{ session('success') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-3" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="toast text-white glass-card border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex align-items-center">
+                <div class="toast-body d-flex align-items-center gap-2">
+                    <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
+                    {{ session('error') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-3" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+        </div>
+    @endif
+</div>
 
 <div class="container-xxl py-4 px-3 px-md-4 text-white">
 
@@ -99,18 +159,6 @@
             </form>
         </div>
     </div>
-
-    {{-- MENSAJES DE SESIÓN (si tu controlador los envía, se muestran; si no, no aparece nada) --}}
-    @if (session('success'))
-        <div class="alert glass-card border-0 text-success mb-4" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="alert glass-card border-0 text-danger mb-4" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ session('error') }}
-        </div>
-    @endif
 
     <div class="row g-4">
 
@@ -138,12 +186,12 @@
                 <div class="glass-soft mt-4 p-3 d-flex justify-content-between align-items-center">
                     <div>
                         <p class="text-uppercase text-secondary mb-1" style="letter-spacing:1px; font-size:.7rem;">Estado actual</p>
-                        <p class="fw-bold fs-5 mb-0 text-success">
-                            <i class="bi bi-circle-fill me-1" style="font-size:.55rem;"></i>{{ $estadoActual ?? 'Activo' }}
+                        <p class="fw-bold fs-5 mb-0 text-{{ $estadoInfo['color'] }}">
+                            <i class="bi bi-circle-fill me-1" style="font-size:.55rem;"></i>{{ $estadoInfo['label'] }}
                         </p>
-                        <p class="text-secondary small mb-0">{{ $estadoDescripcion ?? 'Usa las acciones de la derecha para registrar tu jornada.' }}</p>
+                        <p class="text-secondary small mb-0">{{ $estadoInfo['desc'] }}</p>
                     </div>
-                    <i class="bi bi-briefcase-fill fs-2 text-success opacity-75"></i>
+                    <i class="bi {{ $estadoInfo['icon'] }} fs-2 text-{{ $estadoInfo['color'] }} opacity-75"></i>
                 </div>
 
                 <div class="row g-3 mt-1">
@@ -152,7 +200,7 @@
                             <i class="bi bi-clock fs-4 text-success"></i>
                             <div>
                                 <p class="text-uppercase text-secondary mb-0" style="font-size:.65rem; letter-spacing:1px;">Tiempo trabajado</p>
-                                <p class="fw-bold font-monospace fs-5 mb-0">{{ $tiempoTrabajado ?? '00:00:00' }}</p>
+                                <p class="fw-bold font-monospace fs-5 mb-0" id="tiempoTrabajado">00:00:00</p>
                             </div>
                         </div>
                     </div>
@@ -161,7 +209,7 @@
                             <i class="bi bi-cup-hot fs-4 text-warning"></i>
                             <div>
                                 <p class="text-uppercase text-secondary mb-0" style="font-size:.65rem; letter-spacing:1px;">Tiempo en pausa</p>
-                                <p class="fw-bold font-monospace fs-5 mb-0">{{ $tiempoPausa ?? '00:00:00' }}</p>
+                                <p class="fw-bold font-monospace fs-5 mb-0" id="tiempoPausa">00:00:00</p>
                             </div>
                         </div>
                     </div>
@@ -170,7 +218,7 @@
             </div>
         </div>
 
-        {{-- DERECHA: ACCIONES (mismos forms/rutas que tu código) --}}
+        {{-- DERECHA: ACCIONES --}}
         <div class="col-lg-5">
             <div class="glass-card p-4 h-100 d-flex flex-column">
                 <p class="text-uppercase text-secondary fw-bold mb-3" style="letter-spacing:2px; font-size:.75rem;">Acciones</p>
@@ -179,7 +227,7 @@
 
                     <form action="{{ route('becario.checar') }}" method="POST" class="m-0">
                         @csrf
-                        <button type="submit" class="btn-reset accion-item accion-blue">
+                        <button type="submit" class="btn-reset accion-item accion-blue" @disabled(!$puedeEntrada)>
                             <span class="accion-icon"><i class="bi bi-box-arrow-in-right"></i></span>
                             <span>
                                 <span class="d-block fw-bold accion-title">Registrar entrada</span>
@@ -189,7 +237,7 @@
                     </form>
 
                     <div>
-                        <button type="button" class="btn-reset accion-item accion-amber" data-bs-toggle="collapse" data-bs-target="#pausaMenu">
+                        <button type="button" class="btn-reset accion-item accion-amber" data-bs-toggle="collapse" data-bs-target="#pausaMenu" @disabled(!$puedePausar)>
                             <span class="accion-icon"><i class="bi bi-cup-hot"></i></span>
                             <span>
                                 <span class="d-block fw-bold accion-title">Gestionar pausa</span>
@@ -208,7 +256,7 @@
                                     <option value="Almuerzo">Almuerzo</option>
                                     <option value="Personal">Personal</option>
                                 </select>
-                                <button type="submit" class="btn btn-warning btn-sm w-100 fw-bold text-uppercase">
+                                <button type="submit" class="btn btn-warning btn-sm w-100 fw-bold text-uppercase" @disabled(!$puedePausar)>
                                     Iniciar ahora
                                 </button>
                             </form>
@@ -217,7 +265,7 @@
 
                     <form action="{{ route('becario.finalizarPausa') }}" method="POST" class="m-0">
                         @csrf
-                        <button type="submit" class="btn-reset accion-item accion-blue">
+                        <button type="submit" class="btn-reset accion-item accion-blue" @disabled(!$puedeReanudar)>
                             <span class="accion-icon"><i class="bi bi-play-fill"></i></span>
                             <span>
                                 <span class="d-block fw-bold accion-title">Finalizar pausa</span>
@@ -228,7 +276,7 @@
 
                     <form action="{{ route('becario.salida') }}" method="POST" class="m-0">
                         @csrf
-                        <button type="submit" class="btn-reset accion-item accion-red">
+                        <button type="submit" class="btn-reset accion-item accion-red" @disabled(!$puedeSalir)>
                             <span class="accion-icon"><i class="bi bi-box-arrow-left"></i></span>
                             <span>
                                 <span class="d-block fw-bold accion-title">Registrar salida</span>
@@ -253,34 +301,101 @@
 </div>
 
 <script>
-    // Solo visual: mueve el reloj analógico/digital a la hora real.
-    // No depende de Alpine ni de nada del backend, así que no afecta tus formularios.
-    function actualizarRelojChecador() {
-        const ahora = new Date();
-        const horas = ahora.getHours();
-        const minutos = ahora.getMinutes();
-        const segundos = ahora.getSeconds();
+    // Datos reales del backend para calcular los tiempos en vivo.
+    // Si tu controlador aún no los envía, todo cae a valores por defecto sin romper nada.
+    window.checadorConfig = {
+        estado: @json($estado),
+        horaEntrada: @json($horaEntrada ?? null),
+        pausaInicio: @json($pausaInicio ?? null),
+        horaSalida: @json($horaSalida ?? null),
+        segundosPausaAcumulados: {{ (int) ($segundosPausaAcumulados ?? 0) }}
+    };
 
-        const gradosHora = (horas % 12) * 30 + minutos * 0.5;
-        const gradosMin = minutos * 6;
+    document.addEventListener('DOMContentLoaded', () => {
 
-        const manecillaHora = document.getElementById('reloj-hora');
-        const manecillaMin = document.getElementById('reloj-min');
-        if (manecillaHora) manecillaHora.style.transform = `rotate(${gradosHora}deg)`;
-        if (manecillaMin) manecillaMin.style.transform = `rotate(${gradosMin}deg)`;
+        // --- Notificaciones: se muestran solas y desaparecen a los 3s ---
+        document.querySelectorAll('.toast').forEach((toastEl) => {
+            const toast = new bootstrap.Toast(toastEl, { delay: 3000, autohide: true });
+            toast.show();
+        });
 
-        const digital = document.getElementById('reloj-digital');
-        if (digital) {
-            digital.textContent = [horas, minutos, segundos].map(n => String(n).padStart(2, '0')).join(':');
+        // --- Reloj analógico + digital, formato 12h con AM/PM ---
+        function actualizarReloj() {
+            const ahora = new Date();
+            const horas24 = ahora.getHours();
+            const minutos = ahora.getMinutes();
+            const segundos = ahora.getSeconds();
+
+            const gradosHora = (horas24 % 12) * 30 + minutos * 0.5;
+            const gradosMin = minutos * 6;
+
+            const manecillaHora = document.getElementById('reloj-hora');
+            const manecillaMin = document.getElementById('reloj-min');
+            if (manecillaHora) manecillaHora.style.transform = `rotate(${gradosHora}deg)`;
+            if (manecillaMin) manecillaMin.style.transform = `rotate(${gradosMin}deg)`;
+
+            let horas12 = horas24 % 12;
+            horas12 = horas12 === 0 ? 12 : horas12;
+            const meridiano = horas24 >= 12 ? 'PM' : 'AM';
+
+            const digital = document.getElementById('reloj-digital');
+            if (digital) {
+                digital.innerHTML = `${String(horas12).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')} <span class="fs-6 text-primary">${meridiano}</span>`;
+            }
+
+            const fecha = document.getElementById('reloj-fecha');
+            if (fecha) {
+                fecha.textContent = ahora.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            }
         }
 
-        const fecha = document.getElementById('reloj-fecha');
-        if (fecha) {
-            fecha.textContent = ahora.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        // --- Tiempos de trabajo / pausa en vivo, a partir de timestamps reales ---
+        function formatearDuracion(totalSegundos) {
+            const h = String(Math.floor(totalSegundos / 3600)).padStart(2, '0');
+            const m = String(Math.floor((totalSegundos % 3600) / 60)).padStart(2, '0');
+            const s = String(Math.floor(totalSegundos % 60)).padStart(2, '0');
+            return `${h}:${m}:${s}`;
         }
-    }
 
-    actualizarRelojChecador();
-    setInterval(actualizarRelojChecador, 1000);
+        function calcularTiempos() {
+            const cfg = window.checadorConfig || {};
+            const ahora = Date.now();
+            let segundosTrabajados = 0;
+            let segundosPausados = Number(cfg.segundosPausaAcumulados) || 0;
+
+            const inicio = cfg.horaEntrada ? new Date(cfg.horaEntrada).getTime() : null;
+
+            if (inicio && !isNaN(inicio)) {
+                if (cfg.estado === 'pausado' && cfg.pausaInicio) {
+                    const pausaInicio = new Date(cfg.pausaInicio).getTime();
+                    if (!isNaN(pausaInicio)) {
+                        segundosTrabajados = Math.floor((pausaInicio - inicio) / 1000) - segundosPausados;
+                        segundosPausados += Math.floor((ahora - pausaInicio) / 1000);
+                    }
+                } else if (cfg.estado === 'terminado') {
+                    const finRaw = cfg.horaSalida ? new Date(cfg.horaSalida).getTime() : ahora;
+                    const fin = isNaN(finRaw) ? ahora : finRaw;
+                    segundosTrabajados = Math.floor((fin - inicio) / 1000) - segundosPausados;
+                } else if (cfg.estado === 'trabajando') {
+                    segundosTrabajados = Math.floor((ahora - inicio) / 1000) - segundosPausados;
+                }
+            }
+
+            segundosTrabajados = Math.max(0, segundosTrabajados || 0);
+            segundosPausados = Math.max(0, segundosPausados || 0);
+
+            const elTrabajado = document.getElementById('tiempoTrabajado');
+            const elPausa = document.getElementById('tiempoPausa');
+            if (elTrabajado) elTrabajado.textContent = formatearDuracion(segundosTrabajados);
+            if (elPausa) elPausa.textContent = formatearDuracion(segundosPausados);
+        }
+
+        actualizarReloj();
+        calcularTiempos();
+        setInterval(() => {
+            actualizarReloj();
+            calcularTiempos();
+        }, 1000);
+    });
 </script>
 @endsection

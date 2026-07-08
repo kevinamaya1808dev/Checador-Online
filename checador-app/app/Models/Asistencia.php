@@ -25,50 +25,35 @@ class Asistencia extends Model
 
     // Tiempo trabajado quitando pausas
     public function tiempoTrabajado()
-    {
+{
+    if (!$this->hora_entrada) {
+        return 0;
+    }
 
-        if(!$this->hora_entrada){
-            return 0;
-        }
+    $entrada = \Carbon\Carbon::parse($this->hora_entrada);
 
+    $salida = $this->hora_salida
+        ? \Carbon\Carbon::parse($this->hora_salida)
+        : now();
 
-        $entrada = Carbon::parse($this->hora_entrada);
+    $trabajado = $entrada->diffInSeconds($salida);
 
+    $pausas = 0;
 
-        $salida = $this->hora_salida
-            ? Carbon::parse($this->hora_salida)
+    foreach ($this->pausas as $pausa) {
+
+        $inicio = \Carbon\Carbon::parse($pausa->inicio_pausa);
+
+        $fin = $pausa->fin_pausa
+            ? \Carbon\Carbon::parse($pausa->fin_pausa)
             : now();
 
-
-
-        $tiempoTotal = $entrada->diffInSeconds($salida);
-
-
-
-        $pausas = Pausa::where('user_id',$this->user_id)
-            ->where('fecha',$this->fecha)
-            ->get();
-
-
-
-        $tiempoPausas = 0;
-
-
-        foreach($pausas as $pausa){
-
-            $tiempoPausas += $pausa->duracion();
-
-        }
-
-
-
-        $trabajado = $tiempoTotal - $tiempoPausas;
-
-
-
-        return max($trabajado,0);
+        $pausas += $inicio->diffInSeconds($fin);
 
     }
+
+    return max(0, $trabajado - $pausas);
+}
 
 
 
@@ -84,25 +69,32 @@ class Asistencia extends Model
 
 
     public function tiempoPausas()
-    {
+{
+    $segundos = 0;
 
-        $pausas = Pausa::where('user_id',$this->user_id)
-        ->where('fecha',$this->fecha)
-        ->get();
+    foreach ($this->pausas as $pausa) {
 
+        $inicio = \Carbon\Carbon::parse($pausa->inicio_pausa);
 
-        $total = 0;
+        if ($pausa->fin_pausa) {
 
+            $fin = \Carbon\Carbon::parse($pausa->fin_pausa);
 
-        foreach($pausas as $pausa){
+        } else {
 
-            $total += $pausa->duracion();
+            $fin = now();
 
         }
 
-
-        return $this->formatoTiempo($total);
-
+        $segundos += $inicio->diffInSeconds($fin);
     }
+
+    return $this->formatoTiempo($segundos);
+}
+public function pausas()
+{
+    return $this->hasMany(Pausa::class);
+}
+
 
 }

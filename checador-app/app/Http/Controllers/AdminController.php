@@ -107,4 +107,31 @@ class AdminController extends Controller
 
         return back()->with('success', 'Usuario actualizado con éxito.');
     }
+
+    public function tiempos()
+{
+    $asistencias = Asistencia::with('pausas')
+        ->whereDate('fecha', today())
+        ->get();
+
+    return response()->json(
+
+        $asistencias->map(function ($a){
+
+            return [
+
+                'id'=>$a->id,
+
+                'pausas'=>$a->tiempoPausas(),
+
+                'trabajado'=>$a->formatoTiempo(
+                    $a->tiempoTrabajado()
+                )
+
+            ];
+
+        })
+
+    );
+}
 }

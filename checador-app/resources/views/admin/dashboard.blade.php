@@ -59,21 +59,26 @@
             </span>
         </td>
         <td class="py-3">
-    <span class="badge rounded-pill text-bg-warning bg-opacity-25 text-warning px-3 py-2">
-        <i class="bi bi-cup-hot me-1"></i>
+    <span
+id="pausas-{{ $a->id }}"
+class="badge rounded-pill text-bg-warning bg-opacity-25 text-warning px-3 py-2">
 
-        {{ $a->tiempoPausas() }}
+<i class="bi bi-cup-hot me-1"></i>
 
-    </span>
+{{ $a->tiempoPausas() }}
+
+</span>
 </td>
         <td class="py-3">
-    <span class="badge rounded-pill text-bg-info bg-opacity-25 text-info px-3 py-2">
+    <span
+id="trabajado-{{ $a->id }}"
+class="badge rounded-pill text-bg-info bg-opacity-25 text-info px-3 py-2">
 
-        <i class="bi bi-stopwatch me-1"></i>
+<i class="bi bi-stopwatch me-1"></i>
 
-        {{ $a->formatoTiempo($a->tiempoTrabajado()) }}
+{{ $a->formatoTiempo($a->tiempoTrabajado()) }}
 
-    </span>
+</span>
 </td>
         <td class="py-3">
             @if($a->hora_salida)
@@ -93,4 +98,52 @@
     </div>
 </div>
 @include('admin.modals.registrar-becario')
+
+<script>
+
+function actualizarContadores(){
+
+    fetch("{{ route('admin.tiempos') }}")
+
+    .then(response=>response.json())
+
+    .then(data=>{
+
+        data.forEach(asistencia=>{
+
+            let pausa=document.getElementById(
+                'pausas-'+asistencia.id
+            );
+
+            let trabajo=document.getElementById(
+                'trabajado-'+asistencia.id
+            );
+
+            if(pausa){
+
+                pausa.innerHTML=
+                '<i class="bi bi-cup-hot me-1"></i>'+
+                asistencia.pausas;
+
+            }
+
+            if(trabajo){
+
+                trabajo.innerHTML=
+                '<i class="bi bi-stopwatch me-1"></i>'+
+                asistencia.trabajado;
+
+            }
+
+        });
+
+    });
+
+}
+
+actualizarContadores();
+
+setInterval(actualizarContadores,1000);
+
+</script>
 @endsection

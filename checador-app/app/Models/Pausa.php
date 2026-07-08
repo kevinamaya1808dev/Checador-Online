@@ -9,6 +9,7 @@ class Pausa extends Model
 {
     protected $fillable = [
         'user_id',
+        'asistencia_id',
         'inicio_pausa',
         'fin_pausa',
         'motivo',
@@ -40,4 +41,8 @@ class Pausa extends Model
 
         return $inicio->diffInSeconds($fin);
     }
+   public function asistencia()
+{
+    return $this->belongsTo(Asistencia::class);
+}
 }

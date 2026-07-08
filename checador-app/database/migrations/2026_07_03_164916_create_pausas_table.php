@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             // foreignId para el usuario
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+
             
             // Tiempos y motivo
             $table->time('inicio_pausa')->nullable();

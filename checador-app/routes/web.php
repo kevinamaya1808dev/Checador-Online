@@ -5,7 +5,6 @@ use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BecarioController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 ;
@@ -17,7 +16,7 @@ Route::get('/', function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::post('/checar', [BecarioController::class, 'store'])->name('becario.checar');
+
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
@@ -43,7 +42,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 // Agrega esto en routes/web.php
-Route::post('/logout', function () { Auth::logout(); return redirect('/login'); })->name('logout');
 
 Route::post('/admin/becarios/store', [AdminController::class, 'storeBecario'])->name('admin.becarios.store');
 
@@ -54,3 +52,4 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/home/user/{id}', [HomeController::class, 'deleteUser'])->name('users.delete');
 });
 
+Route::get('/admin/asistencias-tiempo', [AdminController::class, 'tiempos'])->name('admin.tiempos');
