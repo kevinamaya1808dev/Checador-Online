@@ -22,33 +22,32 @@
         .form-control:focus { border-color: #3b82f6; box-shadow: none; }
 
         /* En tu app.blade.php o en un archivo CSS */
+/* Por default (móvil): sin margen, el sidebar va superpuesto/oculto */
 @media (min-width: 768px) {
-    main {
-        margin-left: 260px; /* Igual al width del sidebar */
-    }
+    .with-sidebar { margin-left: 260px; }
 }
-    
+
+/* Espacio para que el botón hamburguesa no tape el contenido en móvil */
+@media (max-width: 767.98px) {
+    .with-sidebar { padding-top: 4.5rem; }
+}
+    [x-cloak] { display: none !important; }
 
     </style>
 </head>
-<body x-data="{ sidebarOpen: true }">
+<body x-data="{ sidebarOpen: window.innerWidth >= 768 }">
 
     <div id="app" class="main-wrapper" style="display: flex;">
         
        @auth
     @if(auth()->user()->role === 'admin')
-        <div x-show="sidebarOpen" class="sidebar-wrapper">
-            @include('layouts.sidebar')
-        </div>
+        @include('layouts.sidebar')
     @endif
 @endauth
 
       <main
-    class="content-area flex-grow-1 {{ auth()->check() && auth()->user()->role === 'admin' ? 'p-4' : 'p-0' }}"
-    style="
-        min-width:0;
-        {{ auth()->check() && auth()->user()->role === 'admin' ? 'margin-left:260px;' : 'margin-left:0;' }}
-    "
+    class="content-area flex-grow-1 {{ auth()->check() && auth()->user()->role === 'admin' ? 'p-4 with-sidebar' : 'p-0' }}"
+    style="min-width:0;"
 >
             @yield('content')
         </main>

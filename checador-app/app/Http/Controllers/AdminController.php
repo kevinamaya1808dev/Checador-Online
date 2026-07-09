@@ -25,10 +25,25 @@ class AdminController extends Controller
             ['Total Registros', $asistencias->count() . ' asistencias'],
             ['Fecha del Reporte', Carbon::parse($hoy)->translatedFormat('d \d\e F \d\e Y')],
         ];
+            
+   $totalActivos = $asistencias->filter(function($a){return !$a->hora_salida &&!$a->tienePausaActiva();})
+->count();
+    $totalDescanso = $asistencias->filter(function($a){return $a->tienePausaActiva();})
+->count();
+    $totalFinalizados = $asistencias->whereNotNull('hora_salida')
+->count();
+    $totalHorasExtras = $asistencias->sum(function($a){return $a->tiempoHorasExtras();
+});
+$estadisticas = [
+    'activos' => $totalActivos,
+    'descanso' => $totalDescanso,
+    'finalizados' => $totalFinalizados,
+    'extras' => $totalHorasExtras
+];
 
-        return view('admin.dashboard', compact('asistencias', 'datosReporte'));
+        return view('admin.dashboard',compact('asistencias','datosReporte','estadisticas')
+);
     }
-
     public function storeBecario(Request $request) 
     {
         $request->validate([
@@ -110,30 +125,48 @@ class AdminController extends Controller
 
     public function tiempos()
 {
-    $asistencias = Asistencia::with('pausas')
-        ->whereDate('fecha', today())
+    $hoy = today()->toDateString();
+
+    $asistencias = Asistencia::with(['pausas', 'user'])
+        ->whereDate('fecha', $hoy)
+        ->latest()
         ->get();
 
-    return response()->json(
+    $finJornada = \Carbon\Carbon::parse($hoy . ' 18:00:00');
 
-        $asistencias->map(function ($a){
+    return response()->json(
+        $asistencias->map(function ($a) use ($finJornada) {
+            $enPausa = $a->pausas->contains(fn ($p) => is_null($p->fin_pausa));
+            $turnoTerminado = (bool) $a->hora_salida;
+
+            if ($turnoTerminado) {
+                $estado = ['texto' => 'Turno terminado', 'clase' => 'text-bg-secondary'];
+            } elseif ($enPausa) {
+                $estado = ['texto' => 'En descanso', 'clase' => 'text-bg-info text-dark'];
+            } else {
+                $estado = ['texto' => 'Activo', 'clase' => 'text-bg-success'];
+            }
 
             return [
-    'id' => $a->id,
-
-    'pausas' => $a->tiempoPausas(),
-
-    'trabajado' => $a->formatoTiempo(
-        $a->tiempoTrabajado()
-    ),
-
-    'extras' => $a->formatoTiempo(
-        $a->tiempoHorasExtras()
-    ),
-];
-
+                'id'                 => $a->id,
+                'user_name'          => $a->user->name,
+                'user_inicial'       => strtoupper(substr($a->user->name, 0, 1)),
+                'fecha'              => \Carbon\Carbon::parse($a->fecha)->format('d/m/Y'),
+                'hora_entrada'       => $a->hora_entrada ? \Carbon\Carbon::parse($a->hora_entrada)->format('h:i A') : '--:--',
+                'hora_salida'        => $a->hora_salida ? \Carbon\Carbon::parse($a->hora_salida)->format('h:i A') : '---',
+                'pausas_segundos' => $a->tiempoPausasSegundos(),
+                'trabajado_segundos' => $a->tiempoTrabajado(),
+                'extra_entrada_segundos' => $a->tiempoExtraEntrada(),
+                'extra_salida_segundos' => $a->tiempoExtraSalida(),
+                'extras_segundos' => $a->tiempoHorasExtras(),
+                'extras_entrada_segundos' => $a->tiempoExtraEntrada(),
+                'extras_salida_segundos' => $a->tiempoExtraSalida(),
+                'en_pausa'           => $enPausa,
+                'turno_terminado'    => $turnoTerminado,
+                'extras_creciendo'   => !$turnoTerminado && now()->gt($finJornada),
+                'estado'             => $estado,
+            ];
         })
-
     );
 }
 }
