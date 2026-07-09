@@ -96,5 +96,30 @@ public function pausas()
     return $this->hasMany(Pausa::class);
 }
 
+public function tiempoHorasExtras()
+{
+    if (!$this->hora_entrada || !$this->hora_salida) {
+        return 0;
+    }
 
+    $inicioJornada = \Carbon\Carbon::parse($this->fecha . ' 09:00:00');
+    $finJornada    = \Carbon\Carbon::parse($this->fecha . ' 18:00:00');
+
+    $entrada = \Carbon\Carbon::parse($this->fecha . ' ' . $this->hora_entrada);
+    $salida  = \Carbon\Carbon::parse($this->fecha . ' ' . $this->hora_salida);
+
+    $extras = 0;
+
+    // Entrada antes de las 09:00
+    if ($entrada->lt($inicioJornada)) {
+        $extras += $entrada->diffInSeconds($inicioJornada);
+    }
+
+    // Salida después de las 18:00
+    if ($salida->gt($finJornada)) {
+        $extras += $finJornada->diffInSeconds($salida);
+    }
+
+    return $extras;
+}
 }

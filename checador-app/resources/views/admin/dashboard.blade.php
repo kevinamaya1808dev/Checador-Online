@@ -29,6 +29,7 @@
                             <th class="py-3 fw-semibold text-uppercase small">Salida</th>
                             <th class="py-3 fw-semibold text-uppercase small">Pausas</th>
                             <th class="py-3 fw-semibold text-uppercase small">Tiempo Total</th>
+                            <th class="py-3 fw-semibold text-uppercase small">Horas Extras</th>
                             <th class="py-3 fw-semibold text-uppercase small">Estado</th>
                             <!-- Acciones eliminadas de aquí -->
                         </tr>
@@ -80,6 +81,17 @@ class="badge rounded-pill text-bg-info bg-opacity-25 text-info px-3 py-2">
 
 </span>
 </td>
+<td class="py-3">
+    <span
+        id="extras-{{ $a->id }}"
+        class="badge rounded-pill text-bg-primary bg-opacity-25 text-primary px-3 py-2">
+
+        <i class="bi bi-alarm me-1"></i>
+
+        {{ $a->formatoTiempo($a->tiempoHorasExtras()) }}
+
+    </span>
+</td>
         <td class="py-3">
             @if($a->hora_salida)
                 <span class="badge rounded-pill text-bg-secondary px-3 py-2">Turno terminado</span>
@@ -118,6 +130,10 @@ function actualizarContadores(){
             let trabajo=document.getElementById(
                 'trabajado-'+asistencia.id
             );
+  
+            let extras=document.getElementById(
+                'extras-'+asistencia.id
+            );
 
             if(pausa){
 
@@ -134,6 +150,14 @@ function actualizarContadores(){
                 asistencia.trabajado;
 
             }
+
+            if(extras){
+
+    extras.innerHTML=
+    '<i class="bi bi-alarm me-1"></i>'+
+    asistencia.extras;
+
+}
 
         });
 

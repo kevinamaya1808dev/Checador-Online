@@ -143,7 +143,7 @@
         <div class="d-flex align-items-center gap-2">
             <i class="bi bi-clock-history fs-4 text-primary"></i>
             <h1 class="h5 fw-bold text-uppercase mb-0" style="letter-spacing:2px;">
-                Checador <span class="text-primary">Online</span>
+                OLLIN<span class="text-primary">CHECK</span>
             </h1>
         </div>
         <div class="d-flex align-items-center gap-3">

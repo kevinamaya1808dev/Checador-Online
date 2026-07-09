@@ -31,63 +31,37 @@ public function index()
 
 
 
-    if($asistencia)
+    if($asistencia && !$asistencia->hora_salida)
     {
-
         $horaEntrada = $asistencia->fecha.' '.$asistencia->hora_entrada;
 
+        $pausa = Pausa::where('asistencia_id',$asistencia->id)
+            ->whereNull('fin_pausa')
+            ->latest()
+            ->first();
 
-        if($asistencia->hora_salida)
-{
-    $estado='inactivo';
-
-    $horaSalida =
-    $asistencia->fecha.' '.$asistencia->hora_salida;
-}
+        if($pausa)
+        {
+            $estado='pausado';
+            $pausaInicio = $asistencia->fecha.' '.$pausa->inicio_pausa;
+        }
         else
         {
-
-            $pausa = Pausa::where('asistencia_id',$asistencia->id)
-                ->whereNull('fin_pausa')
-                ->latest()
-                ->first();
-
-
-
-            if($pausa)
-            {
-                $estado='pausado';
-
-                $pausaInicio =
-                $asistencia->fecha.' '.$pausa->inicio_pausa;
-            }
-            else
-            {
-                $estado='trabajando';
-            }
-
+            $estado='trabajando';
         }
 
-
-
-        // sumar pausas terminadas
+        // sumar pausas terminadas SOLO de la jornada activa
         $pausas = Pausa::where('asistencia_id',$asistencia->id)
             ->whereNotNull('fin_pausa')
             ->get();
 
-
-
         foreach($pausas as $p)
         {
             $inicio = \Carbon\Carbon::parse($p->inicio_pausa);
-
             $fin = \Carbon\Carbon::parse($p->fin_pausa);
 
-
-            $segundosPausaAcumulados +=
-                $inicio->diffInSeconds($fin);
+            $segundosPausaAcumulados += $inicio->diffInSeconds($fin);
         }
-
     }
 
 

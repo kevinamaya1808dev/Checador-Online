@@ -119,16 +119,18 @@ class AdminController extends Controller
         $asistencias->map(function ($a){
 
             return [
+    'id' => $a->id,
 
-                'id'=>$a->id,
+    'pausas' => $a->tiempoPausas(),
 
-                'pausas'=>$a->tiempoPausas(),
+    'trabajado' => $a->formatoTiempo(
+        $a->tiempoTrabajado()
+    ),
 
-                'trabajado'=>$a->formatoTiempo(
-                    $a->tiempoTrabajado()
-                )
-
-            ];
+    'extras' => $a->formatoTiempo(
+        $a->tiempoHorasExtras()
+    ),
+];
 
         })
 
