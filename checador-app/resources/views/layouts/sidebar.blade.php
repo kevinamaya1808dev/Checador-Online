@@ -86,7 +86,7 @@
                 <a href="{{ route('admin.historial') }}"
    class="nav-link {{ request()->routeIs('admin.historial') ? 'active' : '' }}">
     <i class="bi bi-clock-history me-2"></i>
-    Historial
+    Historial de Jornadas
 </a>
             </nav>
             <div class="position-absolute bottom-0 w-100 p-3">

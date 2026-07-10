@@ -41,8 +41,11 @@ class Pausa extends Model
 
         return $inicio->diffInSeconds($fin);
     }
-   public function asistencia()
+  public function asistencia()
 {
-    return $this->belongsTo(Asistencia::class);
+    return $this->belongsTo(
+        Asistencia::class,
+        'asistencia_id'
+    );
 }
 }

@@ -107,7 +107,7 @@ class Asistencia extends Model
 }
 public function pausas()
 {
-    return $this->hasMany(Pausa::class);
+    return $this->hasMany(Pausa::class, 'asistencia_id');
 }
 
 public function tiempoExtraEntrada()
@@ -259,9 +259,8 @@ protected function segundosPausaEnIntervalo($inicioIntervalo, $finIntervalo)
 
 public function tienePausaActiva()
 {
-    return $this->pausas()
-        ->whereNull('fin_pausa')
-        ->exists();
+    return $this->pausas->contains(function ($pausa) {
+        return is_null($pausa->fin_pausa);
+    });
 }
-
 }

@@ -25,23 +25,8 @@ class AdminController extends Controller
             ['Total Registros', $asistencias->count() . ' asistencias'],
             ['Fecha del Reporte', Carbon::parse($hoy)->translatedFormat('d \d\e F \d\e Y')],
         ];
-            
-   $totalActivos = $asistencias->filter(function($a){return !$a->hora_salida &&!$a->tienePausaActiva();})
-->count();
-    $totalDescanso = $asistencias->filter(function($a){return $a->tienePausaActiva();})
-->count();
-    $totalFinalizados = $asistencias->whereNotNull('hora_salida')
-->count();
-    $totalHorasExtras = $asistencias->sum(function($a){return $a->tiempoHorasExtras();
-});
-$estadisticas = [
-    'activos' => $totalActivos,
-    'descanso' => $totalDescanso,
-    'finalizados' => $totalFinalizados,
-    'extras' => $totalHorasExtras
-];
 
-        return view('admin.dashboard',compact('asistencias','datosReporte','estadisticas')
+        return view('admin.dashboard',compact('asistencias','datosReporte')
 );
     }
     public function storeBecario(Request $request) 
@@ -132,7 +117,7 @@ $estadisticas = [
         ->latest()
         ->get();
 
-    $finJornada = \Carbon\Carbon::parse($hoy . ' 18:00:00');
+    $finJornada = Carbon::parse($hoy . ' 18:00:00');
 
     return response()->json(
         $asistencias->map(function ($a) use ($finJornada) {
@@ -156,11 +141,9 @@ $estadisticas = [
                 'hora_salida'        => $a->hora_salida ? \Carbon\Carbon::parse($a->hora_salida)->format('h:i A') : '---',
                 'pausas_segundos' => $a->tiempoPausasSegundos(),
                 'trabajado_segundos' => $a->tiempoTrabajado(),
-                'extra_entrada_segundos' => $a->tiempoExtraEntrada(),
-                'extra_salida_segundos' => $a->tiempoExtraSalida(),
+                'extras_salida_segundos' => $a->tiempoExtraSalida(),
                 'extras_segundos' => $a->tiempoHorasExtras(),
                 'extras_entrada_segundos' => $a->tiempoExtraEntrada(),
-                'extras_salida_segundos' => $a->tiempoExtraSalida(),
                 'en_pausa'           => $enPausa,
                 'turno_terminado'    => $turnoTerminado,
                 'extras_creciendo'   => !$turnoTerminado && now()->gt($finJornada),

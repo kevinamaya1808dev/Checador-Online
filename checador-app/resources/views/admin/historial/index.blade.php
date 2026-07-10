@@ -4,17 +4,24 @@
 
 <div class="container-fluid">
 
-    @include('admin.historial.header')
+    <x-history.header />
 
-    @include('admin.historial.stats')
+    <x-history.stats
+        :asistencias="$asistencias"
+    />
 
-    @include('admin.historial.search')
+    <x-history.search
+    :meses="$meses"
+/>
 
-    @include('admin.historial.filters')
+    
+    <x-history.table
+        :asistencias="$asistencias"
+    />
 
-    @include('admin.historial.table')
-
-    @include('admin.historial.pagination')
+    <x-history.pagination
+        :asistencias="$asistencias"
+    />
 
 </div>
 

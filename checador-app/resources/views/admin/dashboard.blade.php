@@ -57,20 +57,6 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card bg-dark border-secondary shadow rounded-4">
-            <div class="card-body">
-                <div class="text-secondary small">
-                    Total trabajado equipo
-                </div>
-                <h2 id="card-trabajado"
-                    class="text-primary fw-bold mb-0">
-                    00:00:00
-                </h2>
-            </div>
-        </div>
-    </div>
-</div>
 
     <div class="card bg-dark border-secondary shadow-lg rounded-4">
         <div class="card-body p-0 overflow-hidden">
@@ -336,6 +322,17 @@ function sincronizar() {
             });
         })
         .catch(err => console.error('Error sincronizando asistencias:', err));
+}
+
+function actualizarTexto(id, icono, texto)
+{
+    const el = document.getElementById(id);
+
+    if(!el) return;
+
+    el.innerHTML = `
+        <i class="bi ${icono} me-1"></i>${texto}
+    `;
 }
 
 function tick() {
