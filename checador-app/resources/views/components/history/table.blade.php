@@ -76,8 +76,7 @@
 
         </table>
 
-        @include('components.history.modal')
-
     </div>
+    @include('components.history.modal')
 
 </div>

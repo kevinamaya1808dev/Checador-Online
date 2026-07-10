@@ -1,284 +1,287 @@
 <div
-class="modal fade"
-id="detalleJornada{{ $asistencia->id }}"
-tabindex="-1"
+    class="modal fade"
+    id="detalleJornada"
+    tabindex="-1"
+    aria-hidden="true"
 >
+    <div class="modal-dialog modal-xl modal-dialog-centered">
 
-<div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content bg-dark border-secondary text-light">
 
-<div class="modal-content bg-dark text-light border-secondary">
+            <div class="modal-header border-secondary">
 
-<div class="modal-header border-secondary">
+                <h5 class="modal-title">
+                    <i class="bi bi-clock-history text-primary"></i>
+                    Detalle de la jornada
+                </h5>
 
-<h5 class="modal-title">
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
 
-<i class="bi bi-clock-history text-primary"></i>
+            </div>
 
-Detalle de Jornada
+            <div class="modal-body">
 
-</h5>
+    <div class="row mb-4">
 
-<button
-type="button"
-class="btn-close btn-close-white"
-data-bs-dismiss="modal"
-></button>
+        <div class="col-md-8">
 
-</div>
+            <h4 id="modalBecario" class="fw-bold mb-1"></h4>
 
-<div class="modal-body">
+            <span id="modalEmail" class="text-secondary"></span>
 
-<div class="row">
+        </div>
 
-<div class="col-md-6 mb-3">
+        <div class="col-md-4 text-md-end">
 
-<label class="text-secondary">
+            <small class="text-secondary">Fecha</small>
 
-Becario
+            <h5 id="modalFecha"></h5>
 
-</label>
+        </div>
 
-<h5>
+    </div>
 
-{{ $asistencia->user->name }}
+    <div class="row text-center g-3">
 
-</h5>
+        <div class="col-md-4">
 
-<small>
+            <div class="card bg-secondary bg-opacity-10 border-secondary">
 
-{{ $asistencia->user->email }}
+                <div class="card-body">
 
-</small>
+                    <small class="text-secondary">Entrada</small>
 
-</div>
+                    <h5 id="modalEntrada"></h5>
 
-<div class="col-md-6 mb-3">
+                </div>
 
-<label class="text-secondary">
+            </div>
 
-Fecha
+        </div>
 
-</label>
+        <div class="col-md-4">
 
-<h5>
+            <div class="card bg-secondary bg-opacity-10 border-secondary">
 
-{{ \Carbon\Carbon::parse($asistencia->fecha)->format('d/m/Y') }}
+                <div class="card-body">
 
-</h5>
+                    <small class="text-secondary">Salida</small>
 
-</div>
+                    <h5 id="modalSalida"></h5>
 
-<div class="col-md-4">
+                </div>
 
-<label class="text-secondary">
+            </div>
 
-Entrada
+        </div>
 
-</label>
+        <div class="col-md-4">
 
-<h6>
+            <div class="card bg-secondary bg-opacity-10 border-secondary">
 
-{{ \Carbon\Carbon::parse($asistencia->hora_entrada)->format('h:i:s A') }}
+                <div class="card-body">
 
-</h6>
+                    <small class="text-secondary">Horas extra</small>
 
-</div>
+                    <h5 id="modalExtra" class="text-success"></h5>
 
-<div class="col-md-4">
+                </div>
 
-<label class="text-secondary">
+            </div>
 
-Salida
+        </div>
 
-</label>
+    </div>
 
-<h6>
+    <hr>
 
-@if($asistencia->hora_salida)
+    <div class="row text-center">
 
-{{ \Carbon\Carbon::parse($asistencia->hora_salida)->format('h:i:s A') }}
+        <div class="col-md-6">
 
-@else
+            <small class="text-secondary">
 
---
+                Tiempo trabajado
 
-@endif
+            </small>
 
-</h6>
+            <h4 id="modalTrabajo" class="text-info"></h4>
 
-</div>
+        </div>
 
-<div class="col-md-4">
+        <div class="col-md-6">
 
-<label class="text-secondary">
+            <small class="text-secondary">
 
-Horas extra
+                Tiempo de pausas
 
-</label>
+            </small>
 
-<h6 class="text-success">
+            <h4 id="modalPausas" class="text-warning"></h4>
 
-{{ $asistencia->horasExtrasTotalFormato() }}
+        </div>
 
-</h6>
+    </div>
 
-</div>
-
-</div>
-
-<hr class="border-secondary">
-
-<div class="row text-center">
-
-<div class="col">
-
-<label class="text-secondary">
-
-Tiempo trabajado
-
-</label>
-
-<h4 class="text-info">
-
-{{ $asistencia->formatoTiempo($asistencia->tiempoTrabajado()) }}
-
-</h4>
-
-</div>
-
-<div class="col">
-
-<label class="text-secondary">
-
-Tiempo descanso
-
-</label>
-
-<h4 class="text-warning">
-
-{{ $asistencia->tiempoPausas() }}
-
-</h4>
-
-</div>
-
-</div>
-
-<hr class="border-secondary">
+    <hr>
 
 <h5 class="mb-3">
 
-<i class="bi bi-cup-hot"></i>
+    <i class="bi bi-cup-hot me-2 text-warning"></i>
 
-Pausas
+    Historial de pausas
 
 </h5>
 
-@if($asistencia->pausas->isEmpty())
-
-<div class="alert alert-secondary">
-
-No hubo pausas.
-
-</div>
-
-@else
-
 <div class="table-responsive">
 
-<table class="table table-dark table-hover align-middle">
+    <table class="table table-dark table-hover align-middle">
 
-<thead>
+        <thead>
 
-<tr>
+            <tr>
 
-<th>#</th>
+                <th>#</th>
 
-<th>Motivo</th>
+                <th>Motivo</th>
 
-<th>Inicio</th>
+                <th>Inicio</th>
 
-<th>Fin</th>
+                <th>Fin</th>
 
-<th>Duración</th>
+                <th>Duración</th>
 
-</tr>
+            </tr>
 
-</thead>
+        </thead>
 
-<tbody>
+        <tbody id="tablaPausas">
 
-@foreach($asistencia->pausas as $pausa)
+            <tr>
 
-<tr>
+                <td colspan="5" class="text-center text-secondary">
 
-<td>
+                    Sin información.
 
-{{ $loop->iteration }}
+                </td>
 
-</td>
+            </tr>
 
-<td>
+        </tbody>
 
-{{ $pausa->motivo }}
-
-</td>
-
-<td>
-
-{{ \Carbon\Carbon::parse($pausa->inicio_pausa)->format('h:i:s A') }}
-
-</td>
-
-<td>
-
-@if($pausa->fin_pausa)
-
-{{ \Carbon\Carbon::parse($pausa->fin_pausa)->format('h:i:s A') }}
-
-@else
-
---
-
-@endif
-
-</td>
-
-<td>
-
-{{ gmdate('H:i:s',$pausa->duracion()) }}
-
-</td>
-
-</tr>
-
-@endforeach
-
-</tbody>
-
-</table>
-
-</div>
-
-@endif
-
-</div>
-
-<div class="modal-footer border-secondary">
-
-<button
-class="btn btn-secondary"
-data-bs-dismiss="modal"
->
-
-Cerrar
-
-</button>
+    </table>
 
 </div>
 
 </div>
 
+        </div>
+
+    </div>
 </div>
 
-</div>
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const modal = document.getElementById("detalleJornada");
+
+    modal.addEventListener("show.bs.modal", async function (event) {
+
+    const button = event.relatedTarget;
+
+    const id = button.dataset.id;
+
+    const response = await fetch(`/admin/historial/${id}`);
+
+    const asistencia = await response.json();
+
+    document.getElementById("modalBecario").textContent = asistencia.user.name;
+
+    document.getElementById("modalEmail").textContent = asistencia.user.email;
+
+    document.getElementById("modalFecha").textContent =
+        new Date(asistencia.fecha).toLocaleDateString();
+
+    document.getElementById("modalEntrada").textContent =
+        asistencia.hora_entrada ?? "--";
+
+    document.getElementById("modalSalida").textContent =
+        asistencia.hora_salida ?? "--";
+
+    document.getElementById("modalTrabajo").textContent =
+        button.dataset.trabajo;
+
+    document.getElementById("modalPausas").textContent =
+        button.dataset.pausas;
+
+    document.getElementById("modalExtra").textContent =
+        button.dataset.extra;
+
+        const tablaPausas = document.getElementById("tablaPausas");
+
+tablaPausas.innerHTML = "";
+
+if (asistencia.pausas.length === 0) {
+
+    tablaPausas.innerHTML = `
+        <tr>
+            <td colspan="5" class="text-center text-secondary">
+                No hubo pausas registradas.
+            </td>
+        </tr>
+    `;
+
+} else {
+
+    asistencia.pausas.forEach((pausa, index) => {
+
+        const inicio = pausa.inicio_pausa
+            ? new Date("1970-01-01T" + pausa.inicio_pausa)
+                .toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                })
+            : "--";
+
+        const fin = pausa.fin_pausa
+            ? new Date("1970-01-01T" + pausa.fin_pausa)
+                .toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                })
+            : "--";
+
+        tablaPausas.innerHTML += `
+            <tr>
+
+                <td>${index + 1}</td>
+
+                <td>${pausa.motivo}</td>
+
+                <td>${inicio}</td>
+
+                <td>${fin}</td>
+
+                <td>${pausa.duracion_formato}</td>
+
+            </tr>
+        `;
+
+    });
+
+}
+
+});
+
+});
+
+</script>

@@ -16,6 +16,10 @@ class Pausa extends Model
         'fecha'
     ];
 
+    protected $appends = [
+    'duracion_formato'
+];
+
 
     public function user()
     {
@@ -41,6 +45,11 @@ class Pausa extends Model
 
         return $inicio->diffInSeconds($fin);
     }
+
+    public function getDuracionFormatoAttribute()
+{
+    return gmdate('H:i:s', $this->duracion());
+}
   public function asistencia()
 {
     return $this->belongsTo(

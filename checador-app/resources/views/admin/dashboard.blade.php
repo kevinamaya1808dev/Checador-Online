@@ -77,7 +77,7 @@
                     </thead>
                     <tbody>
     @foreach($asistencias as $a)
-<tr data-id="{{ $a->id }}">
+<tr data-user="{{ $a->user_id }} "data-id="{{ $a->id }}">
     <td class="ps-4 py-3">
         <div class="d-flex align-items-center gap-2">
             <div class="rounded-circle bg-secondary bg-opacity-25 border border-secondary d-flex align-items-center justify-content-center text-info fw-bold"
@@ -260,7 +260,8 @@ function actualizarTarjetas(data)
 
 function crearFila(a) {
     const tr = document.createElement('tr');
-    tr.setAttribute('data-id', a.id);
+tr.setAttribute('data-user', a.user_id);
+tr.setAttribute('data-id', a.id);
     tr.innerHTML = `
         <td class="ps-4 py-3">
             <div class="d-flex align-items-center gap-2">
@@ -285,7 +286,7 @@ function sincronizar() {
     fetch("{{ route('admin.tiempos') }}")
         .then(res => res.json())
         .then(data => {
-
+    const usuariosServidor = [];
 
     actualizarTarjetas(data);
 
@@ -294,6 +295,7 @@ function sincronizar() {
 
 
     data.forEach(a => {
+        usuariosServidor.push(String(a.user_id));
                 estadoAsistencias[a.id] = {
     trabajado: a.trabajado_segundos,
     pausas: a.pausas_segundos,
@@ -305,11 +307,31 @@ function sincronizar() {
     extrasCreciendo: a.extras_creciendo,
 };
 
-                let fila = document.querySelector(`tr[data-id="${a.id}"]`);
-                if (!fila) {
-                    fila = crearFila(a);
-                    tbody.prepend(fila);
-                }
+                let fila = document.querySelector(
+    `tr[data-user="${a.user_id}"]`
+);
+
+if (!fila) {
+
+    fila = crearFila(a);
+
+    tbody.prepend(fila);
+
+}
+else if (
+    fila.dataset.id != a.id
+) {
+
+    const nuevaFila = crearFila(a);
+
+    fila.replaceWith(
+        nuevaFila
+    );
+
+    fila = nuevaFila;
+
+}
+                fila.setAttribute('data-id',a.id);
 
                 actualizarTexto('entrada-' + a.id, 'bi-box-arrow-in-right', a.hora_entrada);
                 actualizarTexto('salida-' + a.id, 'bi-box-arrow-left', a.hora_salida);
@@ -320,6 +342,24 @@ function sincronizar() {
                     estadoEl.textContent = a.estado.texto;
                 }
             });
+            tbody.querySelectorAll('tr').forEach(fila => {
+
+    if(
+        !usuariosServidor.includes(
+            fila.dataset.user
+        )
+    ){
+
+        delete estadoAsistencias[
+            fila.dataset.id
+        ];
+
+        fila.remove();
+
+    }
+
+});
+
         })
         .catch(err => console.error('Error sincronizando asistencias:', err));
 }

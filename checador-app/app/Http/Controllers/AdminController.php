@@ -16,9 +16,19 @@ class AdminController extends Controller
         $hoy = now()->toDateString();
         
         // Obtenemos las asistencias (sin tocar tu lógica original)
-        $asistencias = Asistencia::with(['user.pausas' => function($query) use ($hoy) {
-            $query->where('fecha', $hoy)->whereNull('fin_pausa');
-        }])->latest()->get(); 
+        $ultimasAsistencias = Asistencia::selectRaw('MAX(id) as id')
+    ->groupBy('user_id');
+
+$asistencias = Asistencia::with([
+        'user.pausas' => function ($query) use ($hoy) {
+            $query->where('fecha', $hoy)
+                  ->whereNull('fin_pausa');
+        },
+        'pausas'
+    ])
+    ->whereIn('id', $ultimasAsistencias)
+    ->latest()
+    ->get(); 
 
         // Creamos un arreglo con los datos básicos para que tu Modal de vista previa funcione sin dar error
         $datosReporte = [
@@ -29,6 +39,16 @@ class AdminController extends Controller
         return view('admin.dashboard',compact('asistencias','datosReporte')
 );
     }
+
+    public function show(Asistencia $asistencia)
+{
+    $asistencia->load([
+        'user',
+        'pausas'
+    ]);
+
+    return response()->json($asistencia);
+}
     public function storeBecario(Request $request) 
     {
         $request->validate([
@@ -112,10 +132,16 @@ class AdminController extends Controller
 {
     $hoy = today()->toDateString();
 
-    $asistencias = Asistencia::with(['pausas', 'user'])
-        ->whereDate('fecha', $hoy)
-        ->latest()
-        ->get();
+    $ultimasAsistencias = Asistencia::selectRaw('MAX(id) as id')
+    ->groupBy('user_id');
+
+$asistencias = Asistencia::with([
+        'pausas',
+        'user'
+    ])
+    ->whereIn('id', $ultimasAsistencias)
+    ->latest()
+    ->get();
 
     $finJornada = Carbon::parse($hoy . ' 18:00:00');
 
@@ -134,6 +160,7 @@ class AdminController extends Controller
 
             return [
                 'id'                 => $a->id,
+                'user_id'            => $a->user_id,
                 'user_name'          => $a->user->name,
                 'user_inicial'       => strtoupper(substr($a->user->name, 0, 1)),
                 'fecha'              => \Carbon\Carbon::parse($a->fecha)->format('d/m/Y'),

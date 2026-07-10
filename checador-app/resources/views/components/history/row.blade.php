@@ -107,15 +107,16 @@
     {{-- Acción --}}
     <td>
 
-        <button
-            class="btn btn-outline-primary btn-sm"
-            disabled
-        >
+    <a
+    href="{{ route('admin.historial.reporte', $asistencia->user->id) }}"
+    class="btn btn-outline-primary btn-sm"
+>
 
-            <i class="bi bi-eye"></i>
+    <i class="bi bi-file-earmark-text me-1"></i>
 
-        </button>
+    Reporte
 
-    </td>
+</a>
+</td>
 
 </tr>
