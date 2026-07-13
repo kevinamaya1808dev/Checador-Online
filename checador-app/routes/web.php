@@ -6,9 +6,13 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BecarioController;
 use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Reportes\ExcelController;
+use App\Http\Controllers\Reportes\PdfController;
+use App\Http\Controllers\Reportes\ReporteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 ;
+
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -24,7 +28,31 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/asistencias-tiempo', [AdminController::class, 'tiempos'])->name('admin.tiempos');
     Route::get('/admin/historial', [HistorialController::class, 'index'])->name('admin.historial');
     Route::get('/admin/historial/reporte/{user}', [App\Http\Controllers\Reportes\ReporteController::class, 'show'])->name('admin.historial.reporte');
+    Route::get('/admin/historial/reporte/{user}/excel', [ReporteController::class, 'exportarExcel'])->name('admin.historial.reporte.excel');
     Route::get('/admin/historial/{asistencia}', [HistorialController::class, 'show'])->name('admin.historial.show');
+    Route::get('/admin/reportes/{user}/excel', [ExcelController::class,'reporteBecario'])->name('admin.reportes.excel');
+    Route::get('/admin/reportes/excel/general', [ExcelController::class,'historialGeneral'])->name('admin.reportes.general.excel');
+    Route::get(
+    '/pdf/{user}',
+    [PdfController::class, 'reporteIndividual']
+)->name('admin.reportes.pdf');
+
+Route::get(
+    '/pdf/general',
+    [PdfController::class, 'historialGeneral']
+)->name('admin.reportes.general.pdf');
+Route::get(
+    '/admin/reportes/pdf/general',
+    [PdfController::class, 'general']
+)
+->name('admin.reportes.pdf.general');
+
+
+Route::get(
+    '/admin/reportes/pdf/becario/{user}',
+    [PdfController::class, 'becario']
+)
+->name('admin.reportes.pdf.becario');
 });
 
 Route::put('/admin/user/{id}', [App\Http\Controllers\HomeController::class, 'update'])->name('users.update');

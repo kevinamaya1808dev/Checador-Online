@@ -4,42 +4,51 @@ namespace App\Http\Controllers\Reportes;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\ReporteService;
 use Illuminate\Http\Request;
 
 class ReporteController extends Controller
 {
-    public function show(\App\Models\User $user)
+    protected ReporteService $reporteService;
+
+public function __construct(ReporteService $reporteService)
 {
-    $asistencias = $user->asistencias()
-    ->with('pausas')
-    ->orderByDesc('fecha')
-    ->orderByDesc('hora_entrada')
-    ->get();
+    $this->reporteService = $reporteService;
+}
 
-    $totalJornadas = $asistencias->count();
+   public function show(User $user)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | Obtener asistencias del becario
+    |--------------------------------------------------------------------------
+    */
 
-    $totalTrabajo = $asistencias->sum(function ($a) {
-        return $a->tiempoTrabajado();
-    });
+    $asistencias = $this->reporteService
+        ->obtenerReporteBecario($user);
 
-    $totalPausas = $asistencias->sum(function ($a) {
-        return $a->tiempoPausasSegundos();
-    });
+    /*
+    |--------------------------------------------------------------------------
+    | Obtener resumen
+    |--------------------------------------------------------------------------
+    */
 
-    $totalExtras = $asistencias->sum(function ($a) {
-        return $a->tiempoHorasExtras();
-    });
+    $resumen = $this->reporteService
+        ->obtenerResumen($asistencias);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Vista
+    |--------------------------------------------------------------------------
+    */
 
     return view(
         'admin.historial.reporte',
-        compact(
-            'user',
-            'asistencias',
-            'totalJornadas',
-            'totalTrabajo',
-            'totalPausas',
-            'totalExtras'
-        )
+        [
+            'user' => $user,
+            'asistencias' => $asistencias,
+            'resumen' => $resumen,
+        ]
     );
 }
 }

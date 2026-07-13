@@ -24,17 +24,17 @@ class Asistencia extends Model
 
 
     // Tiempo trabajado quitando pausas
-    public function tiempoTrabajado()
+   // app/Models/Asistencia.php
+
+public function tiempoTrabajado()
 {
     if (!$this->hora_entrada) {
         return 0;
     }
 
-
     $entrada = \Carbon\Carbon::parse(
         $this->fecha.' '.$this->hora_entrada
     );
-
 
     $salida = $this->hora_salida
         ? \Carbon\Carbon::parse(
@@ -42,16 +42,17 @@ class Asistencia extends Model
         )
         : now();
 
-
-    $trabajado = $entrada->diffInSeconds($salida);
-
+    $totalBruto = $entrada->diffInSeconds($salida);
 
     $pausas = $this->tiempoPausasSegundos();
 
+    // Restar también el tiempo extra (antes de 9:00 y después de 18:00)
+    // para no contarlo dos veces: una en "trabajado" y otra en "extras".
+    $extras = $this->tiempoExtraEntrada() + $this->tiempoExtraSalida();
 
     return max(
         0,
-        $trabajado - $pausas
+        $totalBruto - $pausas - $extras
     );
 }
 

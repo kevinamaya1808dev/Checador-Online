@@ -71,68 +71,16 @@
                             <!-- Acciones eliminadas de aquí -->
                         </tr>
                     </thead>
-                    <tbody>
-    @foreach($asistencias as $a)
-<tr data-user="{{ $a->user_id }} "data-id="{{ $a->id }}">
-    <td class="ps-4 py-3">
-        <div class="d-flex align-items-center gap-2">
-            <div class="rounded-circle bg-secondary bg-opacity-25 border border-secondary d-flex align-items-center justify-content-center text-info fw-bold"
-                 style="width:36px;height:36px;font-size:0.9rem;">
-                {{ strtoupper(substr($a->user->name, 0, 1)) }}
-            </div>
-            <span class="text-white fw-bold">{{ $a->user->name }}</span>
-        </div>
-    </td>
-    <td class="py-3">
-        {{ $a->fecha ? \Carbon\Carbon::parse($a->fecha)->format('d/m/Y') : 'N/A' }}
-    </td>
-    <td class="py-3">
-        <span id="entrada-{{ $a->id }}" class="badge rounded-pill text-bg-success bg-opacity-25 text-success px-3 py-2">
-            <i class="bi bi-box-arrow-in-right me-1"></i>{{ $a->hora_entrada ? \Carbon\Carbon::parse($a->hora_entrada)->format('h:i A') : '--:--' }}
-        </span>
-    </td>
-    <td class="py-3">
-        <span id="salida-{{ $a->id }}" class="badge rounded-pill text-bg-danger bg-opacity-25 text-danger px-3 py-2">
-            <i class="bi bi-box-arrow-left me-1"></i>{{ $a->hora_salida ? \Carbon\Carbon::parse($a->hora_salida)->format('h:i A') : '---' }}
-        </span>
-    </td>
-    <td class="py-3">
-        <span id="pausas-{{ $a->id }}" class="badge rounded-pill text-bg-warning bg-opacity-25 text-warning px-3 py-2">
-            <i class="bi bi-cup-hot me-1"></i>{{ $a->tiempoPausas() }}
-        </span>
-    </td>
-    <td class="py-3">
-        <span id="trabajado-{{ $a->id }}" class="badge rounded-pill text-bg-info bg-opacity-25 text-info px-3 py-2">
-            <i class="bi bi-stopwatch me-1"></i>{{ $a->formatoTiempo($a->tiempoTrabajado()) }}
-        </span>
-    </td>
 
-<td class="py-3">
-    <div 
-        id="extras-{{ $a->id }}"
-        class="badge rounded-pill text-bg-primary bg-opacity-25 text-primary px-3 py-2 text-start">
-        <div>
-            <i class="bi bi-alarm me-1"></i>
-                <strong>Total:</strong>{{ $a->horasExtrasTotalFormato() }}
-        </div>
-        <small class="d-block mt-1">
-            <i class="bi bi-box-arrow-in-right me-1"></i>Entrada:{{ $a->horasExtrasEntradaFormato() }}
-        </small>
-        <small class="d-block">
-            <i class="bi bi-box-arrow-left me-1"></i>Salida:{{ $a->horasExtrasSalidaFormato() }}
-        </small>
-    </div>
-</td>
-
-    <td class="py-3">
-        <span id="estado-{{ $a->id }}"
-              class="badge rounded-pill px-3 py-2 {{ $a->hora_salida ? 'text-bg-secondary' : ($a->user->pausas->isNotEmpty() ? 'text-bg-info text-dark' : 'text-bg-success') }}">
-            {{ $a->hora_salida ? 'Turno terminado' : ($a->user->pausas->isNotEmpty() ? 'En descanso' : 'Activo') }}
-        </span>
+                  <tbody id="tabla-asistencias">
+<tr id="tabla-vacia">
+    <td colspan="8" class="text-center text-secondary py-5">
+        <i class="bi bi-clock-history fs-3 d-block mb-2"></i>
+        No existen asistencias activas actualmente
     </td>
 </tr>
-@endforeach
 </tbody>
+
                 </table>
             </div>
         </div>
@@ -141,7 +89,7 @@
 @include('admin.modals.registrar-becario')
 
 <script>
-let estadoAsistencias = {}; // guarda el estado de cada fila entre sincronizaciones
+let estadoAsistencias = {}; // ahora keyed por user_id
 
 function formatoHMS(segundos) {
     segundos = Math.max(0, Math.floor(segundos));
@@ -151,113 +99,49 @@ function formatoHMS(segundos) {
     return `${h}:${m}:${s}`;
 }
 
-function actualizarExtras(id, e)
-{
-
-    const el = document.getElementById(
-        'extras-'+id
-    );
-
-
-    if(el){
-
-        el.innerHTML = `
-
-        <div>
-            <i class="bi bi-alarm me-1"></i>
-            <strong>Total:</strong>
-            ${formatoHMS(e.extras)}
-        </div>
-
-        <small class="d-block mt-1">
-            <i class="bi bi-box-arrow-in-right me-1"></i>
-            Entrada:
-            ${formatoHMS(e.extrasEntrada)}
-        </small>
-
-        <small class="d-block">
-            <i class="bi bi-box-arrow-left me-1"></i>
-            Salida:
-            ${formatoHMS(e.extrasSalida)}
-        </small>
-
-        `;
-
-    }
-
+function actualizarTexto(id, icono, texto) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = `<i class="bi ${icono} me-1"></i>${texto}`;
 }
 
-function actualizarTarjetas(data)
-{
+function actualizarExtras(id, e) {
+    const el = document.getElementById('extras-' + id);
+    if (!el) return;
+    el.innerHTML = `
+        <div>
+            <i class="bi bi-alarm me-1"></i>
+            <strong>Total:</strong> ${formatoHMS(e.extras)}
+        </div>
+        <small class="d-block mt-1">
+            <i class="bi bi-box-arrow-in-right me-1"></i>
+            Entrada: ${formatoHMS(e.extrasEntrada)}
+        </small>
+        <small class="d-block">
+            <i class="bi bi-box-arrow-left me-1"></i>
+            Salida: ${formatoHMS(e.extrasSalida)}
+        </small>
+    `;
+}
 
-    let activos = 0;
-    let descanso = 0;
-    let finalizados = 0;
-
+function actualizarTarjetas(data) {
+    let activos = 0, descanso = 0, finalizados = 0;
 
     data.forEach(a => {
-
-
-        if(a.turno_terminado){
-
-            finalizados++;
-
-        }
-        else if(a.en_pausa){
-
-            descanso++;
-
-        }
-        else{
-
-            activos++;
-
-        }
-
-
+        if (a.sin_registro) return; // no cuenta en ninguna tarjeta
+        if (a.turno_terminado) finalizados++;
+        else if (a.en_pausa) descanso++;
+        else activos++;
     });
 
-
-    const cardActivos =
-        document.getElementById('card-activos');
-
-
-    const cardDescanso =
-        document.getElementById('card-descanso');
-
-
-    const cardFinalizados =
-        document.getElementById('card-finalizados');
-
-
-
-    if(cardActivos){
-
-        cardActivos.textContent = activos;
-
-    }
-
-
-    if(cardDescanso){
-
-        cardDescanso.textContent = descanso;
-
-    }
-
-
-    if(cardFinalizados){
-
-        cardFinalizados.textContent = finalizados;
-
-    }
-
-
+    document.getElementById('card-activos').textContent = activos;
+    document.getElementById('card-descanso').textContent = descanso;
+    document.getElementById('card-finalizados').textContent = finalizados;
 }
 
 function crearFila(a) {
     const tr = document.createElement('tr');
-tr.setAttribute('data-user', a.user_id);
-tr.setAttribute('data-id', a.id);
+    tr.setAttribute('data-user', a.user_id);
     tr.innerHTML = `
         <td class="ps-4 py-3">
             <div class="d-flex align-items-center gap-2">
@@ -268,133 +152,134 @@ tr.setAttribute('data-id', a.id);
             </div>
         </td>
         <td class="py-3">${a.fecha}</td>
-        <td class="py-3"><span id="entrada-${a.id}" class="badge rounded-pill text-bg-success bg-opacity-25 text-success px-3 py-2"><i class="bi bi-box-arrow-in-right me-1"></i>${a.hora_entrada}</span></td>
-        <td class="py-3"><span id="salida-${a.id}" class="badge rounded-pill text-bg-danger bg-opacity-25 text-danger px-3 py-2"><i class="bi bi-box-arrow-left me-1"></i>${a.hora_salida}</span></td>
-        <td class="py-3"><span id="pausas-${a.id}" class="badge rounded-pill text-bg-warning bg-opacity-25 text-warning px-3 py-2"><i class="bi bi-cup-hot me-1"></i>${formatoHMS(a.pausas_segundos)}</span></td>
-        <td class="py-3"><span id="trabajado-${a.id}" class="badge rounded-pill text-bg-info bg-opacity-25 text-info px-3 py-2"><i class="bi bi-stopwatch me-1"></i>${formatoHMS(a.trabajado_segundos)}</span></td>
-        <td class="py-3"><span id="extras-${a.id}" class="badge rounded-pill text-bg-primary bg-opacity-25 text-primary px-3 py-2"><i class="bi bi-alarm me-1"></i>${formatoHMS(a.extras_segundos)}</span></td>
-        <td class="py-3"><span id="estado-${a.id}" class="badge rounded-pill px-3 py-2 ${a.estado.clase}">${a.estado.texto}</span></td>
+        <td class="py-3"><span id="entrada-${a.user_id}" class="badge rounded-pill text-bg-success bg-opacity-25 text-success px-3 py-2"><i class="bi bi-box-arrow-in-right me-1"></i>${a.hora_entrada}</span></td>
+        <td class="py-3"><span id="salida-${a.user_id}" class="badge rounded-pill text-bg-danger bg-opacity-25 text-danger px-3 py-2"><i class="bi bi-box-arrow-left me-1"></i>${a.hora_salida}</span></td>
+        <td class="py-3"><span id="pausas-${a.user_id}" class="badge rounded-pill text-bg-warning bg-opacity-25 text-warning px-3 py-2"><i class="bi bi-cup-hot me-1"></i>${formatoHMS(a.pausas_segundos)}</span></td>
+        <td class="py-3"><span id="trabajado-${a.user_id}" class="badge rounded-pill text-bg-info bg-opacity-25 text-info px-3 py-2"><i class="bi bi-stopwatch me-1"></i>${formatoHMS(a.trabajado_segundos)}</span></td>
+        <td class="py-3"><span id="extras-${a.user_id}" class="badge rounded-pill text-bg-primary bg-opacity-25 text-primary px-3 py-2"><i class="bi bi-alarm me-1"></i>${formatoHMS(a.extras_segundos)}</span></td>
+        <td class="py-3"><span id="estado-${a.user_id}" class="badge rounded-pill px-3 py-2 ${a.estado.clase}">${a.estado.texto}</span></td>
     `;
     return tr;
+}
+
+function actualizarFila(a) {
+    actualizarTexto('entrada-' + a.user_id, 'bi-box-arrow-in-right', a.hora_entrada);
+    actualizarTexto('salida-' + a.user_id, 'bi-box-arrow-left', a.hora_salida);
+    actualizarTexto('pausas-' + a.user_id, 'bi-cup-hot', formatoHMS(a.pausas_segundos));
+    actualizarTexto('trabajado-' + a.user_id, 'bi-stopwatch', formatoHMS(a.trabajado_segundos));
+    actualizarExtras(a.user_id, {
+        extras: a.extras_segundos,
+        extrasEntrada: a.extras_entrada_segundos,
+        extrasSalida: a.extras_salida_segundos,
+    });
+
+    const estado = document.getElementById('estado-' + a.user_id);
+    if (estado) {
+        estado.className = 'badge rounded-pill px-3 py-2 ' + a.estado.clase;
+        estado.textContent = a.estado.texto;
+    }
 }
 
 function sincronizar() {
     fetch("{{ route('admin.tiempos') }}")
         .then(res => res.json())
         .then(data => {
-    const usuariosServidor = [];
+            const usuariosServidor = [];
+            const tbody = document.getElementById('tabla-asistencias');
+            const vacio = document.getElementById('tabla-vacia');
 
-    actualizarTarjetas(data);
+            if (vacio && data.length > 0) vacio.remove();
 
+            data.forEach(a => {
+                usuariosServidor.push(String(a.user_id));
 
-    const tbody = document.querySelector('table tbody');
+                estadoAsistencias[a.user_id] = {
+                    trabajado: a.trabajado_segundos,
+                    pausas: a.pausas_segundos,
+                    extras: a.extras_segundos,
+                    extrasEntrada: a.extras_entrada_segundos,
+                    extrasSalida: a.extras_salida_segundos,
+                    enPausa: a.en_pausa,
+                    turnoTerminado: a.turno_terminado,
+                    extrasCreciendo: a.extras_creciendo,
+                    sinRegistro: a.sin_registro,
+                };
 
+                let fila = document.querySelector(`tr[data-user="${a.user_id}"]`);
 
-    data.forEach(a => {
-        usuariosServidor.push(String(a.user_id));
-                estadoAsistencias[a.id] = {
-    trabajado: a.trabajado_segundos,
-    pausas: a.pausas_segundos,
-    extras: a.extras_segundos,
-    extrasEntrada: a.extras_entrada_segundos,
-    extrasSalida: a.extras_salida_segundos,
-    enPausa: a.en_pausa,
-    turnoTerminado: a.turno_terminado,
-    extrasCreciendo: a.extras_creciendo,
-};
-
-                let fila = document.querySelector(
-    `tr[data-user="${a.user_id}"]`
-);
-
-if (!fila) {
-
-    fila = crearFila(a);
-
-    tbody.prepend(fila);
-
-}
-else if (
-    fila.dataset.id != a.id
-) {
-
-    const nuevaFila = crearFila(a);
-
-    fila.replaceWith(
-        nuevaFila
-    );
-
-    fila = nuevaFila;
-
-}
-                fila.setAttribute('data-id',a.id);
-
-                actualizarTexto('entrada-' + a.id, 'bi-box-arrow-in-right', a.hora_entrada);
-                actualizarTexto('salida-' + a.id, 'bi-box-arrow-left', a.hora_salida);
-
-                const estadoEl = document.getElementById('estado-' + a.id);
-                if (estadoEl) {
-                    estadoEl.className = 'badge rounded-pill px-3 py-2 ' + a.estado.clase;
-                    estadoEl.textContent = a.estado.texto;
+                if (!fila) {
+                    fila = crearFila(a);
+                    tbody.appendChild(fila);
+                } else {
+                    actualizarFila(a); // <-- clave: refresca campos aunque el id no cambie
                 }
             });
-            tbody.querySelectorAll('tr').forEach(fila => {
 
-    if(
-        !usuariosServidor.includes(
-            fila.dataset.user
-        )
-    ){
+            tbody.querySelectorAll('tr[data-user]').forEach(fila => {
+                if (!usuariosServidor.includes(fila.dataset.user)) {
+                    delete estadoAsistencias[fila.dataset.user];
+                    fila.remove();
+                }
+            });
 
-        delete estadoAsistencias[
-            fila.dataset.id
-        ];
+            if (tbody.querySelectorAll('tr[data-user]').length === 0) {
+                tbody.innerHTML = `
+                    <tr id="tabla-vacia">
+                        <td colspan="8" class="text-center text-secondary py-5">
+                            <i class="bi bi-clock-history fs-3 d-block mb-2"></i>
+                            No existen asistencias activas actualmente
+                        </td>
+                    </tr>`;
+            }
 
-        fila.remove();
-
-    }
-
-});
-
+            actualizarTarjetas(data);
         })
         .catch(err => console.error('Error sincronizando asistencias:', err));
 }
 
-function actualizarTexto(id, icono, texto)
-{
-    const el = document.getElementById(id);
-
-    if(!el) return;
-
-    el.innerHTML = `
-        <i class="bi ${icono} me-1"></i>${texto}
-    `;
-}
-
 function tick() {
-    Object.keys(estadoAsistencias).forEach(id => {
-        const e = estadoAsistencias[id];
-        if (e.turnoTerminado) return;
+    Object.keys(estadoAsistencias).forEach(userId => {
+        const e = estadoAsistencias[userId];
+        if (e.turnoTerminado || e.sinRegistro) return;
 
-        if (e.enPausa) {
-            e.pausas += 1;
-        } else {
-            e.trabajado += 1;
-        }
+        if (e.enPausa) e.pausas += 1;
+        else e.trabajado += 1;
 
         if (e.extrasCreciendo) {
-        e.extras += 1;
-        e.extrasSalida += 1;
+            e.extras += 1;
+            e.extrasSalida += 1;
         }
 
-        actualizarTexto('pausas-' + id, 'bi-cup-hot', formatoHMS(e.pausas));
-        actualizarTexto('trabajado-' + id, 'bi-stopwatch', formatoHMS(e.trabajado));
-       actualizarExtras(id,e);
+        actualizarTexto('pausas-' + userId, 'bi-cup-hot', formatoHMS(e.pausas));
+        actualizarTexto('trabajado-' + userId, 'bi-stopwatch', formatoHMS(e.trabajado));
+        actualizarExtras(userId, e);
     });
 }
 
+
+let intervaloSincronizacion;
+
+function iniciarPolling() {
+    clearInterval(intervaloSincronizacion);
+    intervaloSincronizacion = setInterval(sincronizar, 1500);
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        clearInterval(intervaloSincronizacion);
+    } else {
+        sincronizar(); // trae el estado actual de inmediato al volver
+        iniciarPolling();
+    }
+});
+
 sincronizar();
-setInterval(sincronizar, 10000); // corrige con el servidor cada 10s
+iniciarPolling();
+setInterval(tick, 1000);
+
+
+sincronizar();
+setInterval(sincronizar, 1500); // cada 1.5s en vez de 10s
 setInterval(tick, 1000);         // avanza el reloj visual cada 1s
 </script>
 @endsection

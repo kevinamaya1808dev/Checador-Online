@@ -49,23 +49,22 @@
 
                 <div class="d-grid gap-2 d-md-flex justify-content-end">
 
-                    <button
-                        class="btn btn-success">
+                    <a href="{{ route('admin.reportes.excel', $user) }}" class="btn btn-success">
 
-                        <i class="bi bi-file-earmark-excel"></i>
+                        <i class="bi bi-file-earmark-excel me-2"></i>
 
-                        Excel
+                        Exportar Excel
 
-                    </button>
+                    </a>
+                    <a
+    href="{{ route('admin.reportes.pdf', $user) }}"
+    class="btn btn-danger">
 
-                    <button
-                        class="btn btn-danger">
+    <i class="bi bi-file-earmark-pdf me-2"></i>
 
-                        <i class="bi bi-file-earmark-pdf"></i>
+    Exportar PDF
 
-                        PDF
-
-                    </button>
+</a>
 
                     <button
                         onclick="window.print()"

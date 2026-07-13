@@ -1,5 +1,6 @@
 <div class="row g-4">
 
+    {{-- Información del becario --}}
     <div class="col-lg-4">
 
         <div class="card bg-dark border-secondary h-100">
@@ -24,19 +25,24 @@
 
     </div>
 
+    {{-- Jornadas --}}
     <div class="col-lg-2">
 
-        <div class="card bg-dark border-secondary">
+        <div class="card bg-dark border-secondary h-100">
 
             <div class="card-body text-center">
 
-                <h3>
+                <h3 class="fw-bold">
 
-                    {{ $totalJornadas }}
+                    {{ $resumen['jornadas'] }}
 
                 </h3>
 
-                <small>Jornadas</small>
+                <small class="text-secondary">
+
+                    Jornadas
+
+                </small>
 
             </div>
 
@@ -44,19 +50,24 @@
 
     </div>
 
+    {{-- Horas trabajadas --}}
     <div class="col-lg-2">
 
-        <div class="card bg-dark border-secondary">
+        <div class="card bg-dark border-secondary h-100">
 
             <div class="card-body text-center">
 
-                <h5>
+                <h5 class="fw-bold text-primary">
 
-                    {{ gmdate('H:i:s',$totalTrabajo) }}
+                    {{ $resumen['horas_trabajadas'] }}
 
                 </h5>
 
-                <small>Trabajadas</small>
+                <small class="text-secondary">
+
+                    Trabajadas
+
+                </small>
 
             </div>
 
@@ -64,19 +75,24 @@
 
     </div>
 
+    {{-- Tiempo en pausa --}}
     <div class="col-lg-2">
 
-        <div class="card bg-dark border-secondary">
+        <div class="card bg-dark border-secondary h-100">
 
             <div class="card-body text-center">
 
-                <h5>
+                <h5 class="fw-bold text-warning">
 
-                    {{ gmdate('H:i:s',$totalPausas) }}
+                    {{ $resumen['tiempo_pausa'] }}
 
                 </h5>
 
-                <small>Pausas</small>
+                <small class="text-secondary">
+
+                    Pausas
+
+                </small>
 
             </div>
 
@@ -84,19 +100,24 @@
 
     </div>
 
+    {{-- Horas extra --}}
     <div class="col-lg-2">
 
-        <div class="card bg-dark border-secondary">
+        <div class="card bg-dark border-secondary h-100">
 
             <div class="card-body text-center">
 
-                <h5 class="text-success">
+                <h5 class="fw-bold text-success">
 
-                    {{ gmdate('H:i:s',$totalExtras) }}
+                    {{ $resumen['horas_extra'] }}
 
                 </h5>
 
-                <small>Horas extra</small>
+                <small class="text-secondary">
+
+                    Horas extra
+
+                </small>
 
             </div>
 
