@@ -10,10 +10,6 @@
             <button type="button" class="btn btn-outline-primary shadow-sm rounded-3" data-bs-toggle="modal" data-bs-target="#modalRegistrarBecario">
                 <i class="bi bi-person-plus"></i> + Nuevo Becario
             </button>
-            <!-- Botón de Exportar (Asegúrate de tener esta ruta en web.php) -->
-            <a href="{{ route('admin.exportar') }}" class="btn btn-primary shadow-sm rounded-3">
-                <i class="bi bi-file-earmark-arrow-down"></i> Exportar Reporte
-            </a>
         </div>
     </div>
 

@@ -21,13 +21,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::get('/admin/exportar', [AdminController::class, 'exportarReporte'])->name('admin.exportar');
     Route::get('/admin/asistencias-tiempo', [AdminController::class, 'tiempos'])->name('admin.tiempos');
     Route::get('/admin/historial', [HistorialController::class, 'index'])->name('admin.historial');
-    Route::get(
-    '/admin/historial/reporte/{user}',
-    [App\Http\Controllers\ReporteController::class, 'show']
-)->name('admin.historial.reporte');
+    Route::get('/admin/historial/reporte/{user}', [App\Http\Controllers\Reportes\ReporteController::class, 'show'])->name('admin.historial.reporte');
     Route::get('/admin/historial/{asistencia}', [HistorialController::class, 'show'])->name('admin.historial.show');
 });
 
