@@ -2,8 +2,8 @@
     'use strict';
 
     // ---- Configuración ----
-    const POLLING_MS = 1500; // frecuencia de sincronización con el servidor
-    const TICK_MS = 1000;    // frecuencia del reloj visual (avance local)
+    const POLLING_MS = 1750; // frecuencia de sincronización con el servidor
+    const TICK_MS = 1200;    // frecuencia del reloj visual (avance local)
 
     // ---- Estado en memoria ----
     let estadoAsistencias = {}; // keyed por user_id
