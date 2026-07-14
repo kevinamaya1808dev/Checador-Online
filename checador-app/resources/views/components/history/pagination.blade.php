@@ -2,7 +2,7 @@
 
     <div class="mt-4">
 
-        {{ $asistencias->links() }}
+        {{ $asistencias->links('vendor.pagination.ollin') }}
 
     </div>
 

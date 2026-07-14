@@ -27,7 +27,7 @@
     </td>
 
     {{-- Entrada --}}
-    <td>
+    <td class="d-none d-md-table-cell">
 
       @if($asistencia->hora_entrada)
 
@@ -42,7 +42,7 @@
     </td>
 
     {{-- Salida --}}
-    <td>
+    <td class="d-none d-md-table-cell">
 
         @if($asistencia->hora_salida)
 
@@ -56,7 +56,7 @@
     </td>
 
     {{-- Número de pausas --}}
-    <td>
+    <td class="d-none d-md-table-cell">
 
         <span class="badge bg-info">
 
@@ -67,7 +67,7 @@
     </td>
 
     {{-- Tiempo total pausas --}}
-    <td>
+    <td class="d-none d-md-table-cell">
 
         {{ $asistencia->tiempoPausas() }}
 
@@ -81,7 +81,7 @@
     </td>
 
     {{-- Horas extra --}}
-    <td>
+    <td class="d-none d-md-table-cell">
 
         @if($asistencia->tiempoHorasExtras() > 0)
 

@@ -1,7 +1,7 @@
 <div class="row g-4">
 
     {{-- Información del becario --}}
-    <div class="col-lg-4">
+    <div class="col-12 col-md-6 col-lg-4">
 
         <div class="card bg-dark border-secondary h-100">
 
@@ -26,7 +26,7 @@
     </div>
 
     {{-- Jornadas --}}
-    <div class="col-lg-2">
+    <div class="col-6 col-md-3 col-lg-2">
 
         <div class="card bg-dark border-secondary h-100">
 
@@ -51,7 +51,7 @@
     </div>
 
     {{-- Horas trabajadas --}}
-    <div class="col-lg-2">
+    <div class="col-6 col-md-3 col-lg-2">
 
         <div class="card bg-dark border-secondary h-100">
 
@@ -76,7 +76,7 @@
     </div>
 
     {{-- Tiempo en pausa --}}
-    <div class="col-lg-2">
+    <div class="col-6 col-md-3 col-lg-2">
 
         <div class="card bg-dark border-secondary h-100">
 
@@ -101,7 +101,7 @@
     </div>
 
     {{-- Horas extra --}}
-    <div class="col-lg-2">
+    <div class="col-6 col-md-3 col-lg-2">
 
         <div class="card bg-dark border-secondary h-100">
 

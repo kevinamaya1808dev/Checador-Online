@@ -32,15 +32,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/historial/{asistencia}', [HistorialController::class, 'show'])->name('admin.historial.show');
     Route::get('/admin/reportes/{user}/excel', [ExcelController::class,'reporteBecario'])->name('admin.reportes.excel');
     Route::get('/admin/reportes/excel/general', [ExcelController::class,'historialGeneral'])->name('admin.reportes.general.excel');
-    Route::get(
-    '/pdf/{user}',
-    [PdfController::class, 'reporteIndividual']
-)->name('admin.reportes.pdf');
 
-Route::get(
-    '/pdf/general',
-    [PdfController::class, 'historialGeneral']
-)->name('admin.reportes.general.pdf');
+
 Route::get(
     '/admin/reportes/pdf/general',
     [PdfController::class, 'general']

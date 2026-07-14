@@ -22,9 +22,6 @@
         background: rgba(0, 0, 0, 0.5);
         z-index: 1040;
     }
-    .sidebar-toggle-btn {
-        z-index: 1030;
-    }
     .nav-link {
         color: #888 !important;
         padding: 15px 25px !important;
@@ -38,13 +35,37 @@
     }
 
     .sidebar-toggle-btn {
-    z-index: 1030;
-    background-color: #2c3035;
-    border-color: #3e444a;
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-}
+        z-index: 1060;
+        background-color: #2c3035;
+        border-color: #3e444a;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .sidebar-toggle-btn:hover {
+        background-color: #3e444a;
+        border-color: #4b5563;
+    }
+
+    .sidebar-toggle-btn .bi {
+        transition: transform 0.25s ease;
+    }
+
+    .sidebar-toggle-btn.is-open .bi {
+        transform: rotate(90deg);
+    }
+
+    /* Deja espacio arriba del logo para que el botón fijo no lo tape */
+    @media (max-width: 767.98px) {
+        .sidebar-brand {
+            padding-top: 4.5rem !important;
+        }
+    }
 </style>
 
 @auth
@@ -53,10 +74,13 @@
         <!-- Botón hamburguesa: solo visible en móvil -->
         <button
             class="btn btn-outline-light sidebar-toggle-btn d-md-none position-fixed top-0 start-0 m-3"
+            :class="{ 'is-open': sidebarOpen }"
             @click="sidebarOpen = !sidebarOpen"
             type="button"
+            :aria-expanded="sidebarOpen"
+            aria-label="Abrir menú"
         >
-            <i class="bi bi-list fs-4"></i>
+            <i class="bi fs-5" :class="sidebarOpen ? 'bi-x-lg' : 'bi-list'"></i>
         </button>
 
         <!-- Fondo oscuro al abrir en móvil: toca fuera para cerrar -->
@@ -72,7 +96,7 @@
             :class="{ 'sidebar-active': sidebarOpen }"
         >
 
-            <div class="p-4">
+            <div class="p-4 sidebar-brand">
                 <h5 class="text-white fw-bold">OLLIN<span class="text-primary">CHECK</span></h5>
             </div>
             <nav class="nav flex-column mt-2">
@@ -99,23 +123,5 @@
             </div>
         </div>
 
-        <i class="bi bi-moon-fill"></i>
-</button>
-
-<script>
-    const btn = document.getElementById('theme-toggle');
-
-    if (btn) {
-        btn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
-        });
-    }
-
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
-</script>
     @endif
 @endauth

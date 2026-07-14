@@ -1,3 +1,10 @@
+<div class="d-flex justify-content-end mb-3">
+    <!-- Botón para abrir el modal -->
+    <button type="button" class="btn btn-outline-primary shadow-sm rounded-3" data-bs-toggle="modal" data-bs-target="#modalRegistrarBecario">
+        <i class="bi bi-person-plus"></i> + Nuevo Becario
+    </button>
+</div>
+
 <div class="modal fade" id="modalRegistrarBecario" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-dark border border-secondary text-white shadow-lg">
@@ -60,6 +67,8 @@
         </div>
     </div>
 </div>
+
+
 <script>
 function generarEmailAuto() {
     let nombre = document.getElementById('nombre_becario').value;
@@ -67,4 +76,4 @@ function generarEmailAuto() {
     document.getElementById('email_prefix').value = emailBase;
     document.getElementById('email_corporativo').value = emailBase + "@ollintem.com.mx";
 }
-</script> 
+</script>

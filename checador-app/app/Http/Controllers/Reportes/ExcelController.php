@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\ReporteService;
 use Illuminate\Http\Request;
-use Spatie\SimpleExcel\SimpleExcelWriter;
+use App\Services\Excel\HistorialBecarioExcel;
 use App\Services\Excel\HistorialGeneralExcel;
 use Carbon\Carbon;
 
@@ -22,9 +22,9 @@ class ExcelController extends Controller
     /**
      * Reporte individual
      */
-    public function reporteBecario(User $user, Request $request)
+   public function reporteBecario(User $user, Request $request)
 {
-    // Obtener filtros (se usarán más adelante)
+    // Obtener filtros
     $desde = $request->input('desde');
     $hasta = $request->input('hasta');
 
@@ -34,6 +34,9 @@ class ExcelController extends Controller
         $desde,
         $hasta
     );
+
+    // Obtener resumen (mismo método que usa historialGeneral)
+    $resumen = $this->reporteService->obtenerResumen($asistencias);
 
     // Nombre del archivo
     $nombreArchivo = 'Reporte_' .
@@ -50,39 +53,22 @@ class ExcelController extends Controller
         mkdir(storage_path('app/temp'), 0777, true);
     }
 
-    // Crear Excel
-    $writer = SimpleExcelWriter::create($ruta);
+    // Generar Excel con diseño OllinCheck
+    $excel = new HistorialBecarioExcel();
 
-    foreach ($asistencias as $asistencia) {
-
-        $writer->addRow([
-
-            'Fecha' => Carbon::parse($asistencia->fecha)->format('d/m/Y'),
-
-            'Entrada' => $asistencia->hora_entrada
-                ? Carbon::parse($asistencia->hora_entrada)->format('h:i:s A')
-                : '--',
-
-            'Salida' => $asistencia->hora_salida
-                ? Carbon::parse($asistencia->hora_salida)->format('h:i:s A')
-                : '--',
-
-            'Pausas' => $asistencia->pausas->count(),
-
-            'Tiempo de pausas' => $asistencia->tiempoPausas(),
-
-            'Tiempo trabajado' => $asistencia->formatoTiempo(
-                $asistencia->tiempoTrabajado()
-            ),
-
-            'Horas extra' => $asistencia->horasExtrasTotalFormato(),
-
-        ]);
-    }
+    $excel->guardarComo(
+        $ruta,
+        $user,
+        $asistencias,
+        $resumen,
+        [
+            'desde' => $desde,
+            'hasta' => $hasta,
+        ]
+    );
 
     return response()->download($ruta)->deleteFileAfterSend(true);
 }
-
     /**
      * Reporte general
      */

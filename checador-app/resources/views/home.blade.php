@@ -6,6 +6,7 @@
         <h2 class="text-white fw-bold mb-0">
             <i class="bi bi-people-fill text-info me-2"></i>Administración de Usuarios
         </h2>
+        @include('admin.modals.registrar-becario')
     </div>
 
     <div class="card bg-dark border-secondary shadow-lg rounded-4">

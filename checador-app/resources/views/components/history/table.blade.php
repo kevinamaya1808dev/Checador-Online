@@ -29,17 +29,17 @@
 
     <th>Fecha</th>
 
-    <th>Entrada</th>
+   <th class="d-none d-md-table-cell">Entrada</th>
 
-    <th>Salida</th>
+    <th class="d-none d-md-table-cell">Salida</th>
 
-    <th>Pausas</th>
+    <th class="d-none d-md-table-cell">Pausas</th>
 
-    <th>Tiempo pausa</th>
+    <th class="d-none d-md-table-cell">Tiempo pausa</th>
 
     <th>Tiempo trabajado</th>
 
-    <th>Horas extra</th>
+    <th class="d-none d-md-table-cell">Horas extra</th>
 
     <th>Acciones</th>
 
@@ -58,7 +58,7 @@
 
                     <tr>
 
-                        <td colspan="8" class="text-center py-5">
+                        <td colspan="9" class="text-center py-5">
 
                             <i class="bi bi-folder-x display-6"></i>
 

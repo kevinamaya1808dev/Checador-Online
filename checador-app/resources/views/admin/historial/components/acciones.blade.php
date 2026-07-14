@@ -24,24 +24,23 @@
 
                 <form class="row g-2">
 
-                    <div class="col">
+    <div class="col-12 col-sm-6">
 
-                        <input
-                            type="date"
-                            class="form-control">
+        <input
+            type="date"
+            class="form-control">
 
-                    </div>
+    </div>
 
-                    <div class="col">
+    <div class="col-12 col-sm-6">
 
-                        <input
-                            type="date"
-                            class="form-control">
+        <input
+            type="date"
+            class="form-control">
 
-                    </div>
+    </div>
 
-                </form>
-
+</form>
             </div>
 
             {{-- Acciones --}}
@@ -57,7 +56,7 @@
 
                     </a>
                     <a
-    href="{{ route('admin.reportes.pdf', $user) }}"
+    href="{{ route('admin.reportes.pdf.becario', $user) }}"
     class="btn btn-danger">
 
     <i class="bi bi-file-earmark-pdf me-2"></i>
@@ -65,14 +64,6 @@
     Exportar PDF
 
 </a>
-
-                    <button
-                        onclick="window.print()"
-                        class="btn btn-primary">
-
-                        <i class="bi bi-printer"></i>
-
-                    </button>
 
                 </div>
 
