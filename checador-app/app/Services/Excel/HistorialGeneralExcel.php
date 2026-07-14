@@ -455,4 +455,26 @@ class HistorialGeneralExcel
         "A16:H{$ultimaFila}"
     );
 }
+
+/**
+ * Guardar el archivo Excel
+ */
+public function guardarComo(
+    string $ruta,
+    $asistencias,
+    array $resumen,
+    array $filtros = []
+): void {
+
+    $spreadsheet = $this->generar(
+        $asistencias,
+        $resumen,
+        $filtros
+    );
+
+    $writer = new Xlsx($spreadsheet);
+
+    $writer->save($ruta);
+
+}
 }

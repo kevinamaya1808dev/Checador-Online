@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\ReporteService;
 use Illuminate\Http\Request;
 use Spatie\SimpleExcel\SimpleExcelWriter;
+use App\Services\Excel\HistorialGeneralExcel;
 use Carbon\Carbon;
 
 class ExcelController extends Controller
@@ -95,10 +96,9 @@ class ExcelController extends Controller
 
     $buscar = $request->input('search');
 
-$mes = $request->input('mes');
+    $mes = $request->input('mes');
 
-$semana = $request->input('semana');
-
+    $semana = $request->input('semana');
 
 
     /*
@@ -108,17 +108,27 @@ $semana = $request->input('semana');
     */
 
     $asistencias = $this->reporteService
-    ->obtenerHistorialGeneral(
-        $buscar,
-        $mes,
-        $semana
-    );
+        ->obtenerHistorialGeneral(
+            $buscar,
+            $mes,
+            $semana
+        );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Obtener resumen
+    |--------------------------------------------------------------------------
+    */
+
+    $resumen = $this->reporteService
+        ->obtenerResumen($asistencias);
 
 
 
     /*
     |--------------------------------------------------------------------------
-    | Crear nombre del archivo
+    | Crear nombre archivo
     |--------------------------------------------------------------------------
     */
 
@@ -138,6 +148,12 @@ $semana = $request->input('semana');
 
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Crear carpeta temporal
+    |--------------------------------------------------------------------------
+    */
+
     if (!file_exists(storage_path('app/temp'))) {
 
         mkdir(
@@ -150,68 +166,36 @@ $semana = $request->input('semana');
 
 
 
-    $writer = SimpleExcelWriter::create($ruta);
+    /*
+    |--------------------------------------------------------------------------
+    | Generar Excel con diseño OllinCheck
+    |--------------------------------------------------------------------------
+    */
+
+    $excel = new HistorialGeneralExcel();
+
+
+    $excel->guardarComo(
+        $ruta,
+        $asistencias,
+        $resumen,
+        [
+            'search' => $buscar,
+            'mes' => $mes,
+            'semana' => $semana,
+        ]
+    );
 
 
 
-    foreach ($asistencias as $asistencia) {
-
-        $writer->addRow([
-
-            'Becario' => $asistencia->user->name,
-
-            'Fecha' => Carbon::parse(
-                $asistencia->fecha
-            )->format('d/m/Y'),
-
-            'Entrada' =>
-
-                $asistencia->hora_entrada
-
-                    ? Carbon::parse(
-                        $asistencia->hora_entrada
-                    )->format('h:i:s A')
-
-                    : '--',
-
-            'Salida' =>
-
-                $asistencia->hora_salida
-
-                    ? Carbon::parse(
-                        $asistencia->hora_salida
-                    )->format('h:i:s A')
-
-                    : '--',
-
-            'Pausas' =>
-
-                $asistencia->pausas->count(),
-
-            'Tiempo pausa' =>
-
-                $asistencia->tiempoPausas(),
-
-            'Tiempo trabajado' =>
-
-                $asistencia->formatoTiempo(
-                    $asistencia->tiempoTrabajado()
-                ),
-
-            'Horas extra' =>
-
-                $asistencia->horasExtrasTotalFormato()
-
-        ]);
-
-    }
-
-
+    /*
+    |--------------------------------------------------------------------------
+    | Descargar archivo
+    |--------------------------------------------------------------------------
+    */
 
     return response()
-
         ->download($ruta)
-
         ->deleteFileAfterSend(true);
 }
 }
