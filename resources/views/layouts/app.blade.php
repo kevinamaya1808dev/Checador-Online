@@ -20,21 +20,12 @@
 x-init="if (isDark) { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); }"
 class="bg-[#F9F6EE] dark:bg-slate-950 text-gray-800 dark:text-gray-300 [font-family:'Segoe_UI',sans-serif] transition-colors duration-300">
 
-    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        
-        <div class="absolute -top-[30%] -left-[10%] w-[120%] h-[70vh] 
-                    bg-gradient-to-b from-white via-white/50 to-transparent 
-                    dark:from-blue-800/20 dark:via-blue-900/5 
-                    rounded-[100%] blur-[60px] transform -rotate-12 transition-colors duration-700">
-        </div>
-
-        <div class="absolute bottom-[-20%] -right-[10%] w-[130%] h-[80vh] 
-                    bg-gradient-to-t from-[#EAE4D8] via-[#F4F0E6]/50 to-transparent 
-                    dark:from-purple-900/20 dark:via-slate-900/5 
-                    rounded-[100%] blur-[80px] transform rotate-12 transition-colors duration-700">
-        </div>
-        
-    </div>
+   <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-white dark:bg-[#05060a] transition-colors duration-700">
+    <canvas id="aurora-stars" class="absolute inset-0 w-full h-full"></canvas>
+    <div class="aurora-band aurora-purple"></div>
+    <div class="aurora-band aurora-cyan"></div>
+    <div class="aurora-band aurora-green"></div>
+</div>
 
     <button @click="toggleTheme()" 
             class="fixed top-4 right-4 z-[1070] p-2 rounded-lg bg-[#EAE4D8] dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-[#DFD8C8] dark:hover:bg-gray-700 transition-all shadow-sm">
@@ -54,3 +45,76 @@ class="bg-[#F9F6EE] dark:bg-slate-950 text-gray-800 dark:text-gray-300 [font-fam
     </div>
 </body>
 </html>
+
+<style>
+    .aurora-band {
+    position: absolute;
+    left: -20%;
+    width: 140%;
+    height: 60vh;
+    filter: blur(70px);
+    border-radius: 50%;
+    will-change: transform, opacity;
+    transition: opacity 0.7s ease;
+}
+
+/* ---- TEMA CLARO (por defecto) ---- */
+.aurora-band {
+    opacity: 0.22;
+    mix-blend-mode: multiply;
+}
+
+.aurora-purple {
+    top: -10%;
+    background: radial-gradient(ellipse at center, #c084fc 0%, transparent 70%);
+    animation: aurora-drift-1 22s ease-in-out infinite alternate;
+}
+
+.aurora-cyan {
+    top: 15%;
+    background: radial-gradient(ellipse at center, #67e8f9 0%, transparent 70%);
+    animation: aurora-drift-2 28s ease-in-out infinite alternate;
+}
+
+.aurora-green {
+    top: 35%;
+    background: radial-gradient(ellipse at center, #6ee7b7 0%, transparent 70%);
+    animation: aurora-drift-3 34s ease-in-out infinite alternate;
+}
+
+/* ---- TEMA OSCURO ---- */
+.dark .aurora-band {
+    opacity: 0.35;
+    mix-blend-mode: screen;
+}
+
+.dark .aurora-purple {
+    background: radial-gradient(ellipse at center, #a855f7 0%, transparent 70%);
+}
+
+.dark .aurora-cyan {
+    background: radial-gradient(ellipse at center, #22d3ee 0%, transparent 70%);
+}
+
+.dark .aurora-green {
+    background: radial-gradient(ellipse at center, #34d399 0%, transparent 70%);
+}
+
+@keyframes aurora-drift-1 {
+    0%   { transform: translateX(-5%) translateY(0) rotate(-6deg) scaleY(1); }
+    50%  { transform: translateX(8%) translateY(4%) rotate(3deg) scaleY(1.15); }
+    100% { transform: translateX(-8%) translateY(-3%) rotate(-3deg) scaleY(1); }
+}
+
+@keyframes aurora-drift-2 {
+    0%   { transform: translateX(6%) translateY(2%) rotate(4deg) scaleY(1); }
+    50%  { transform: translateX(-10%) translateY(-4%) rotate(-5deg) scaleY(1.2); }
+    100% { transform: translateX(5%) translateY(3%) rotate(2deg) scaleY(1); }
+}
+
+@keyframes aurora-drift-3 {
+    0%   { transform: translateX(-8%) translateY(-2%) rotate(-4deg) scaleY(1); }
+    50%  { transform: translateX(10%) translateY(5%) rotate(6deg) scaleY(1.1); }
+    100% { transform: translateX(-6%) translateY(2%) rotate(-2deg) scaleY(1); }
+}
+</style>

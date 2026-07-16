@@ -10,14 +10,14 @@
 
             <div class="fixed inset-0 bg-black/50 z-[1040] md:hidden" x-show="sidebarOpen" x-cloak @click="sidebarOpen = false"></div>
 
-            <aside class="fixed top-0 left-0 h-screen z-[1050] bg-[#F4F0E6] dark:bg-[#141419] border-r border-[#EAE4D8] dark:border-white/10 transition-all duration-300 ease-in-out"
+            <aside class="fixed top-0 left-0 h-screen z-[1050] bg-stone-100 dark:bg-[#141419] border-r border-stone-200 dark:border-white/10 transition-all duration-300 ease-in-out"
                    :class="{ 
                        'w-[260px] translate-x-0': sidebarOpen || !isCollapsed, 
                        'w-[80px] -translate-x-full md:translate-x-0': !sidebarOpen && isCollapsed 
                    }">
 
                 <div @click="isCollapsed = !isCollapsed" 
-                     class="flex items-center gap-3 p-4 h-[70px] cursor-pointer hover:bg-[#EAE4D8] dark:hover:bg-white/5 transition-colors">
+                     class="flex items-center gap-3 p-4 h-[70px] cursor-pointer hover:bg-stone-200 dark:hover:bg-white/5 transition-colors">
                     
                     <img src="{{ asset('images/isotipo.webp') }}" alt="Logo" class="w-8 h-8 object-contain shrink-0">
                     
