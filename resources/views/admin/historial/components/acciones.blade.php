@@ -1,4 +1,4 @@
-<div class="rounded-2xl bg-slate-800/50 border border-white/[0.08] p-4">
+<div class="rounded-2xl bg-white dark:bg-gray-800/50 border border-[#EAE4D8] dark:border-gray-700 p-4 mb-6">
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
 
@@ -6,7 +6,7 @@
         <div class="lg:col-span-3">
             <a
                 href="{{ route('admin.historial') }}"
-                class="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-slate-500 text-slate-300 px-4 py-2 text-sm font-medium hover:bg-white/5 hover:border-slate-400 transition-colors"
+                class="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-slate-500 text-gray-600 dark:text-slate-300 px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-white/5 hover:border-gray-400 transition-colors"
             >
                 <i class="bi bi-arrow-left"></i>
                 Regresar al historial
@@ -19,18 +19,18 @@
 
                 <input
                     type="date"
-                    class="w-full rounded-lg bg-slate-950 border border-slate-600 text-white text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="w-full rounded-lg bg-white dark:bg-slate-950 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
 
                 <input
                     type="date"
-                    class="w-full rounded-lg bg-slate-950 border border-slate-600 text-white text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="w-full rounded-lg bg-white dark:bg-slate-950 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
 
             </form>
         </div>
 
-        {{-- Acciones --}}
+        {{-- Acciones (Botones Excel/PDF fijos) --}}
         <div class="lg:col-span-4">
             <div class="flex flex-col sm:flex-row gap-2 sm:justify-end">
 
