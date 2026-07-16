@@ -132,9 +132,7 @@
         {{-- HEADER --}}
         <div class="entrada bg-slate-900/85 backdrop-blur-[15px] border border-white/[0.08] rounded-3xl flex justify-between items-center px-4 sm:px-5 py-3.5 mb-5 shadow-lg">
             <div class="flex items-center gap-3">
-                <span class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 shadow-[0_8px_20px_-4px_rgba(37,99,235,0.6)]">
-                    <i class="bi bi-clock-history text-lg text-white"></i>
-                </span>
+                   <img src="{{ asset('images/isotipo.webp') }}" alt="Logo OllinCheck" class="w-6 h-6">
                 <div>
                     <h1 class="text-lg font-bold uppercase mb-0 tracking-[2px] leading-none">
                         OLLIN<span class="text-blue-500">CHECK</span>

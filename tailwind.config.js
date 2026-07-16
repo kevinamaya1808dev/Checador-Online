@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class', // <--- ESTO ES VITAL
   content: [
-    './resources/**/*.blade.php',
-    './resources/**/*.js',
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
   ],
-  darkMode: 'class',
   theme: {
     extend: {},
   },
