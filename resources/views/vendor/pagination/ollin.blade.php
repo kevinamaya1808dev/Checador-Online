@@ -1,31 +1,33 @@
+{{-- vendor/pagination/ollin.blade.php --}}
 @if ($paginator->hasPages())
-<nav role="navigation" aria-label="Paginación" class="d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3">
+<nav role="navigation" aria-label="Paginación" class="flex flex-col sm:flex-row items-center justify-between gap-3">
 
     {{-- Texto de resultados --}}
     <div>
-        <p class="text-secondary small mb-0">
+        <p class="text-gray-400 text-sm mb-0">
             Mostrando
-            <span class="fw-semibold text-white">{{ $paginator->firstItem() }}</span>
+            <span class="font-semibold text-white">{{ $paginator->firstItem() }}</span>
             a
-            <span class="fw-semibold text-white">{{ $paginator->lastItem() }}</span>
+            <span class="font-semibold text-white">{{ $paginator->lastItem() }}</span>
             de
-            <span class="fw-semibold text-white">{{ $paginator->total() }}</span>
+            <span class="font-semibold text-white">{{ $paginator->total() }}</span>
             resultados
         </p>
     </div>
 
-    <ul class="pagination pagination-sm mb-0 gap-1">
+    <ul class="flex items-center gap-1 mb-0 list-none p-0">
 
         {{-- Botón Anterior --}}
         @if ($paginator->onFirstPage())
-            <li class="page-item disabled">
-                <span class="page-link pg-link d-inline-flex align-items-center justify-content-center">
+            <li>
+                <span class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm bg-transparent border border-white/[0.08] text-gray-500">
                     <i class="bi bi-chevron-left"></i>
                 </span>
             </li>
         @else
-            <li class="page-item">
-                <a href="{{ $paginator->previousPageUrl() }}" class="page-link pg-link d-inline-flex align-items-center justify-content-center">
+            <li>
+                <a href="{{ $paginator->previousPageUrl() }}"
+                   class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm bg-white/[0.03] border border-white/15 text-slate-300 transition-all duration-200 hover:bg-gradient-to-br hover:from-cyan-400 hover:to-blue-900 hover:border-blue-900 hover:text-white hover:-translate-y-0.5">
                     <i class="bi bi-chevron-left"></i>
                 </a>
             </li>
@@ -36,8 +38,8 @@
 
             {{-- "..." --}}
             @if (is_string($element))
-                <li class="page-item disabled">
-                    <span class="page-link pg-link border-0 bg-transparent">{{ $element }}</span>
+                <li>
+                    <span class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm border-0 bg-transparent text-slate-300">{{ $element }}</span>
                 </li>
             @endif
 
@@ -45,12 +47,13 @@
             @if (is_array($element))
                 @foreach ($element as $page => $url)
                     @if ($page == $paginator->currentPage())
-                        <li class="page-item active">
-                            <span class="page-link pg-link pg-active fw-semibold">{{ $page }}</span>
+                        <li>
+                            <span class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm font-semibold bg-gradient-to-br from-blue-500 to-blue-900 border border-blue-900 text-white shadow-[0_2px_10px_rgba(30,58,138,0.55)]">{{ $page }}</span>
                         </li>
                     @else
-                        <li class="page-item">
-                            <a href="{{ $url }}" class="page-link pg-link">{{ $page }}</a>
+                        <li>
+                            <a href="{{ $url }}"
+                               class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm bg-white/[0.03] border border-white/15 text-slate-300 transition-all duration-200 hover:bg-gradient-to-br hover:from-cyan-400 hover:to-blue-900 hover:border-blue-900 hover:text-white hover:-translate-y-0.5">{{ $page }}</a>
                         </li>
                     @endif
                 @endforeach
@@ -60,14 +63,15 @@
 
         {{-- Botón Siguiente --}}
         @if ($paginator->hasMorePages())
-            <li class="page-item">
-                <a href="{{ $paginator->nextPageUrl() }}" class="page-link pg-link d-inline-flex align-items-center justify-content-center">
+            <li>
+                <a href="{{ $paginator->nextPageUrl() }}"
+                   class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm bg-white/[0.03] border border-white/15 text-slate-300 transition-all duration-200 hover:bg-gradient-to-br hover:from-cyan-400 hover:to-blue-900 hover:border-blue-900 hover:text-white hover:-translate-y-0.5">
                     <i class="bi bi-chevron-right"></i>
                 </a>
             </li>
         @else
-            <li class="page-item disabled">
-                <span class="page-link pg-link d-inline-flex align-items-center justify-content-center">
+            <li>
+                <span class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm bg-transparent border border-white/[0.08] text-gray-500">
                     <i class="bi bi-chevron-right"></i>
                 </span>
             </li>
@@ -75,42 +79,4 @@
 
     </ul>
 </nav>
-
-<style>
-    .pg-link {
-        background-color: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        color: #cbd5e1;
-        min-width: 2.25rem;
-        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
-    }
-
-    .page-item:not(.disabled):not(.active) .pg-link:hover {
-        background: linear-gradient(135deg, #22d3ee, #1e3a8a);
-        border-color: #1e3a8a;
-        color: #fff;
-        transform: translateY(-2px);
-    }
-
-    .page-item.disabled .pg-link {
-        background-color: transparent;
-        border-color: rgba(255, 255, 255, 0.08);
-        color: #6b7280;
-    }
-
-    .pg-active {
-        background: linear-gradient(135deg, #3b82f6, #1e3a8a);
-        border-color: #1e3a8a;
-        color: #fff;
-        box-shadow: 0 2px 10px rgba(30, 58, 138, 0.55);
-    }
-
-    @media (max-width: 576px) {
-        .pg-link {
-            min-width: 1.9rem;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.8rem;
-        }
-    }
-</style>
 @endif

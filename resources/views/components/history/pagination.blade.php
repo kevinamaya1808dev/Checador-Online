@@ -1,3 +1,4 @@
+{{-- components/history/pagination.blade.php --}}
 @if ($asistencias->hasPages())
 
     <div class="mt-4">

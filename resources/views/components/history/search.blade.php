@@ -4,23 +4,23 @@
 
 <form method="GET" class="mb-4">
 
-    <div class="card">
+    <div class="bg-gray-900 border border-gray-700 rounded-2xl shadow-xl">
 
-        <div class="card-body">
+        <div class="p-5">
 
-            <div class="row g-3 align-items-end">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-end">
 
                 {{-- Buscar --}}
-                <div class="col-lg-4">
+                <div class="lg:col-span-4">
 
-                    <label class="form-label text-secondary">
+                    <label class="block text-gray-400 text-sm mb-1.5">
                         Buscar becario
                     </label>
 
                     <input
                         type="text"
                         name="search"
-                        class="form-control"
+                        class="w-full bg-[#0f1724] border border-white/10 text-white rounded-lg px-3 py-2.5 focus:bg-[#101b2c] focus:border-blue-500 focus:ring-2 focus:ring-blue-500/25 focus:outline-none"
                         placeholder="Nombre o correo..."
                         value="{{ request('search') }}"
                     >
@@ -28,15 +28,15 @@
                 </div>
 
                 {{-- Semana --}}
-                <div class="col-lg-2">
+                <div class="lg:col-span-2">
 
-                    <label class="form-label text-secondary">
+                    <label class="block text-gray-400 text-sm mb-1.5">
                         Semana
                     </label>
 
                     <select
                         name="semana"
-                        class="form-select"
+                        class="w-full bg-[#0f1724] border border-white/10 text-white rounded-lg px-3 py-2.5 focus:bg-[#101b2c] focus:border-blue-500 focus:ring-2 focus:ring-blue-500/25 focus:outline-none"
                     >
 
                         <option value="">Todas</option>
@@ -56,15 +56,15 @@
                 </div>
 
                 {{-- Mes --}}
-                <div class="col-lg-2">
+                <div class="lg:col-span-2">
 
-                    <label class="form-label text-secondary">
+                    <label class="block text-gray-400 text-sm mb-1.5">
                         Mes
                     </label>
 
                     <select
                         name="mes"
-                        class="form-select"
+                        class="w-full bg-[#0f1724] border border-white/10 text-white rounded-lg px-3 py-2.5 focus:bg-[#101b2c] focus:border-blue-500 focus:ring-2 focus:ring-blue-500/25 focus:outline-none"
                     >
 
                         <option value="">Todos</option>
@@ -87,15 +87,15 @@
                 </div>
 
                 {{-- Orden --}}
-                <div class="col-lg-2">
+                <div class="lg:col-span-2">
 
-                    <label class="form-label text-secondary">
+                    <label class="block text-gray-400 text-sm mb-1.5">
                         Orden
                     </label>
 
                     <select
                         name="order"
-                        class="form-select"
+                        class="w-full bg-[#0f1724] border border-white/10 text-white rounded-lg px-3 py-2.5 focus:bg-[#101b2c] focus:border-blue-500 focus:ring-2 focus:ring-blue-500/25 focus:outline-none"
                     >
 
                         <option value="az" @selected(request('order')=='az')>
@@ -119,11 +119,11 @@
                 </div>
 
                 {{-- Botones --}}
-                <div class="col-lg-2">
+                <div class="lg:col-span-2">
 
-                    <div class="d-grid gap-2">
+                    <div class="grid gap-2">
 
-                        <button class="btn btn-primary">
+                        <button class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg px-4 py-2.5 transition-colors">
 
                             <i class="bi bi-search"></i>
 
@@ -131,9 +131,9 @@
 
                         </button>
 
-                        <a
+                        <a 
                             href="{{ route('admin.historial') }}"
-                            class="btn btn-outline-secondary"
+                            class="inline-flex items-center justify-center gap-2 border border-gray-600 text-gray-300 hover:bg-white/5 rounded-lg px-4 py-2.5 transition-colors no-underline"
                         >
 
                             <i class="bi bi-arrow-counterclockwise"></i>

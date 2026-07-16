@@ -1,67 +1,64 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-2">
-        <h2 class="text-white fw-bold mb-0">
-            <i class="bi bi-people-fill text-info me-2"></i>Administración de Usuarios
+<div class="w-full px-3 sm:px-4">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+        <h2 class="text-white font-bold mb-0 text-xl sm:text-3xl">
+            <i class="bi bi-people-fill text-cyan-400 mr-2"></i>Administración de Usuarios
         </h2>
+        
         @include('admin.modals.registrar-becario')
     </div>
 
-    <div class="card bg-dark border-secondary shadow-lg rounded-4">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-dark table-hover mb-0 align-middle">
+    <div class="bg-gray-900 border border-gray-700 shadow-xl rounded-2xl">
+        <div class="p-0">
+            <div class="overflow-x-auto">
+                <table class="w-full text-white mb-0 align-middle">
                     <thead>
-                        <tr class="text-secondary" style="background-color: rgba(255,255,255,0.03);">
-                            <th class="ps-4 py-3 fw-semibold text-uppercase small">Nombre</th>
-                            <th class="py-3 fw-semibold text-uppercase small">Email</th>
-                            <th class="py-3 fw-semibold text-uppercase small">Rol</th>
-                            <th class="text-end pe-4 py-3 fw-semibold text-uppercase small">Acciones</th>
+                        <tr class="text-gray-400 bg-white/[0.03]">
+                            <th class="pl-3 sm:pl-4 py-3 font-semibold uppercase text-[0.8rem] sm:text-xs">Nombre</th>
+                            <th class="py-3 font-semibold uppercase text-[0.8rem] sm:text-xs">Email</th>
+                            <th class="py-3 font-semibold uppercase text-[0.8rem] sm:text-xs">Rol</th>
+                            <th class="text-right pr-3 sm:pr-4 py-3 font-semibold uppercase text-[0.8rem] sm:text-xs">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($usuarios as $user)
-                        <tr>
-                            <td class="ps-4 py-3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="rounded-circle bg-secondary bg-opacity-25 border border-secondary d-flex align-items-center justify-content-center text-info fw-bold user-avatar"
-                                         style="width:36px;height:36px;font-size:0.9rem;">
+                        <tr class="hover:bg-white/5">
+                            <td class="pl-3 sm:pl-4 py-3 text-[0.8rem] sm:text-base">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-gray-500/25 border border-gray-500 flex items-center justify-center text-cyan-400 font-bold text-[0.75rem] sm:text-[0.9rem] flex-shrink-0">
                                         {{ strtoupper(substr($user->name, 0, 1)) }}
                                     </div>
                                     <span class="text-white">{{ $user->name }}</span>
                                 </div>
                             </td>
-                            <td class="py-3">
-                                <span class="text-info">{{ $user->email }}</span>
+                            <td class="py-3 text-[0.8rem] sm:text-base">
+                                <span class="text-cyan-400">{{ $user->email }}</span>
                             </td>
                             <td class="py-3">
-                                <span class="badge rounded-pill px-3 py-2
-                                    @if(strtolower($user->role) === 'admin') text-bg-primary
-                                    @else text-bg-secondary
+                                <span class="inline-flex items-center rounded-full font-medium text-[0.7rem] px-2.5 py-1.5 sm:text-xs sm:px-3 sm:py-2
+                                    @if(strtolower($user->role) === 'admin') bg-blue-500/25 text-blue-400
+                                    @else bg-gray-500/25 text-gray-300
                                     @endif">
                                     {{ ucfirst($user->role) }}
                                 </span>
                             </td>
-                            <td class="text-end pe-4 py-3">
-                                <div class="d-flex justify-content-end gap-2 flex-nowrap">
+                            <td class="text-right pr-3 sm:pr-4 py-3">
+                                <div class="flex justify-end gap-2 flex-nowrap">
+                                    
                                     <button type="button"
-                                            class="btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center action-btn action-btn-edit"
-                                            style="width:34px;height:34px;"
+                                            class="w-7 h-7 sm:w-[34px] sm:h-[34px] rounded-full p-0 inline-flex items-center justify-center border-none text-white text-[0.75rem] sm:text-[0.95rem] transition-all duration-200 bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-[0_2px_8px_rgba(8,145,178,0.45)] hover:text-white hover:-translate-y-[3px] hover:scale-[1.06] hover:shadow-[0_6px_16px_rgba(8,145,178,0.6)] hover:brightness-110 focus:text-white focus:-translate-y-[3px] focus:scale-[1.06] focus:shadow-[0_6px_16px_rgba(8,145,178,0.6)] focus:brightness-110 active:translate-y-0 active:scale-[0.96]"
                                             title="Editar"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modalEditarUsuario"
-                                            onclick="prepararEdicion('{{ $user->id }}', '{{ $user->name }}', '{{ $user->role }}')">
+                                            onclick="prepararEdicion('{{ $user->id }}', '{{ addslashes($user->name) }}', '{{ $user->role }}', '{{ $user->email }}')">
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
 
                                     @if($user->id != 1)
-                                    <form action="{{ route('users.delete', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Seguro?')">
+                                    <form action="{{ route('users.delete', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('¿Seguro?')">
                                         @csrf @method('DELETE')
                                         <button type="submit"
-                                                class="btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center action-btn action-btn-delete"
-                                                style="width:34px;height:34px;"
+                                                class="w-7 h-7 sm:w-[34px] sm:h-[34px] rounded-full p-0 inline-flex items-center justify-center border-none text-white text-[0.75rem] sm:text-[0.95rem] transition-all duration-200 bg-gradient-to-br from-red-400 to-red-600 shadow-[0_2px_8px_rgba(220,38,38,0.45)] hover:text-white hover:-translate-y-[3px] hover:scale-[1.06] hover:shadow-[0_6px_16px_rgba(220,38,38,0.6)] hover:brightness-110 focus:text-white focus:-translate-y-[3px] focus:scale-[1.06] focus:shadow-[0_6px_16px_rgba(220,38,38,0.6)] focus:brightness-110 active:translate-y-0 active:scale-[0.96]"
                                                 title="Eliminar">
                                             <i class="bi bi-trash-fill"></i>
                                         </button>
@@ -80,83 +77,30 @@
 
 @include('admin.modals.editar-usuario')
 
-<style>
-    .action-btn {
-        width: 36px !important;
-        height: 36px !important;
-        border: none !important;
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.95rem;
-        color: #fff !important;
-        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-    }
-
-    .action-btn-edit {
-        background: linear-gradient(135deg, #22d3ee, #0891b2) !important;
-        box-shadow: 0 2px 8px rgba(8, 145, 178, 0.45);
-    }
-
-    .action-btn-edit:hover,
-    .action-btn-edit:focus {
-        color: #fff !important;
-        transform: translateY(-3px) scale(1.06);
-        box-shadow: 0 6px 16px rgba(8, 145, 178, 0.6);
-        filter: brightness(1.1);
-    }
-
-    .action-btn-delete {
-        background: linear-gradient(135deg, #f87171, #dc2626) !important;
-        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.45);
-    }
-
-    .action-btn-delete:hover,
-    .action-btn-delete:focus {
-        color: #fff !important;
-        transform: translateY(-3px) scale(1.06);
-        box-shadow: 0 6px 16px rgba(220, 38, 38, 0.6);
-        filter: brightness(1.1);
-    }
-
-    .action-btn:active {
-        transform: translateY(0) scale(0.96);
-    }
-
-    @media (max-width: 576px) {
-        .container-fluid {
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-        }
-
-        h2.fw-bold {
-            font-size: 1.25rem;
-        }
-
-        .table-dark td,
-        .table-dark th {
-            font-size: 0.8rem;
-            padding-left: 0.75rem !important;
-            padding-right: 0.75rem !important;
-        }
-
-        .user-avatar {
-            width: 28px !important;
-            height: 28px !important;
-            font-size: 0.75rem !important;
-        }
-
-        .action-btn {
-            width: 28px !important;
-            height: 28px !important;
-            font-size: 0.75rem;
-        }
-
-        .badge.rounded-pill {
-            font-size: 0.7rem;
-            padding: 0.35rem 0.6rem !important;
-        }
-    }
-</style>
-
 @endsection
+
+<script>
+    // 1. Función global para abrir cualquier modal
+    window.openModal = function(id) {
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100', 'pointer-events-auto');
+        }
+    };
+
+    // 2. Lógica para cerrar modales (se ejecuta al cargar la página)
+    document.addEventListener('DOMContentLoaded', () => {
+        const closeButtons = document.querySelectorAll('.btn-close-modal');
+        
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const modal = this.closest('[role="dialog"]');
+                if (modal) {
+                    modal.classList.add('opacity-0', 'pointer-events-none');
+                    modal.classList.remove('opacity-100', 'pointer-events-auto');
+                }
+            });
+        });
+    });
+</script>

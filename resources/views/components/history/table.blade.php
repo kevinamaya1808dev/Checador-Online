@@ -1,13 +1,13 @@
-<div class="card border-0 shadow-sm">
+<div class="bg-gray-900 border border-gray-700 rounded-2xl shadow-xl">
 
-    <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="flex justify-between items-center px-5 py-3 border-b border-gray-700">
 
-        <h5 class="mb-0">
-            <i class="bi bi-table me-2"></i>
+        <h5 class="mb-0 text-white font-semibold text-lg">
+            <i class="bi bi-table mr-2"></i>
             Registros
         </h5>
 
-        <span class="badge bg-secondary">
+        <span class="inline-flex items-center rounded-full bg-gray-600 text-white text-sm px-3 py-1">
 
             {{ $asistencias->total() }}
 
@@ -17,31 +17,31 @@
 
     </div>
 
-    <div class="table-responsive">
+    <div class="overflow-x-auto">
 
-        <table class="table table-dark table-hover align-middle mb-0">
+        <table class="w-full text-white align-middle mb-0">
 
             <thead>
 
-<tr>
+<tr class="bg-white/[0.03] text-gray-400">
 
-    <th>Becario</th>
+    <th class="px-4 py-3 text-left text-xs uppercase font-semibold">Becario</th>
 
-    <th>Fecha</th>
+    <th class="px-4 py-3 text-left text-xs uppercase font-semibold">Fecha</th>
 
-   <th class="d-none d-md-table-cell">Entrada</th>
+   <th class="hidden md:table-cell px-4 py-3 text-left text-xs uppercase font-semibold">Entrada</th>
 
-    <th class="d-none d-md-table-cell">Salida</th>
+    <th class="hidden md:table-cell px-4 py-3 text-left text-xs uppercase font-semibold">Salida</th>
 
-    <th class="d-none d-md-table-cell">Pausas</th>
+    <th class="hidden md:table-cell px-4 py-3 text-left text-xs uppercase font-semibold">Pausas</th>
 
-    <th class="d-none d-md-table-cell">Tiempo pausa</th>
+    <th class="hidden md:table-cell px-4 py-3 text-left text-xs uppercase font-semibold">Tiempo pausa</th>
 
-    <th>Tiempo trabajado</th>
+    <th class="px-4 py-3 text-left text-xs uppercase font-semibold">Tiempo trabajado</th>
 
-    <th class="d-none d-md-table-cell">Horas extra</th>
+    <th class="hidden md:table-cell px-4 py-3 text-left text-xs uppercase font-semibold">Horas extra</th>
 
-    <th>Acciones</th>
+    <th class="px-4 py-3 text-left text-xs uppercase font-semibold">Acciones</th>
 
 </tr>
 
@@ -58,9 +58,9 @@
 
                     <tr>
 
-                        <td colspan="9" class="text-center py-5">
+                        <td colspan="9" class="text-center py-10 text-gray-400">
 
-                            <i class="bi bi-folder-x display-6"></i>
+                            <i class="bi bi-folder-x text-4xl"></i>
 
                             <br><br>
 

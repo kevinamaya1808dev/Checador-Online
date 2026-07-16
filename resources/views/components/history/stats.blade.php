@@ -1,72 +1,64 @@
 @props(['asistencias'])
 
-<div class="row g-3 mb-4">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
 
-    <div class="col-6 col-md-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
+    <div class="bg-gray-900 border border-gray-700 rounded-xl shadow-sm h-full">
+        <div class="p-5">
 
-                <small class="text-secondary">
-                    Registros
-                </small>
+            <small class="text-gray-400">
+                Registros
+            </small>
 
-                <h3 class="fw-bold text-white mt-2">
-                    {{ $asistencias->total() }}
-                </h3>
+            <h3 class="font-bold text-white mt-2">
+                {{ $asistencias->total() }}
+            </h3>
 
-            </div>
         </div>
     </div>
 
-    <div class="col-6 col-md-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
+    <div class="bg-gray-900 border border-gray-700 rounded-xl shadow-sm h-full">
+        <div class="p-5">
 
-                <small class="text-secondary">
-                    Becarios
-                </small>
+            <small class="text-gray-400">
+                Becarios
+            </small>
 
-                <h3 class="fw-bold text-primary mt-2">
-                    {{ $asistencias->pluck('user_id')->unique()->count() }}
-                </h3>
+            <h3 class="font-bold text-blue-500 mt-2">
+                {{ $asistencias->pluck('user_id')->unique()->count() }}
+            </h3>
 
-            </div>
         </div>
     </div>
 
-    <div class="col-6 col-md-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
+    <div class="bg-gray-900 border border-gray-700 rounded-xl shadow-sm h-full">
+        <div class="p-5">
 
-                <small class="text-secondary">
-                    Finalizados
-                </small>
+            <small class="text-gray-400">
+                Finalizados
+            </small>
 
-                <h3 class="fw-bold text-success mt-2">
+            <h3 class="font-bold text-green-500 mt-2">
 
-                    {{ $asistencias->whereNotNull('hora_salida')->count() }}
+                {{ $asistencias->whereNotNull('hora_salida')->count() }}
 
-                </h3>
+            </h3>
 
-            </div>
         </div>
     </div>
 
-   <div class="col-6 col-md-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
+    <div class="bg-gray-900 border border-gray-700 rounded-xl shadow-sm h-full">
+        <div class="p-5">
 
-                <small class="text-secondary">
-                    En curso
-                </small>
+            <small class="text-gray-400">
+                En curso
+            </small>
 
-                <h3 class="fw-bold text-warning mt-2">
+            <h3 class="font-bold text-yellow-400 mt-2">
 
-                    {{ $asistencias->whereNull('hora_salida')->count() }}
+                {{ $asistencias->whereNull('hora_salida')->count() }}
 
-                </h3>
+            </h3>
 
-            </div>
         </div>
     </div>
 

@@ -1,95 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-    body {
-        background-color: #020617; /* slate-950 */
-    }
-
-    .glass-card {
-        background: rgba(15, 23, 42, 0.85);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 20px;
-    }
-
-    .glass-soft {
-        background: rgba(30, 41, 59, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 16px;
-    }
-
-    /* --- Reloj analógico --- */
-    .clock-wrap { width: 250px; height: 250px; margin: 0 auto; }
-    .clock-face {
-        width: 100%; height: 100%; border-radius: 50%;
-        border: 8px solid #001f3f;
-        background: linear-gradient(180deg, #00172e, #000d1a);
-        box-shadow: inset 0 0 30px #000, 0 0 40px rgba(0, 31, 63, 0.9);
-        position: relative;
-    }
-    .clock-face .num {
-        position: absolute; font-family: monospace; font-size: .75rem;
-        font-weight: 700; color: rgba(96, 165, 250, .6);
-    }
-    .num-12 { top: 12px; left: 50%; transform: translateX(-50%); }
-    .num-6  { bottom: 12px; left: 50%; transform: translateX(-50%); }
-    .num-9  { left: 12px; top: 50%; transform: translateY(-50%); }
-    .num-3  { right: 12px; top: 50%; transform: translateY(-50%); }
-    .clock-center {
-        position: absolute; top: 50%; left: 50%; width: 14px; height: 14px;
-        margin: -7px; background: #3b82f6; border-radius: 50%; z-index: 5;
-        box-shadow: 0 0 15px #3b82f6;
-    }
-    .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center; border-radius: 4px; }
-    .hand-hour { width: 6px; height: 60px; margin-left: -3px; background: linear-gradient(#2563eb, #93c5fd); z-index: 2; }
-    .hand-min  { width: 4px; height: 88px; margin-left: -2px; background: linear-gradient(#22d3ee, #fff); z-index: 3; }
-
-    /* --- Botones de acción --- */
-    .btn-reset {
-        background: none; border: none; padding: 0; margin: 0;
-        text-align: left; width: 100%; color: inherit; font: inherit; cursor: pointer;
-    }
-    .accion-item {
-        display: flex; align-items: center; gap: 1rem;
-        border-radius: 14px; padding: 1rem;
-        border: 1px solid rgba(255,255,255,.08);
-        background: rgba(15, 23, 42, 0.6);
-        transition: transform .2s ease, background .2s ease, opacity .2s ease;
-    }
-    .accion-item:hover { transform: translateY(-3px); }
-    .accion-item:disabled,
-    .accion-item[disabled] {
-        opacity: .3;
-        cursor: not-allowed;
-        pointer-events: none;
-        transform: none;
-    }
-    .accion-icon {
-        width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
-        display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #fff;
-    }
-    .accion-blue  { border-color: rgba(59,130,246,.4); }
-    .accion-blue .accion-icon { background: #2563eb; box-shadow: 0 0 15px rgba(37,99,235,.5); }
-    .accion-blue .accion-title { color: #93c5fd; }
-
-    .accion-amber { border-color: rgba(245,158,11,.4); }
-    .accion-amber .accion-icon { background: #d97706; box-shadow: 0 0 15px rgba(217,119,6,.5); }
-    .accion-amber .accion-title { color: #fcd34d; }
-
-    .accion-red   { border-color: rgba(239,68,68,.4); }
-    .accion-red .accion-icon { background: #dc2626; box-shadow: 0 0 15px rgba(185,28,28,.5); }
-    .accion-red .accion-title { color: #fca5a5; }
-
-    /* --- Notificaciones toast --- */
-    .toast-container { z-index: 1090; }
-    .toast {
-        border-radius: 14px;
-        overflow: hidden;
-        min-width: 280px;
-    }
-</style>
 
 @php
     // $estado esperado desde el controlador: 'inactivo' | 'trabajando' | 'pausado' | 'terminado'
@@ -98,263 +9,430 @@
     $gating    = ! is_null($estadoRaw); // solo bloqueamos botones cuando el backend ya manda el estado real
 
     $estadoInfo = [
-        'inactivo'   => ['label' => 'Esperando turno',  'desc' => 'Aún no has registrado tu entrada.',   'color' => 'secondary', 'icon' => 'bi-hourglass-split'],
-        'trabajando' => ['label' => 'Trabajando',        'desc' => 'Tu turno está activo.',                'color' => 'success',   'icon' => 'bi-briefcase-fill'],
-        'pausado'    => ['label' => 'En pausa',          'desc' => 'Descanso en curso.',                   'color' => 'warning',   'icon' => 'bi-cup-hot'],
-        'terminado'  => ['label' => 'Turno finalizado',  'desc' => 'Registro guardado correctamente.',     'color' => 'danger',    'icon' => 'bi-flag-fill'],
-    ][$estado] ?? ['label' => ucfirst($estado), 'desc' => '', 'color' => 'secondary', 'icon' => 'bi-question-circle'];
+        'inactivo'   => ['label' => 'Esperando turno',  'desc' => 'Aún no has registrado tu entrada.',   'texto' => 'text-slate-300',  'icon' => 'bi-hourglass-split'],
+        'trabajando' => ['label' => 'Trabajando',        'desc' => 'Tu turno está activo.',                'texto' => 'text-green-400',  'icon' => 'bi-briefcase-fill'],
+        'pausado'    => ['label' => 'En pausa',          'desc' => 'Descanso en curso.',                   'texto' => 'text-amber-400',  'icon' => 'bi-cup-hot'],
+        'terminado'  => ['label' => 'Turno finalizado',  'desc' => 'Registro guardado correctamente.',     'texto' => 'text-red-400',    'icon' => 'bi-flag-fill'],
+    ][$estado] ?? ['label' => ucfirst($estado), 'desc' => '', 'texto' => 'text-slate-300', 'icon' => 'bi-question-circle'];
+
+    // Estilos del banner de estado — clases Tailwind completas y literales para que el JIT las detecte.
+    $estadoBanner = [
+        'inactivo'   => [
+            'wash'    => 'from-slate-500/10',
+            'border'  => 'border-slate-500/20',
+            'iconBg'  => 'bg-gradient-to-br from-slate-500 to-slate-700',
+            'iconSh'  => 'shadow-[0_8px_20px_-4px_rgba(100,116,139,0.5)]',
+            'dot'     => 'bg-slate-400',
+            'pulse'   => false,
+        ],
+        'trabajando' => [
+            'wash'    => 'from-green-500/10',
+            'border'  => 'border-green-500/25',
+            'iconBg'  => 'bg-gradient-to-br from-green-500 to-green-700',
+            'iconSh'  => 'shadow-[0_8px_20px_-4px_rgba(34,197,94,0.55)]',
+            'dot'     => 'bg-green-400',
+            'pulse'   => true,
+        ],
+        'pausado'    => [
+            'wash'    => 'from-amber-500/10',
+            'border'  => 'border-amber-500/25',
+            'iconBg'  => 'bg-gradient-to-br from-amber-500 to-amber-700',
+            'iconSh'  => 'shadow-[0_8px_20px_-4px_rgba(217,119,6,0.55)]',
+            'dot'     => 'bg-amber-400',
+            'pulse'   => true,
+        ],
+        'terminado'  => [
+            'wash'    => 'from-red-500/10',
+            'border'  => 'border-red-500/25',
+            'iconBg'  => 'bg-gradient-to-br from-red-500 to-red-700',
+            'iconSh'  => 'shadow-[0_8px_20px_-4px_rgba(220,38,38,0.5)]',
+            'dot'     => 'bg-red-400',
+            'pulse'   => false,
+        ],
+    ][$estado] ?? [
+        'wash' => 'from-slate-500/10', 'border' => 'border-slate-500/20',
+        'iconBg' => 'bg-gradient-to-br from-slate-500 to-slate-700',
+        'iconSh' => 'shadow-[0_8px_20px_-4px_rgba(100,116,139,0.5)]',
+        'dot' => 'bg-slate-400', 'pulse' => false,
+    ];
 
     $puedeEntrada  = ! $gating || $estado === 'inactivo';
     $puedePausar   = ! $gating || $estado === 'trabajando';
     $puedeReanudar = ! $gating || $estado === 'pausado';
-    $puedeSalir = ! $gating || $estado === 'trabajando';
+    $puedeSalir    = ! $gating || $estado === 'trabajando';
+
+    // "Destacar" = es la acción que realmente corresponde hacer ahora mismo.
+    $destacarEntrada  = $gating && $puedeEntrada;
+    $destacarPausar   = $gating && $puedePausar;
+    $destacarReanudar = $gating && $puedeReanudar;
+    $destacarSalir    = $gating && $puedeSalir;
+
+    $inicial = auth()->check() ? mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) : 'U';
 @endphp
 
-{{-- NOTIFICACIONES: aparecen a un costado y se autodestruyen a los 3s --}}
-<div class="toast-container position-fixed top-0 end-0 p-3">
+<style>
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .entrada {
+        opacity: 0;
+        animation: fadeInUp .6s cubic-bezier(.16,.84,.44,1) forwards;
+    }
+
+    @keyframes anilloPulso {
+        0%   { box-shadow: 0 0 0 0 rgba(255,255,255,.18); }
+        70%  { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+        100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+    }
+    .anillo-vivo { animation: anilloPulso 2.2s ease-out infinite; }
+</style>
+
+{{-- NOTIFICACIONES: aparecen a un costado y se autodestruyen a los 3s (JS plano, sin Bootstrap) --}}
+<div class="fixed top-0 right-0 p-3 z-[1090] flex flex-col gap-2">
     @if (session('success'))
-        <div class="toast text-white glass-card border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex align-items-center">
-                <div class="toast-body d-flex align-items-center gap-2">
-                    <i class="bi bi-check-circle-fill text-success fs-5"></i>
+        <div data-toast class="text-white bg-slate-900/90 backdrop-blur-[15px] border border-white/[0.08] rounded-2xl overflow-hidden min-w-[280px] shadow-2xl" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="flex items-center">
+                <div class="flex items-center gap-2 p-3">
+                    <i class="bi bi-check-circle-fill text-green-500 text-xl"></i>
                     {{ session('success') }}
                 </div>
-                <button type="button" class="btn-close btn-close-white me-3" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                <button type="button" data-toast-close class="ml-auto mr-3 text-white/70 hover:text-white transition-colors" aria-label="Cerrar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
         </div>
     @endif
     @if (session('error'))
-        <div class="toast text-white glass-card border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex align-items-center">
-                <div class="toast-body d-flex align-items-center gap-2">
-                    <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
+        <div data-toast class="text-white bg-slate-900/90 backdrop-blur-[15px] border border-white/[0.08] rounded-2xl overflow-hidden min-w-[280px] shadow-2xl" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="flex items-center">
+                <div class="flex items-center gap-2 p-3">
+                    <i class="bi bi-exclamation-triangle-fill text-red-500 text-xl"></i>
                     {{ session('error') }}
                 </div>
-                <button type="button" class="btn-close btn-close-white me-3" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                <button type="button" data-toast-close class="ml-auto mr-3 text-white/70 hover:text-white transition-colors" aria-label="Cerrar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
         </div>
     @endif
 </div>
 
-<div class="container-xxl py-4 px-3 px-md-4 text-white">
+<div class="relative min-h-screen bg-slate-950 text-white overflow-hidden">
 
-    {{-- HEADER --}}
-    <div class="glass-card d-flex justify-content-between align-items-center px-4 py-3 mb-4">
-        <div class="d-flex align-items-center gap-2">
-            <i class="bi bi-clock-history fs-4 text-primary"></i>
-            <h1 class="h5 fw-bold text-uppercase mb-0" style="letter-spacing:2px;">
-                OLLIN<span class="text-primary">CHECK</span>
-            </h1>
-        </div>
-        <div class="d-flex align-items-center gap-3">
-            <span class="d-none d-sm-flex align-items-center gap-2 small fw-semibold">
-                <i class="bi bi-person-circle text-primary fs-5"></i>
-                {{ auth()->check() ? auth()->user()->name : 'Usuario' }}
-            </span>
-            <form action="{{ route('logout') }}" method="POST" class="mb-0">
-                @csrf
-                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
-                    <i class="bi bi-power"></i> Salir
-                </button>
-            </form>
-        </div>
+    {{-- Ambiente decorativo de fondo: manchas de color muy sutiles, dan profundidad sin distraer --}}
+    <div class="pointer-events-none absolute inset-0 -z-0 overflow-hidden">
+        <div class="absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-blue-600/10 blur-[110px]"></div>
+        <div class="absolute top-1/3 -right-32 w-[420px] h-[420px] rounded-full bg-amber-500/10 blur-[120px]"></div>
+        <div class="absolute bottom-0 left-1/4 w-[360px] h-[360px] rounded-full bg-red-600/5 blur-[110px]"></div>
     </div>
 
-    <div class="row g-4">
+    <div class="relative max-w-[1320px] mx-auto py-5 px-3 md:px-4">
 
-        {{-- IZQUIERDA: RELOJ + ESTADO --}}
-        <div class="col-lg-7">
-            <div class="glass-card p-4 h-100">
-
-                <div class="clock-wrap mt-2">
-                    <div class="clock-face">
-                        <span class="num num-12">12</span>
-                        <span class="num num-6">6</span>
-                        <span class="num num-9">9</span>
-                        <span class="num num-3">3</span>
-                        <div class="clock-center"></div>
-                        <div id="reloj-hora" class="hand hand-hour"></div>
-                        <div id="reloj-min" class="hand hand-min"></div>
-                    </div>
+        {{-- HEADER --}}
+        <div class="entrada bg-slate-900/85 backdrop-blur-[15px] border border-white/[0.08] rounded-3xl flex justify-between items-center px-4 sm:px-5 py-3.5 mb-5 shadow-lg">
+            <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 shadow-[0_8px_20px_-4px_rgba(37,99,235,0.6)]">
+                    <i class="bi bi-clock-history text-lg text-white"></i>
+                </span>
+                <div>
+                    <h1 class="text-lg font-bold uppercase mb-0 tracking-[2px] leading-none">
+                        OLLIN<span class="text-blue-500">CHECK</span>
+                    </h1>
+                    <p class="text-[0.7rem] text-slate-400 mt-0.5 flex items-center gap-1.5">
+                        <span class="relative flex h-1.5 w-1.5">
+                            <span class="{{ $estadoBanner['pulse'] ? 'animate-ping' : '' }} absolute inline-flex h-full w-full rounded-full {{ $estadoBanner['dot'] }} opacity-60"></span>
+                            <span class="relative inline-flex rounded-full h-1.5 w-1.5 {{ $estadoBanner['dot'] }}"></span>
+                        </span>
+                        {{ $estadoInfo['label'] }}
+                    </p>
                 </div>
-
-                <div class="text-center mt-4">
-                    <div class="display-6 fw-bold font-monospace" id="reloj-digital">--:--:--</div>
-                    <p class="text-secondary small mb-0 text-capitalize" id="reloj-fecha"></p>
-                </div>
-
-                <div class="glass-soft mt-4 p-3 d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-uppercase text-secondary mb-1" style="letter-spacing:1px; font-size:.7rem;">Estado actual</p>
-                        <p class="fw-bold fs-5 mb-0 text-{{ $estadoInfo['color'] }}">
-                            <i class="bi bi-circle-fill me-1" style="font-size:.55rem;"></i>{{ $estadoInfo['label'] }}
-                        </p>
-                        <p class="text-secondary small mb-0">{{ $estadoInfo['desc'] }}</p>
-                    </div>
-                    <i class="bi {{ $estadoInfo['icon'] }} fs-2 text-{{ $estadoInfo['color'] }} opacity-75"></i>
-                </div>
-
-                <div class="row g-3 mt-1">
-                    <div class="col-sm-6">
-                        <div class="glass-soft p-3 d-flex align-items-center gap-3">
-                            <i class="bi bi-clock fs-4 text-success"></i>
-                            <div>
-                                <p class="text-uppercase text-secondary mb-0" style="font-size:.65rem; letter-spacing:1px;">Tiempo trabajado</p>
-                                <p class="fw-bold font-monospace fs-5 mb-0" id="tiempoTrabajado">00:00:00</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="glass-soft p-3 d-flex align-items-center gap-3">
-                            <i class="bi bi-cup-hot fs-4 text-warning"></i>
-                            <div>
-                                <p class="text-uppercase text-secondary mb-0" style="font-size:.65rem; letter-spacing:1px;">Tiempo en pausa</p>
-                                <p class="fw-bold font-monospace fs-5 mb-0" id="tiempoPausa">00:00:00</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="hidden sm:flex items-center gap-2.5 text-sm font-semibold">
+                    <span class="w-8 h-8 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 text-xs font-bold flex items-center justify-center">
+                        {{ $inicial }}
+                    </span>
+                    {{ auth()->check() ? auth()->user()->name : 'Usuario' }}
+                </span>
+                <form action="{{ route('logout') }}" method="POST" class="mb-0">
+                    @csrf
+                    <button type="submit" class="inline-flex items-center gap-1.5 text-sm border border-red-500/60 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 rounded-full px-3.5 py-1.5 transition-colors duration-200">
+                        <i class="bi bi-power"></i> Salir
+                    </button>
+                </form>
             </div>
         </div>
 
-        {{-- DERECHA: ACCIONES --}}
-        <div class="col-lg-5">
-            <div class="glass-card p-4 h-100 d-flex flex-column">
-                <p class="text-uppercase text-secondary fw-bold mb-3" style="letter-spacing:2px; font-size:.75rem;">Acciones</p>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-                <div class="d-flex flex-column gap-3">
+            {{-- IZQUIERDA: RELOJ + ESTADO --}}
+            <div class="lg:col-span-7">
+                <div class="entrada bg-slate-900/85 backdrop-blur-[15px] border border-white/[0.08] rounded-3xl p-5 sm:p-6 h-full shadow-lg" style="animation-delay:.08s">
 
-                    <form action="{{ route('becario.checar') }}" method="POST" class="m-0">
-                        @csrf
-                        <button type="submit" class="btn-reset accion-item accion-blue" @disabled(!$puedeEntrada)>
-                            <span class="accion-icon"><i class="bi bi-box-arrow-in-right"></i></span>
-                            <span>
-                                <span class="d-block fw-bold accion-title">Registrar entrada</span>
-                                <span class="d-block small text-secondary">Inicia el registro de tu turno</span>
-                            </span>
-                        </button>
-                    </form>
+                    <p class="uppercase text-slate-500 font-bold tracking-[2px] text-[0.7rem] mb-1">Tu turno en tiempo real</p>
 
-                    <div>
-                        <button type="button" class="btn-reset accion-item accion-amber" data-bs-toggle="collapse" data-bs-target="#pausaMenu" @disabled(!$puedePausar)>
-                            <span class="accion-icon"><i class="bi bi-cup-hot"></i></span>
-                            <span>
-                                <span class="d-block fw-bold accion-title">Gestionar pausa</span>
-                                <span class="d-block small text-secondary">Justificación obligatoria</span>
-                            </span>
-                        </button>
+                    <div class="relative w-[250px] h-[250px] mx-auto mt-3">
+                        <div class="absolute inset-0 rounded-full bg-blue-500/20 blur-3xl scale-90"></div>
 
-                        <div class="collapse mt-2" id="pausaMenu">
-                            <form action="{{ route('becario.iniciarPausa') }}" method="POST"
-                                  class="glass-soft p-3" style="border-color: rgba(245,158,11,.3);">
-                                @csrf
-                                <label class="small text-warning fw-bold text-uppercase mb-2 d-block" style="font-size:.7rem;">
-                                    Motivo de pausa
-                                </label>
-                                <select name="motivo" class="form-select form-select-sm bg-dark text-white border-secondary mb-3">
-                                    <option value="Almuerzo">Almuerzo</option>
-                                    <option value="Personal">Personal</option>
-                                </select>
-                                <button type="submit" class="btn btn-warning btn-sm w-100 fw-bold text-uppercase" @disabled(!$puedePausar)>
-                                    Iniciar ahora
-                                </button>
-                            </form>
+                        <div class="relative w-full h-full rounded-full border-8 border-[#001f3f] bg-gradient-to-b from-[#00172e] to-[#000d1a] shadow-[inset_0_0_30px_#000,0_0_40px_rgba(0,31,63,0.9)]">
+                            <span class="absolute font-mono text-xs font-bold text-blue-400/60 top-3 left-1/2 -translate-x-1/2">12</span>
+                            <span class="absolute font-mono text-xs font-bold text-blue-400/60 bottom-3 left-1/2 -translate-x-1/2">6</span>
+                            <span class="absolute font-mono text-xs font-bold text-blue-400/60 left-3 top-1/2 -translate-y-1/2">9</span>
+                            <span class="absolute font-mono text-xs font-bold text-blue-400/60 right-3 top-1/2 -translate-y-1/2">3</span>
+
+                            <div class="absolute top-1/2 left-1/2 w-3.5 h-3.5 -mt-[7px] -ml-[7px] bg-blue-500 rounded-full z-[6] shadow-[0_0_15px_#3b82f6]"></div>
+
+                            <div id="reloj-hora" class="absolute bottom-1/2 left-1/2 origin-bottom rounded w-1.5 h-[58px] -ml-[3px] bg-gradient-to-b from-blue-600 to-blue-300 z-[2]"></div>
+                            <div id="reloj-min" class="absolute bottom-1/2 left-1/2 origin-bottom rounded w-1 h-[85px] -ml-[2px] bg-gradient-to-b from-cyan-400 to-white z-[3]"></div>
+                            <div id="reloj-seg" class="absolute bottom-1/2 left-1/2 origin-bottom rounded-full w-[2px] h-[95px] -ml-px bg-red-400/80 z-[4]"></div>
                         </div>
                     </div>
 
-                    <form
-    id="formFinalizarPausa"
-    action="{{ route('becario.finalizarPausa') }}"
-    method="POST"
-    class="m-0">
+                    <div class="text-center mt-5">
+                        <div class="text-4xl sm:text-5xl font-bold font-mono tracking-tight bg-gradient-to-b from-white to-slate-300 bg-clip-text text-transparent" id="reloj-digital">--:--:--</div>
+                        <p class="inline-block text-slate-400 text-xs mt-1.5 mb-0 capitalize border border-white/10 rounded-full px-3 py-1" id="reloj-fecha"></p>
+                    </div>
 
-    @csrf
+                    {{-- Banner de estado --}}
+                    <div class="relative overflow-hidden rounded-2xl border {{ $estadoBanner['border'] }} bg-gradient-to-r {{ $estadoBanner['wash'] }} to-transparent mt-5 p-4 sm:p-5 flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <span class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-xl sm:text-2xl text-white {{ $estadoBanner['iconBg'] }} {{ $estadoBanner['iconSh'] }} {{ $estadoBanner['pulse'] ? 'anillo-vivo' : '' }} shrink-0">
+                                <i class="bi {{ $estadoInfo['icon'] }}"></i>
+                            </span>
+                            <div>
+                                <p class="uppercase text-slate-400 mb-1 tracking-[1px] text-[0.65rem]">Estado actual</p>
+                                <p class="font-bold text-lg sm:text-xl mb-0 leading-none {{ $estadoInfo['texto'] }}">{{ $estadoInfo['label'] }}</p>
+                                <p class="text-slate-400 text-sm mb-0 mt-1">{{ $estadoInfo['desc'] }}</p>
+                            </div>
+                        </div>
+                    </div>
 
-    <button
-        type="button"
-        class="btn-reset accion-item accion-blue"
-        data-bs-toggle="modal"
-        data-bs-target="#modalFinalizarPausa"
-        @disabled(!$puedeReanudar)>
-
-        <span class="accion-icon">
-            <i class="bi bi-play-fill"></i>
-        </span>
-
-        <span>
-
-            <span class="d-block fw-bold accion-title">
-
-                Finalizar pausa
-
-            </span>
-
-            <span class="d-block small text-secondary">
-
-                Reanuda tus actividades
-
-            </span>
-
-        </span>
-
-    </button>
-
-</form>
-
-                    <form
-    id="formSalida"
-    action="{{ route('becario.salida') }}"
-    method="POST"
-    class="m-0">
-
-    @csrf
-
-    <button
-        type="button"
-        class="btn-reset accion-item accion-red"
-        data-bs-toggle="modal"
-        data-bs-target="#modalSalida"
-        @disabled(!$puedeSalir)>
-
-        <span class="accion-icon">
-
-            <i class="bi bi-box-arrow-left"></i>
-
-        </span>
-
-        <span>
-
-            <span class="d-block fw-bold accion-title">
-
-                Registrar salida
-
-            </span>
-
-            <span class="d-block small text-secondary">
-
-                Finaliza tu turno
-
-            </span>
-
-        </span>
-
-    </button>
-
-</form>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                        <div class="group relative overflow-hidden bg-slate-800/50 border border-white/[0.06] rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 hover:border-green-500/30 hover:-translate-y-0.5">
+                            <span class="absolute left-0 top-0 h-full w-1 bg-green-500/70"></span>
+                            <span class="w-11 h-11 rounded-xl flex items-center justify-center text-lg text-white bg-gradient-to-br from-green-500 to-green-700 shadow-[0_8px_18px_-4px_rgba(34,197,94,0.5)] shrink-0">
+                                <i class="bi bi-clock"></i>
+                            </span>
+                            <div class="min-w-0">
+                                <p class="uppercase text-slate-400 mb-0 text-[0.65rem] tracking-[1px]">Tiempo trabajado</p>
+                                <p class="font-bold font-mono text-xl mb-0 text-white" id="tiempoTrabajado">00:00:00</p>
+                            </div>
+                        </div>
+                        <div class="group relative overflow-hidden bg-slate-800/50 border border-white/[0.06] rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 hover:border-amber-500/30 hover:-translate-y-0.5">
+                            <span class="absolute left-0 top-0 h-full w-1 bg-amber-500/70"></span>
+                            <span class="w-11 h-11 rounded-xl flex items-center justify-center text-lg text-white bg-gradient-to-br from-amber-500 to-amber-700 shadow-[0_8px_18px_-4px_rgba(217,119,6,0.5)] shrink-0">
+                                <i class="bi bi-cup-hot"></i>
+                            </span>
+                            <div class="min-w-0">
+                                <p class="uppercase text-slate-400 mb-0 text-[0.65rem] tracking-[1px]">Tiempo en pausa</p>
+                                <p class="font-bold font-mono text-xl mb-0 text-white" id="tiempoPausa">00:00:00</p>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
+            </div>
 
-                <div class="glass-soft mt-auto p-3 d-flex gap-2 align-items-start">
-                    <i class="bi bi-info-circle-fill text-primary mt-1"></i>
-                    <div>
-                        <p class="fw-bold small mb-0">Recuerda registrar tus pausas</p>
-                        <p class="text-secondary mb-0" style="font-size:.75rem;">Para llevar un control correcto de tu tiempo laboral.</p>
+            {{-- DERECHA: ACCIONES --}}
+            <div class="lg:col-span-5">
+                <div class="entrada bg-slate-900/85 backdrop-blur-[15px] border border-white/[0.08] rounded-3xl p-5 sm:p-6 h-full flex flex-col shadow-lg" style="animation-delay:.16s">
+
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="uppercase text-slate-500 font-bold tracking-[2px] text-[0.7rem] mb-0">Acciones</p>
+                        <span class="h-px flex-1 ml-3 bg-gradient-to-r from-white/10 to-transparent"></span>
+                    </div>
+
+                    <div class="flex flex-col gap-3.5">
+
+                        {{-- Registrar entrada --}}
+                        <form action="{{ route('becario.checar') }}" method="POST" class="m-0">
+                            @csrf
+                            <button type="submit"
+                                    class="group relative isolate w-full text-left overflow-hidden rounded-2xl border p-4 sm:p-5 flex items-center gap-4
+                                           bg-slate-900/60 border-blue-500/40
+                                           transition-all duration-300 ease-out
+                                           hover:-translate-y-1 hover:border-blue-400/70 hover:shadow-[0_18px_35px_-15px_rgba(37,99,235,0.55)]
+                                           active:translate-y-0 active:scale-[0.98]
+                                           disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none disabled:hover:translate-y-0 disabled:hover:shadow-none
+                                           {{ $destacarEntrada ? 'ring-1 ring-blue-400/40 shadow-[0_0_30px_-8px_rgba(59,130,246,0.5)]' : '' }}"
+                                    @disabled(!$puedeEntrada)>
+
+                                <span class="absolute left-0 top-0 h-full w-1 bg-blue-500 origin-center scale-y-0 group-hover:scale-y-100 transition-transform duration-300 rounded-r"></span>
+                                <span class="pointer-events-none absolute -right-8 -top-8 w-28 h-28 rounded-full bg-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                                @if($destacarEntrada)
+                                    <span class="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-blue-300 bg-blue-500/10 border border-blue-400/30 rounded-full px-2 py-0.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+                                        Disponible
+                                    </span>
+                                @endif
+
+                                <span class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-xl text-white
+                                             bg-gradient-to-br from-blue-500 to-blue-700 shadow-[0_8px_20px_-4px_rgba(37,99,235,0.65)]
+                                             transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                                    <i class="bi bi-box-arrow-in-right"></i>
+                                </span>
+
+                                <span class="relative flex-1 min-w-0">
+                                    <span class="block font-bold text-base sm:text-lg text-blue-300 tracking-tight">Registrar entrada</span>
+                                    <span class="block text-sm text-slate-400 mt-0.5">Inicia el registro de tu turno</span>
+                                </span>
+
+                                <i class="bi bi-chevron-right relative text-white/0 group-hover:text-white/50 transition-all duration-300 group-hover:translate-x-1"></i>
+                            </button>
+                        </form>
+
+                        {{-- Gestionar pausa --}}
+                        <div>
+                            <button type="button"
+                                    class="group relative isolate w-full text-left overflow-hidden rounded-2xl border p-4 sm:p-5 flex items-center gap-4
+                                           bg-slate-900/60 border-amber-500/40
+                                           transition-all duration-300 ease-out
+                                           hover:-translate-y-1 hover:border-amber-400/70 hover:shadow-[0_18px_35px_-15px_rgba(217,119,6,0.55)]
+                                           active:translate-y-0 active:scale-[0.98]
+                                           disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none disabled:hover:translate-y-0 disabled:hover:shadow-none
+                                           {{ $destacarPausar ? 'ring-1 ring-amber-400/40 shadow-[0_0_30px_-8px_rgba(245,158,11,0.5)]' : '' }}"
+                                    onclick="togglePausaMenu()"
+                                    @disabled(!$puedePausar)>
+
+                                <span class="absolute left-0 top-0 h-full w-1 bg-amber-500 origin-center scale-y-0 group-hover:scale-y-100 transition-transform duration-300 rounded-r"></span>
+                                <span class="pointer-events-none absolute -right-8 -top-8 w-28 h-28 rounded-full bg-amber-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                                @if($destacarPausar)
+                                    <span class="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-amber-300 bg-amber-500/10 border border-amber-400/30 rounded-full px-2 py-0.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                        Disponible
+                                    </span>
+                                @endif
+
+                                <span class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-xl text-white
+                                             bg-gradient-to-br from-amber-500 to-amber-700 shadow-[0_8px_20px_-4px_rgba(217,119,6,0.65)]
+                                             transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                                    <i class="bi bi-cup-hot"></i>
+                                </span>
+
+                                <span class="relative flex-1 min-w-0">
+                                    <span class="block font-bold text-base sm:text-lg text-amber-300 tracking-tight">Gestionar pausa</span>
+                                    <span class="block text-sm text-slate-400 mt-0.5">Justificación obligatoria</span>
+                                </span>
+
+                                <i id="pausaChevron" class="bi bi-chevron-down relative text-white/40 transition-transform duration-300"></i>
+                            </button>
+
+                            <div id="pausaMenu" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-out">
+                                <form action="{{ route('becario.iniciarPausa') }}" method="POST"
+                                      class="bg-slate-800/50 border border-amber-500/30 rounded-2xl p-3 mt-2">
+                                    @csrf
+                                    <label class="block text-sm text-amber-400 font-bold uppercase mb-2 text-[0.7rem]">
+                                        Motivo de pausa
+                                    </label>
+                                    <select name="motivo" class="w-full bg-[#0f1724] border border-white/10 text-white text-sm rounded-lg px-3 py-2 mb-3 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/25 focus:outline-none">
+                                        <option value="Almuerzo">Almuerzo</option>
+                                        <option value="Personal">Personal</option>
+                                    </select>
+                                    <button type="submit"
+                                            class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold uppercase text-sm rounded-lg px-4 py-2.5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                            @disabled(!$puedePausar)>
+                                        Iniciar ahora
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        {{-- Finalizar pausa --}}
+                        <form id="formFinalizarPausa" action="{{ route('becario.finalizarPausa') }}" method="POST" class="m-0">
+                            @csrf
+                            <button type="button"
+                                    class="group relative isolate w-full text-left overflow-hidden rounded-2xl border p-4 sm:p-5 flex items-center gap-4
+                                           bg-slate-900/60 border-blue-500/40
+                                           transition-all duration-300 ease-out
+                                           hover:-translate-y-1 hover:border-blue-400/70 hover:shadow-[0_18px_35px_-15px_rgba(37,99,235,0.55)]
+                                           active:translate-y-0 active:scale-[0.98]
+                                           disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none disabled:hover:translate-y-0 disabled:hover:shadow-none
+                                           {{ $destacarReanudar ? 'ring-1 ring-blue-400/40 shadow-[0_0_30px_-8px_rgba(59,130,246,0.5)]' : '' }}"
+                                    onclick="openModal('modalFinalizarPausa')"
+                                    @disabled(!$puedeReanudar)>
+
+                                <span class="absolute left-0 top-0 h-full w-1 bg-blue-500 origin-center scale-y-0 group-hover:scale-y-100 transition-transform duration-300 rounded-r"></span>
+                                <span class="pointer-events-none absolute -right-8 -top-8 w-28 h-28 rounded-full bg-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                                @if($destacarReanudar)
+                                    <span class="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-blue-300 bg-blue-500/10 border border-blue-400/30 rounded-full px-2 py-0.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+                                        Disponible
+                                    </span>
+                                @endif
+
+                                <span class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-xl text-white
+                                             bg-gradient-to-br from-blue-500 to-blue-700 shadow-[0_8px_20px_-4px_rgba(37,99,235,0.65)]
+                                             transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                                    <i class="bi bi-play-fill"></i>
+                                </span>
+
+                                <span class="relative flex-1 min-w-0">
+                                    <span class="block font-bold text-base sm:text-lg text-blue-300 tracking-tight">Finalizar pausa</span>
+                                    <span class="block text-sm text-slate-400 mt-0.5">Reanuda tus actividades</span>
+                                </span>
+
+                                <i class="bi bi-chevron-right relative text-white/0 group-hover:text-white/50 transition-all duration-300 group-hover:translate-x-1"></i>
+                            </button>
+                        </form>
+
+                        {{-- Registrar salida --}}
+                        <form id="formSalida" action="{{ route('becario.salida') }}" method="POST" class="m-0">
+                            @csrf
+                            <button type="button"
+                                    class="group relative isolate w-full text-left overflow-hidden rounded-2xl border p-4 sm:p-5 flex items-center gap-4
+                                           bg-slate-900/60 border-red-500/40
+                                           transition-all duration-300 ease-out
+                                           hover:-translate-y-1 hover:border-red-400/70 hover:shadow-[0_18px_35px_-15px_rgba(220,38,38,0.55)]
+                                           active:translate-y-0 active:scale-[0.98]
+                                           disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none disabled:hover:translate-y-0 disabled:hover:shadow-none
+                                           {{ $destacarSalir ? 'ring-1 ring-red-400/40 shadow-[0_0_30px_-8px_rgba(239,68,68,0.5)]' : '' }}"
+                                    onclick="openModal('modalSalida')"
+                                    @disabled(!$puedeSalir)>
+
+                                <span class="absolute left-0 top-0 h-full w-1 bg-red-500 origin-center scale-y-0 group-hover:scale-y-100 transition-transform duration-300 rounded-r"></span>
+                                <span class="pointer-events-none absolute -right-8 -top-8 w-28 h-28 rounded-full bg-red-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                                @if($destacarSalir)
+                                    <span class="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-red-300 bg-red-500/10 border border-red-400/30 rounded-full px-2 py-0.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span>
+                                        Disponible
+                                    </span>
+                                @endif
+
+                                <span class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-xl text-white
+                                             bg-gradient-to-br from-red-500 to-red-700 shadow-[0_8px_20px_-4px_rgba(185,28,28,0.65)]
+                                             transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                                    <i class="bi bi-box-arrow-left"></i>
+                                </span>
+
+                                <span class="relative flex-1 min-w-0">
+                                    <span class="block font-bold text-base sm:text-lg text-red-300 tracking-tight">Registrar salida</span>
+                                    <span class="block text-sm text-slate-400 mt-0.5">Finaliza tu turno</span>
+                                </span>
+
+                                <i class="bi bi-chevron-right relative text-white/0 group-hover:text-white/50 transition-all duration-300 group-hover:translate-x-1"></i>
+                            </button>
+                        </form>
+
+                    </div>
+
+                    <div class="bg-slate-800/50 border border-white/[0.06] rounded-2xl mt-auto p-4 flex gap-3 items-start">
+                        <span class="w-8 h-8 rounded-lg bg-blue-500/15 border border-blue-400/25 flex items-center justify-center shrink-0">
+                            <i class="bi bi-info-circle-fill text-blue-400 text-sm"></i>
+                        </span>
+                        <div>
+                            <p class="font-bold text-sm mb-0">Recuerda registrar tus pausas</p>
+                            <p class="text-slate-400 mb-0 text-[0.75rem]">Para llevar un control correcto de tu tiempo laboral.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
 </div>
 
@@ -364,7 +442,6 @@
 
 <script>
     // Datos reales del backend para calcular los tiempos en vivo.
-    // Si tu controlador aún no los envía, todo cae a valores por defecto sin romper nada.
     window.checadorConfig = {
         estado: @json($estado),
         horaEntrada: @json($horaEntrada ?? null),
@@ -373,12 +450,81 @@
         segundosPausaAcumulados: {{ (int) ($segundosPausaAcumulados ?? 0) }}
     };
 
+    // --- Helpers genéricos de modal ---
+    window.openModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+
+        const dialog = modal.querySelector('.modal-dialog');
+
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+
+        setTimeout(() => {
+            if (dialog) {
+                dialog.classList.remove('scale-95');
+                dialog.classList.add('scale-100');
+            }
+        }, 10);
+    };
+
+    window.closeModal = function(modalId) {
+        const modal = typeof modalId === 'string' ? document.getElementById(modalId) : modalId;
+        if (!modal) return;
+
+        const dialog = modal.querySelector('.modal-dialog');
+
+        if (dialog) {
+            dialog.classList.remove('scale-100');
+            dialog.classList.add('scale-95');
+        }
+
+        modal.classList.add('opacity-0');
+
+        setTimeout(() => {
+            modal.classList.add('pointer-events-none');
+        }, 300);
+    };
+
+    // --- Collapse animado del menú de pausa (JS plano, con altura + opacidad) ---
+    window.togglePausaMenu = function() {
+        const el = document.getElementById('pausaMenu');
+        const chevron = document.getElementById('pausaChevron');
+        if (!el) return;
+
+        const cerrado = el.classList.contains('max-h-0');
+
+        if (cerrado) {
+            el.classList.remove('max-h-0', 'opacity-0');
+            el.classList.add('max-h-[320px]', 'opacity-100');
+            if (chevron) chevron.classList.add('rotate-180');
+        } else {
+            el.classList.remove('max-h-[320px]', 'opacity-100');
+            el.classList.add('max-h-0', 'opacity-0');
+            if (chevron) chevron.classList.remove('rotate-180');
+        }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
 
+        // --- Entrada escalonada de las tarjetas principales ---
+        document.querySelectorAll('.entrada').forEach((el, i) => {
+            if (!el.style.animationDelay) {
+                el.style.animationDelay = `${i * 0.08}s`;
+            }
+        });
+
         // --- Notificaciones: se muestran solas y desaparecen a los 3s ---
-        document.querySelectorAll('.toast').forEach((toastEl) => {
-            const toast = new bootstrap.Toast(toastEl, { delay: 3000, autohide: true });
-            toast.show();
+        document.querySelectorAll('[data-toast]').forEach((toastEl) => {
+            const cerrarToast = () => {
+                toastEl.style.transition = 'opacity 0.3s ease';
+                toastEl.style.opacity = '0';
+                setTimeout(() => toastEl.remove(), 300);
+            };
+
+            const btnCerrar = toastEl.querySelector('[data-toast-close]');
+            if (btnCerrar) btnCerrar.addEventListener('click', cerrarToast);
+
+            setTimeout(cerrarToast, 3000);
         });
 
         // --- Reloj analógico + digital, formato 12h con AM/PM ---
@@ -390,11 +536,14 @@
 
             const gradosHora = (horas24 % 12) * 30 + minutos * 0.5;
             const gradosMin = minutos * 6;
+            const gradosSeg = segundos * 6;
 
             const manecillaHora = document.getElementById('reloj-hora');
             const manecillaMin = document.getElementById('reloj-min');
+            const manecillaSeg = document.getElementById('reloj-seg');
             if (manecillaHora) manecillaHora.style.transform = `rotate(${gradosHora}deg)`;
             if (manecillaMin) manecillaMin.style.transform = `rotate(${gradosMin}deg)`;
+            if (manecillaSeg) manecillaSeg.style.transform = `rotate(${gradosSeg}deg)`;
 
             let horas12 = horas24 % 12;
             horas12 = horas12 === 0 ? 12 : horas12;
@@ -402,7 +551,7 @@
 
             const digital = document.getElementById('reloj-digital');
             if (digital) {
-                digital.innerHTML = `${String(horas12).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')} <span class="fs-6 text-primary">${meridiano}</span>`;
+                digital.innerHTML = `${String(horas12).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')} <span class="text-lg sm:text-xl text-blue-500">${meridiano}</span>`;
             }
 
             const fecha = document.getElementById('reloj-fecha');
@@ -411,7 +560,7 @@
             }
         }
 
-        // --- Tiempos de trabajo / pausa en vivo, a partir de timestamps reales ---
+        // --- Tiempos de trabajo / pausa en vivo ---
         function formatearDuracion(totalSegundos) {
             const h = String(Math.floor(totalSegundos / 3600)).padStart(2, '0');
             const m = String(Math.floor((totalSegundos % 3600) / 60)).padStart(2, '0');
@@ -459,32 +608,52 @@
             calcularTiempos();
         }, 1000);
 
-        // Confirmar finalizar pausa
-const btnConfirmarPausa = document.getElementById('confirmarFinalizarPausa');
 
-if (btnConfirmarPausa) {
+        // ==========================================
+        // EVENTOS DE LOS MODALES (ACCIONES)
+        // ==========================================
 
-    btnConfirmarPausa.addEventListener('click', () => {
+        const btnConfirmarPausa = document.getElementById('confirmarFinalizarPausa');
+        if (btnConfirmarPausa) {
+            btnConfirmarPausa.addEventListener('click', () => {
+                document.getElementById('formFinalizarPausa').submit();
+            });
+        }
 
-        document.getElementById('formFinalizarPausa').submit();
+        const btnConfirmarSalida = document.getElementById('confirmarSalida');
+        if (btnConfirmarSalida) {
+            btnConfirmarSalida.addEventListener('click', () => {
+                document.getElementById('formSalida').submit();
+            });
+        }
 
-    });
 
-}
+        // ==========================================
+        // EVENTOS PARA CERRAR MODALES
+        // ==========================================
 
-// Confirmar salida
-const btnConfirmarSalida = document.getElementById('confirmarSalida');
+        document.querySelectorAll('.btn-close-modal').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const modal = e.target.closest('[role="dialog"]');
+                if (modal) window.closeModal(modal);
+            });
+        });
 
-if (btnConfirmarSalida) {
+        document.querySelectorAll('[role="dialog"]').forEach(modal => {
+            modal.addEventListener('mousedown', (e) => {
+                if (e.target === modal) {
+                    window.closeModal(modal);
+                }
+            });
+        });
 
-    btnConfirmarSalida.addEventListener('click', () => {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modalesAbiertos = document.querySelectorAll('[role="dialog"]:not(.opacity-0)');
+                modalesAbiertos.forEach(modal => window.closeModal(modal));
+            }
+        });
 
-        document.getElementById('formSalida').submit();
-
-    });
-
-}
     });
 </script>
-
 @endsection

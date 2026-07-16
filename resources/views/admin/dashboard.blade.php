@@ -1,61 +1,58 @@
 @extends('layouts.app')
 @section('content')
-<div class="container-fluid px-3 px-md-4">
-    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center text-center text-sm-start mb-4 gap-2">
-        <h2 class="fw-bold mb-0 dashboard-title">
-            <i class="bi bi-clock-history text-info me-2"></i>Panel de Control: Asistencias
+<div class="w-full px-3 md:px-4">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-center sm:text-left mb-4 gap-2">
+        <h2 class="font-bold mb-0 text-lg sm:text-xl lg:text-3xl">
+            <i class="bi bi-clock-history text-cyan-400 mr-2"></i>Panel de Control: Asistencias
         </h2>
     </div>
 
-    <div class="row g-3 mb-4">
-        <div class="col-4">
-            <div class="card bg-dark border-secondary shadow rounded-4 h-100">
-                <div class="card-body px-2 px-sm-3 py-2 py-sm-3">
-                    <div class="text-secondary small">Becarios Activos</div>
-                    <h2 id="card-activos" class="text-success fw-bold mb-0 dashboard-stat">0</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="card bg-dark border-secondary shadow rounded-4 h-100">
-                <div class="card-body px-2 px-sm-3 py-2 py-sm-3">
-                    <div class="text-secondary small">En Descanso</div>
-                    <h2 id="card-descanso" class="text-info fw-bold mb-0 dashboard-stat">0</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="card bg-dark border-secondary shadow rounded-4 h-100">
-                <div class="card-body px-2 px-sm-3 py-2 py-sm-3">
-                    <div class="text-secondary small">Turnos Finalizados</div>
-                    <h2 id="card-finalizados" class="text-warning fw-bold mb-0 dashboard-stat">0</h2>
-                </div>
+    <div class="grid grid-cols-3 gap-3 mb-4">
+
+        <div class="bg-gray-900 border border-gray-700 shadow-lg rounded-2xl h-full">
+            <div class="px-2 sm:px-3 py-2 sm:py-3">
+                <div class="text-gray-400 text-[0.68rem] sm:text-sm">Becarios Activos</div>
+                <h2 id="card-activos" class="text-green-500 font-bold mb-0 text-lg sm:text-2xl">0</h2>
             </div>
         </div>
 
-        <div class="col-12">
-            <div class="card bg-dark border-secondary shadow-lg rounded-4">
-                <div class="card-body p-0 overflow-hidden">
+        <div class="bg-gray-900 border border-gray-700 shadow-lg rounded-2xl h-full">
+            <div class="px-2 sm:px-3 py-2 sm:py-3">
+                <div class="text-gray-400 text-[0.68rem] sm:text-sm">En Descanso</div>
+                <h2 id="card-descanso" class="text-cyan-400 font-bold mb-0 text-lg sm:text-2xl">0</h2>
+            </div>
+        </div>
+
+        <div class="bg-gray-900 border border-gray-700 shadow-lg rounded-2xl h-full">
+            <div class="px-2 sm:px-3 py-2 sm:py-3">
+                <div class="text-gray-400 text-[0.68rem] sm:text-sm">Turnos Finalizados</div>
+                <h2 id="card-finalizados" class="text-yellow-400 font-bold mb-0 text-lg sm:text-2xl">0</h2>
+            </div>
+        </div>
+
+        <div class="col-span-3">
+            <div class="bg-gray-900 border border-gray-700 shadow-xl rounded-2xl">
+                <div class="p-0 overflow-hidden">
 
                     {{-- Tabla (tablet / desktop) --}}
-                    <div class="table-responsive dashboard-table-wrap d-none d-md-block">
-                        <table class="table table-dark table-hover mb-0 align-middle dashboard-table" style="min-width: 800px;">
+                    <div class="overflow-x-auto hidden md:block">
+                        <table class="w-full text-white mb-0 align-middle" style="min-width: 800px;">
                             <thead>
-                                <tr class="text-secondary" style="background-color: rgba(255,255,255,0.03);">
-                                    <th class="ps-4 py-3 fw-semibold text-uppercase small">Becario</th>
-                                    <th class="py-3 fw-semibold text-uppercase small">Fecha</th>
-                                    <th class="py-3 fw-semibold text-uppercase small">Entrada</th>
-                                    <th class="py-3 fw-semibold text-uppercase small">Salida</th>
-                                    <th class="py-3 fw-semibold text-uppercase small">Pausas</th>
-                                    <th class="py-3 fw-semibold text-uppercase small">Tiempo Total</th>
-                                    <th class="py-3 fw-semibold text-uppercase small">Horas Extras</th>
-                                    <th class="py-3 fw-semibold text-uppercase small">Estado</th>
+                                <tr class="text-gray-400 bg-white/[0.03]">
+                                    <th class="pl-4 py-3 font-semibold uppercase text-xs">Becario</th>
+                                    <th class="py-3 font-semibold uppercase text-xs">Fecha</th>
+                                    <th class="py-3 font-semibold uppercase text-xs">Entrada</th>
+                                    <th class="py-3 font-semibold uppercase text-xs">Salida</th>
+                                    <th class="py-3 font-semibold uppercase text-xs">Pausas</th>
+                                    <th class="py-3 font-semibold uppercase text-xs">Tiempo Total</th>
+                                    <th class="py-3 font-semibold uppercase text-xs">Horas Extras</th>
+                                    <th class="py-3 font-semibold uppercase text-xs">Estado</th>
                                 </tr>
                             </thead>
                             <tbody id="tabla-asistencias">
-                                <tr id="tabla-vacia">
-                                    <td colspan="8" class="text-center text-secondary py-5">
-                                        <i class="bi bi-clock-history fs-3 d-block mb-2"></i>
+                                <tr id="tabla-vacia" class="hover:bg-white/5">
+                                    <td colspan="8" class="text-center text-gray-400 py-10">
+                                        <i class="bi bi-clock-history text-2xl block mb-2"></i>
                                         No existen asistencias activas actualmente
                                     </td>
                                 </tr>
@@ -64,125 +61,23 @@
                     </div>
 
                     {{-- Tarjetas (móvil) --}}
-                    <div id="tarjetas-asistencias" class="d-block d-md-none p-3">
-                        <p id="tarjetas-vacio" class="text-center text-secondary py-4 mb-0">
-                            <i class="bi bi-clock-history fs-3 d-block mb-2"></i>
+                    <div id="tarjetas-asistencias" class="block md:hidden p-3">
+                        <p id="tarjetas-vacio" class="text-center text-gray-400 py-4 mb-0">
+                            <i class="bi bi-clock-history text-2xl block mb-2"></i>
                             No existen asistencias activas actualmente
                         </p>
                     </div>
 
-                    <div class="dashboard-scroll-hint d-none d-md-block d-lg-none text-center text-secondary small py-2 border-top border-secondary">
-                        <i class="bi bi-arrow-left-right me-1"></i>Desliza para ver toda la tabla
+                    <div class="hidden md:block lg:hidden text-center text-gray-400 text-xs py-2 border-t border-gray-700 bg-white/[0.02]">
+                        <i class="bi bi-arrow-left-right mr-1"></i>Desliza para ver toda la tabla
                     </div>
 
                 </div>
             </div>
         </div>
+
     </div>
 </div>
-
-<style>
-    /* Sistema responsivo del dashboard de asistencias */
-
-    @media (max-width: 991.98px) {
-        .dashboard-title {
-            font-size: 1.4rem;
-        }
-    }
-
-    @media (max-width: 575.98px) {
-        .dashboard-title {
-            font-size: 1.15rem;
-        }
-
-        .dashboard-stat {
-            font-size: 1.1rem;
-        }
-
-        .card-body .small {
-            font-size: .68rem;
-        }
-    }
-
-    .dashboard-scroll-hint {
-        background: rgba(255,255,255,0.02);
-    }
-
-    /* ---- Tarjetas por usuario (móvil) ---- */
-    .becario-card {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 0.75rem;
-        overflow: hidden;
-    }
-
-    .becario-card + .becario-card {
-        margin-top: 0.75rem;
-    }
-
-    .becario-card-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .becario-card-user {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: 0;
-    }
-
-    .becario-card-user span {
-        color: #fff;
-        font-weight: 600;
-        font-size: 0.9rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .becario-card-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .becario-card-item {
-        padding: 0.6rem 1rem;
-        border-right: 1px solid rgba(255, 255, 255, 0.08);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .becario-card-item:nth-child(2n) {
-        border-right: none;
-    }
-
-    .becario-card-item:nth-last-child(-n+2) {
-        border-bottom: none;
-    }
-
-    .becario-card-label {
-        margin: 0;
-        font-size: 0.72rem;
-        text-transform: uppercase;
-        color: #adb5bd;
-    }
-
-    .becario-card-value {
-        margin: 2px 0 0;
-        font-size: 0.85rem;
-    }
-
-    .becario-card-extras {
-        padding: 0.6rem 1rem;
-        font-size: 0.8rem;
-        color: #adb5bd;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-</style>
 
 {{-- Solo configuración: las rutas Blade no pueden vivir en el .js externo,
      así que se exponen aquí como datos globales antes de cargar el script. --}}

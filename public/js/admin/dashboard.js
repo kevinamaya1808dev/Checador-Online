@@ -22,7 +22,7 @@
     function actualizarTexto(id, icono, texto) {
         const el = document.getElementById(id);
         if (!el) return;
-        el.innerHTML = `<i class="bi ${icono} me-1"></i>${texto}`;
+        el.innerHTML = `<i class="bi ${icono} mr-1"></i>${texto}`;
     }
 
     function actualizarExtras(id, e) {
@@ -30,15 +30,15 @@
         if (!el) return;
         el.innerHTML = `
             <div>
-                <i class="bi bi-alarm me-1"></i>
+                <i class="bi bi-alarm mr-1"></i>
                 <strong>Total:</strong> ${formatoHMS(e.extras)}
             </div>
-            <small class="d-block mt-1">
-                <i class="bi bi-box-arrow-in-right me-1"></i>
+            <small class="block mt-1">
+                <i class="bi bi-box-arrow-in-right mr-1"></i>
                 Entrada: ${formatoHMS(e.extrasEntrada)}
             </small>
-            <small class="d-block">
-                <i class="bi bi-box-arrow-left me-1"></i>
+            <small class="block">
+                <i class="bi bi-box-arrow-left mr-1"></i>
                 Salida: ${formatoHMS(e.extrasSalida)}
             </small>
         `;
@@ -61,23 +61,24 @@
 
     function crearFila(a) {
         const tr = document.createElement('tr');
+        tr.className = 'hover:bg-white/5';
         tr.setAttribute('data-user', a.user_id);
         tr.innerHTML = `
-            <td class="ps-4 py-3">
-                <div class="d-flex align-items-center gap-2">
-                    <div class="rounded-circle bg-secondary bg-opacity-25 border border-secondary d-flex align-items-center justify-content-center text-info fw-bold" style="width:36px;height:36px;font-size:0.9rem;">
+            <td class="pl-4 py-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-full bg-gray-500/25 border border-gray-500 flex items-center justify-center text-cyan-400 font-bold text-sm flex-shrink-0">
                         ${a.user_inicial}
                     </div>
-                    <span class="text-white fw-bold">${a.user_name}</span>
+                    <span class="text-white font-bold">${a.user_name}</span>
                 </div>
             </td>
             <td class="py-3">${a.fecha}</td>
-            <td class="py-3"><span id="entrada-${a.user_id}" class="badge rounded-pill text-bg-success bg-opacity-25 text-success px-3 py-2"><i class="bi bi-box-arrow-in-right me-1"></i>${a.hora_entrada}</span></td>
-            <td class="py-3"><span id="salida-${a.user_id}" class="badge rounded-pill text-bg-danger bg-opacity-25 text-danger px-3 py-2"><i class="bi bi-box-arrow-left me-1"></i>${a.hora_salida}</span></td>
-            <td class="py-3"><span id="pausas-${a.user_id}" class="badge rounded-pill text-bg-warning bg-opacity-25 text-warning px-3 py-2"><i class="bi bi-cup-hot me-1"></i>${formatoHMS(a.pausas_segundos)}</span></td>
-            <td class="py-3"><span id="trabajado-${a.user_id}" class="badge rounded-pill text-bg-info bg-opacity-25 text-info px-3 py-2"><i class="bi bi-stopwatch me-1"></i>${formatoHMS(a.trabajado_segundos)}</span></td>
-            <td class="py-3"><span id="extras-${a.user_id}" class="badge rounded-pill text-bg-primary bg-opacity-25 text-primary px-3 py-2"><i class="bi bi-alarm me-1"></i>${formatoHMS(a.extras_segundos)}</span></td>
-            <td class="py-3"><span id="estado-${a.user_id}" class="badge rounded-pill px-3 py-2 ${a.estado.clase}">${a.estado.texto}</span></td>
+            <td class="py-3"><span id="entrada-${a.user_id}" class="inline-flex items-center rounded-full bg-green-500/25 text-green-400 px-3 py-2 text-sm font-medium"><i class="bi bi-box-arrow-in-right mr-1"></i>${a.hora_entrada}</span></td>
+            <td class="py-3"><span id="salida-${a.user_id}" class="inline-flex items-center rounded-full bg-red-500/25 text-red-400 px-3 py-2 text-sm font-medium"><i class="bi bi-box-arrow-left mr-1"></i>${a.hora_salida}</span></td>
+            <td class="py-3"><span id="pausas-${a.user_id}" class="inline-flex items-center rounded-full bg-yellow-500/25 text-yellow-400 px-3 py-2 text-sm font-medium"><i class="bi bi-cup-hot mr-1"></i>${formatoHMS(a.pausas_segundos)}</span></td>
+            <td class="py-3"><span id="trabajado-${a.user_id}" class="inline-flex items-center rounded-full bg-cyan-500/25 text-cyan-400 px-3 py-2 text-sm font-medium"><i class="bi bi-stopwatch mr-1"></i>${formatoHMS(a.trabajado_segundos)}</span></td>
+            <td class="py-3"><span id="extras-${a.user_id}" class="inline-flex items-center rounded-full bg-blue-500/25 text-blue-400 px-3 py-2 text-sm font-medium"><i class="bi bi-alarm mr-1"></i>${formatoHMS(a.extras_segundos)}</span></td>
+            <td class="py-3"><span id="estado-${a.user_id}" class="inline-flex items-center rounded-full px-3 py-2 text-sm font-medium ${a.estado.clase}">${a.estado.texto}</span></td>
         `;
         return tr;
     }
@@ -95,7 +96,7 @@
 
         const estado = document.getElementById('estado-' + a.user_id);
         if (estado) {
-            estado.className = 'badge rounded-pill px-3 py-2 ' + a.estado.clase;
+            estado.className = 'inline-flex items-center rounded-full px-3 py-2 text-sm font-medium ' + a.estado.clase;
             estado.textContent = a.estado.texto;
         }
     }
@@ -103,8 +104,8 @@
     function renderTablaVacia(tbody) {
         tbody.innerHTML = `
             <tr id="tabla-vacia">
-                <td colspan="8" class="text-center text-secondary py-5">
-                    <i class="bi bi-clock-history fs-3 d-block mb-2"></i>
+                <td colspan="8" class="text-center text-gray-400 py-10">
+                    <i class="bi bi-clock-history text-2xl block mb-2"></i>
                     No existen asistencias activas actualmente
                 </td>
             </tr>`;
@@ -114,14 +115,14 @@
     function actualizarTextoCard(id, icono, texto) {
         const el = document.getElementById(id);
         if (!el) return;
-        el.innerHTML = `<i class="bi ${icono} me-1"></i>${texto}`;
+        el.innerHTML = `<i class="bi ${icono} mr-1"></i>${texto}`;
     }
 
     function actualizarExtrasCard(id, e) {
         const el = document.getElementById('extras-card-' + id);
         if (!el) return;
         el.innerHTML = `
-            <i class="bi bi-alarm me-1"></i>
+            <i class="bi bi-alarm mr-1"></i>
             <strong>Extras:</strong> ${formatoHMS(e.extras)}
             <span class="mx-1">·</span>
             Ent. ${formatoHMS(e.extrasEntrada)}
@@ -132,38 +133,38 @@
 
     function crearTarjeta(a) {
         const div = document.createElement('div');
-        div.className = 'becario-card';
+        div.className = 'bg-white/[0.03] border border-white/10 rounded-xl overflow-hidden';
         div.setAttribute('data-user-card', a.user_id);
         div.innerHTML = `
-            <div class="becario-card-header">
-                <div class="becario-card-user">
-                    <div class="rounded-circle bg-secondary bg-opacity-25 border border-secondary d-flex align-items-center justify-content-center text-info fw-bold flex-shrink-0" style="width:32px;height:32px;font-size:0.8rem;">
+            <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-white/10">
+                <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-gray-500/25 border border-gray-500 flex items-center justify-center text-cyan-400 font-bold text-xs flex-shrink-0">
                         ${a.user_inicial}
                     </div>
-                    <span>${a.user_name}</span>
+                    <span class="text-white font-semibold text-sm whitespace-nowrap overflow-hidden text-ellipsis">${a.user_name}</span>
                 </div>
-                <span id="estado-card-${a.user_id}" class="badge rounded-pill px-2 py-1 ${a.estado.clase}">${a.estado.texto}</span>
+                <span id="estado-card-${a.user_id}" class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${a.estado.clase}">${a.estado.texto}</span>
             </div>
-            <div class="becario-card-grid">
-                <div class="becario-card-item">
-                    <p class="becario-card-label">Entrada</p>
-                    <p id="entrada-card-${a.user_id}" class="becario-card-value text-success"><i class="bi bi-box-arrow-in-right me-1"></i>${a.hora_entrada}</p>
+            <div class="grid grid-cols-2">
+                <div class="p-2.5 px-4 border-r border-b border-white/[0.08]">
+                    <p class="m-0 text-[0.72rem] uppercase text-gray-400">Entrada</p>
+                    <p id="entrada-card-${a.user_id}" class="mt-0.5 text-[0.85rem] text-green-500"><i class="bi bi-box-arrow-in-right mr-1"></i>${a.hora_entrada}</p>
                 </div>
-                <div class="becario-card-item">
-                    <p class="becario-card-label">Salida</p>
-                    <p id="salida-card-${a.user_id}" class="becario-card-value text-danger"><i class="bi bi-box-arrow-left me-1"></i>${a.hora_salida}</p>
+                <div class="p-2.5 px-4 border-b border-white/[0.08]">
+                    <p class="m-0 text-[0.72rem] uppercase text-gray-400">Salida</p>
+                    <p id="salida-card-${a.user_id}" class="mt-0.5 text-[0.85rem] text-red-500"><i class="bi bi-box-arrow-left mr-1"></i>${a.hora_salida}</p>
                 </div>
-                <div class="becario-card-item">
-                    <p class="becario-card-label">Pausas</p>
-                    <p id="pausas-card-${a.user_id}" class="becario-card-value text-warning"><i class="bi bi-cup-hot me-1"></i>${formatoHMS(a.pausas_segundos)}</p>
+                <div class="p-2.5 px-4 border-r border-white/[0.08]">
+                    <p class="m-0 text-[0.72rem] uppercase text-gray-400">Pausas</p>
+                    <p id="pausas-card-${a.user_id}" class="mt-0.5 text-[0.85rem] text-yellow-500"><i class="bi bi-cup-hot mr-1"></i>${formatoHMS(a.pausas_segundos)}</p>
                 </div>
-                <div class="becario-card-item">
-                    <p class="becario-card-label">Tiempo total</p>
-                    <p id="trabajado-card-${a.user_id}" class="becario-card-value text-info"><i class="bi bi-stopwatch me-1"></i>${formatoHMS(a.trabajado_segundos)}</p>
+                <div class="p-2.5 px-4">
+                    <p class="m-0 text-[0.72rem] uppercase text-gray-400">Tiempo total</p>
+                    <p id="trabajado-card-${a.user_id}" class="mt-0.5 text-[0.85rem] text-cyan-400"><i class="bi bi-stopwatch mr-1"></i>${formatoHMS(a.trabajado_segundos)}</p>
                 </div>
             </div>
-            <div id="extras-card-${a.user_id}" class="becario-card-extras">
-                <i class="bi bi-alarm me-1"></i>
+            <div id="extras-card-${a.user_id}" class="px-4 py-2.5 text-[0.8rem] text-gray-400 border-t border-white/[0.08]">
+                <i class="bi bi-alarm mr-1"></i>
                 <strong>Extras:</strong> ${formatoHMS(a.extras_segundos)}
                 <span class="mx-1">·</span>
                 Ent. ${formatoHMS(a.extras_entrada_segundos)}
@@ -187,15 +188,15 @@
 
         const estado = document.getElementById('estado-card-' + a.user_id);
         if (estado) {
-            estado.className = 'badge rounded-pill px-2 py-1 ' + a.estado.clase;
+            estado.className = 'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ' + a.estado.clase;
             estado.textContent = a.estado.texto;
         }
     }
 
     function renderTarjetasVacio(contenedor) {
         contenedor.innerHTML = `
-            <p id="tarjetas-vacio" class="text-center text-secondary py-4 mb-0">
-                <i class="bi bi-clock-history fs-3 d-block mb-2"></i>
+            <p id="tarjetas-vacio" class="text-center text-gray-400 py-4 mb-0">
+                <i class="bi bi-clock-history text-2xl block mb-2"></i>
                 No existen asistencias activas actualmente
             </p>`;
     }

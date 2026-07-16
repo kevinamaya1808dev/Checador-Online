@@ -1,132 +1,83 @@
-<div class="card bg-dark border-secondary shadow-sm mt-4">
+<div class="rounded-2xl bg-slate-800/50 border border-white/[0.08] shadow-sm overflow-hidden">
 
-    <div class="card-header">
-
-        <h5 class="mb-0">
-
-            <i class="bi bi-calendar3 me-2"></i>
-
+    <div class="px-4 py-3 border-b border-white/[0.08]">
+        <h5 class="font-bold text-base mb-0">
+            <i class="bi bi-calendar3 mr-2 text-blue-400"></i>
             Historial de jornadas
-
         </h5>
-
     </div>
 
     {{-- Tabla normal (tablet / desktop) --}}
-    <div class="table-responsive d-none d-md-block">
+    <div class="hidden md:block overflow-x-auto">
 
-        <table class="table table-dark table-hover align-middle mb-0">
+        <table class="w-full text-sm text-left">
 
             <thead>
-
-                <tr>
-
-                    <th>Fecha</th>
-
-                    <th>Entrada</th>
-
-                    <th>Salida</th>
-
-                    <th>Pausas</th>
-
-                    <th>Tiempo pausa</th>
-
-                    <th>Tiempo trabajado</th>
-
-                    <th>Horas extra</th>
-
+                <tr class="border-b border-white/[0.08] text-slate-400 uppercase text-xs tracking-wide">
+                    <th class="px-4 py-3 font-semibold">Fecha</th>
+                    <th class="px-4 py-3 font-semibold">Entrada</th>
+                    <th class="px-4 py-3 font-semibold">Salida</th>
+                    <th class="px-4 py-3 font-semibold">Pausas</th>
+                    <th class="px-4 py-3 font-semibold">Tiempo pausa</th>
+                    <th class="px-4 py-3 font-semibold">Tiempo trabajado</th>
+                    <th class="px-4 py-3 font-semibold">Horas extra</th>
                 </tr>
-
             </thead>
 
             <tbody>
-
             @forelse($asistencias as $asistencia)
+                <tr class="border-b border-white/[0.06] hover:bg-white/[0.04] transition-colors">
 
-                <tr>
-
-                    <td>
-
+                    <td class="px-4 py-3">
                         {{ \Carbon\Carbon::parse($asistencia->fecha)->format('d/m/Y') }}
-
                     </td>
 
-                    <td>
-
+                    <td class="px-4 py-3">
                         {{ $asistencia->hora_entrada
                             ? \Carbon\Carbon::parse($asistencia->hora_entrada)->format('h:i:s A')
                             : '--' }}
-
                     </td>
 
-                    <td>
-
+                    <td class="px-4 py-3">
                         {{ $asistencia->hora_salida
                             ? \Carbon\Carbon::parse($asistencia->hora_salida)->format('h:i:s A')
                             : '--' }}
-
                     </td>
 
-                    <td>
-
-                        <span class="badge bg-info">
-
+                    <td class="px-4 py-3">
+                        <span class="inline-flex items-center justify-center rounded-md bg-sky-500/20 text-sky-300 text-xs font-semibold px-2 py-1">
                             {{ $asistencia->pausas->count() }}
-
                         </span>
-
                     </td>
 
-                    <td>
-
+                    <td class="px-4 py-3">
                         {{ $asistencia->tiempoPausas() }}
-
                     </td>
 
-                    <td>
-
+                    <td class="px-4 py-3 font-mono">
                         {{ $asistencia->formatoTiempo($asistencia->tiempoTrabajado()) }}
-
                     </td>
 
-                    <td>
-
+                    <td class="px-4 py-3">
                         @if($asistencia->tiempoHorasExtras())
-
-                            <span class="text-success fw-bold">
-
+                            <span class="text-emerald-400 font-bold">
                                 {{ $asistencia->horasExtrasTotalFormato() }}
-
                             </span>
-
                         @else
-
-                            <span class="text-secondary">
-
+                            <span class="text-slate-500">
                                 00:00:00
-
                             </span>
-
                         @endif
-
                     </td>
 
                 </tr>
-
             @empty
-
                 <tr>
-
-                    <td colspan="7" class="text-center py-4">
-
+                    <td colspan="7" class="text-center py-6 text-slate-400">
                         No existen registros.
-
                     </td>
-
                 </tr>
-
             @endforelse
-
             </tbody>
 
         </table>
@@ -134,96 +85,61 @@
     </div>
 
     {{-- Tarjetas (móvil) --}}
-    <div class="d-block d-md-none p-3">
+    <div class="block md:hidden p-3 space-y-3">
 
         @forelse($asistencias as $asistencia)
 
-            <div class="jornada-card mb-3">
+            <div class="rounded-xl bg-white/[0.03] border border-white/[0.08] overflow-hidden">
 
-                <div class="jornada-card-header">
-
+                <div class="flex justify-between items-center px-4 py-2.5 border-b border-white/[0.08] font-semibold text-white">
                     <span>
-
-                        <i class="bi bi-calendar3 me-1"></i>
-
+                        <i class="bi bi-calendar3 mr-1 text-blue-400"></i>
                         {{ \Carbon\Carbon::parse($asistencia->fecha)->format('d/m/Y') }}
-
                     </span>
-
-                    <span class="jornada-badge-tiempo">
-
+                    <span class="text-sm font-semibold rounded-md bg-emerald-600/20 text-emerald-300 px-2.5 py-1">
                         {{ $asistencia->formatoTiempo($asistencia->tiempoTrabajado()) }}
-
                     </span>
-
                 </div>
 
-                <div class="jornada-card-grid">
+                <div class="grid grid-cols-2">
 
-                    <div class="jornada-item jornada-border-right jornada-border-bottom">
-
-                        <p class="jornada-label">Entrada</p>
-
-                        <p class="jornada-value">
-
+                    <div class="px-4 py-2.5 border-r border-b border-white/[0.08]">
+                        <p class="m-0 text-xs text-slate-400">Entrada</p>
+                        <p class="mt-0.5 mb-0 text-sm text-white">
                             {{ $asistencia->hora_entrada
                                 ? \Carbon\Carbon::parse($asistencia->hora_entrada)->format('h:i:s A')
                                 : '--' }}
-
                         </p>
-
                     </div>
 
-                    <div class="jornada-item jornada-border-bottom">
-
-                        <p class="jornada-label">Salida</p>
-
-                        <p class="jornada-value">
-
+                    <div class="px-4 py-2.5 border-b border-white/[0.08]">
+                        <p class="m-0 text-xs text-slate-400">Salida</p>
+                        <p class="mt-0.5 mb-0 text-sm text-white">
                             {{ $asistencia->hora_salida
                                 ? \Carbon\Carbon::parse($asistencia->hora_salida)->format('h:i:s A')
                                 : '--' }}
-
                         </p>
-
                     </div>
 
-                    <div class="jornada-item jornada-border-right">
-
-                        <p class="jornada-label">Pausas</p>
-
-                        <p class="jornada-value">
-
+                    <div class="px-4 py-2.5 border-r border-white/[0.08]">
+                        <p class="m-0 text-xs text-slate-400">Pausas</p>
+                        <p class="mt-0.5 mb-0 text-sm text-white">
                             {{ $asistencia->pausas->count() }}
-
-                            <span class="jornada-value-sub">
-
+                            <span class="text-xs text-slate-400">
                                 ({{ $asistencia->tiempoPausas() }})
-
                             </span>
-
                         </p>
-
                     </div>
 
-                    <div class="jornada-item">
-
-                        <p class="jornada-label">Horas extra</p>
-
-                        <p class="jornada-value {{ $asistencia->tiempoHorasExtras() ? 'text-warning' : 'text-secondary' }}">
-
+                    <div class="px-4 py-2.5">
+                        <p class="m-0 text-xs text-slate-400">Horas extra</p>
+                        <p class="mt-0.5 mb-0 text-sm {{ $asistencia->tiempoHorasExtras() ? 'text-amber-400' : 'text-slate-500' }}">
                             @if($asistencia->tiempoHorasExtras())
-
                                 {{ $asistencia->horasExtrasTotalFormato() }}
-
                             @else
-
                                 00:00:00
-
                             @endif
-
                         </p>
-
                     </div>
 
                 </div>
@@ -232,10 +148,8 @@
 
         @empty
 
-            <p class="text-center text-secondary py-4 mb-0">
-
+            <p class="text-center text-slate-400 py-6 mb-0">
                 No existen registros.
-
             </p>
 
         @endforelse
@@ -243,67 +157,3 @@
     </div>
 
 </div>
-
-<style>
-
-    .jornada-card {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 0.5rem;
-        overflow: hidden;
-    }
-
-    .jornada-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.65rem 1rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        font-weight: 600;
-        color: #fff;
-    }
-
-    .jornada-badge-tiempo {
-        font-size: 0.85rem;
-        font-weight: 600;
-        padding: 0.2rem 0.6rem;
-        border-radius: 0.375rem;
-        background: rgba(25, 135, 84, 0.2);
-        color: #75d8a4;
-    }
-
-    .jornada-card-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .jornada-item {
-        padding: 0.6rem 1rem;
-    }
-
-    .jornada-border-right {
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .jornada-border-bottom {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .jornada-label {
-        margin: 0;
-        font-size: 0.75rem;
-        color: #adb5bd;
-    }
-
-    .jornada-value {
-        margin: 2px 0 0;
-        font-size: 0.9rem;
-        color: #fff;
-    }
-
-    .jornada-value-sub {
-        font-size: 0.75rem;
-        color: #adb5bd;
-    }
-
-</style>

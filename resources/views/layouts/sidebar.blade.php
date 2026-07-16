@@ -1,122 +1,60 @@
-<style>
-    .modern-sidebar {
-        background: rgba(20, 20, 25, 0.95);
-        backdrop-filter: blur(10px);
-        border-right: 1px solid rgba(255, 255, 255, 0.05);
-        width: 260px;
-        transition: transform 0.3s ease;
-        transform: translateX(-100%);
-        z-index: 1050;
-    }
-    .modern-sidebar.sidebar-active {
-        transform: translateX(0);
-    }
-    @media (min-width: 768px) {
-        .modern-sidebar {
-            transform: translateX(0) !important;
-        }
-    }
-    .sidebar-backdrop {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1040;
-    }
-    .nav-link {
-        color: #888 !important;
-        padding: 15px 25px !important;
-        transition: 0.3s;
-        border-left: 3px solid transparent;
-    }
-    .nav-link:hover, .nav-link.active {
-        color: #fff !important;
-        background: rgba(255, 255, 255, 0.05);
-        border-left: 3px solid #0d6efd; /* Azul corporativo */
-    }
-
-    .sidebar-toggle-btn {
-        z-index: 1060;
-        background-color: #2c3035;
-        border-color: #3e444a;
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.2s ease, border-color 0.2s ease;
-    }
-
-    .sidebar-toggle-btn:hover {
-        background-color: #3e444a;
-        border-color: #4b5563;
-    }
-
-    .sidebar-toggle-btn .bi {
-        transition: transform 0.25s ease;
-    }
-
-    .sidebar-toggle-btn.is-open .bi {
-        transform: rotate(90deg);
-    }
-
-    /* Deja espacio arriba del logo para que el botón fijo no lo tape */
-    @media (max-width: 767.98px) {
-        .sidebar-brand {
-            padding-top: 4.5rem !important;
-        }
-    }
-</style>
-
 @auth
     @if(auth()->user()->role === 'admin')
 
         <!-- Botón hamburguesa: solo visible en móvil -->
         <button
-            class="btn btn-outline-light sidebar-toggle-btn d-md-none position-fixed top-0 start-0 m-3"
-            :class="{ 'is-open': sidebarOpen }"
+            class="fixed top-0 left-0 m-3 z-[1060] md:hidden w-9 h-9 rounded-lg flex items-center justify-center bg-[#2c3035] border border-[#3e444a] text-white transition-colors duration-200 hover:bg-[#3e444a] hover:border-[#4b5563]"
             @click="sidebarOpen = !sidebarOpen"
             type="button"
             :aria-expanded="sidebarOpen"
             aria-label="Abrir menú"
         >
-            <i class="bi fs-5" :class="sidebarOpen ? 'bi-x-lg' : 'bi-list'"></i>
+            <i
+                class="bi text-xl transition-transform duration-[250ms]"
+                :class="sidebarOpen ? 'bi-x-lg rotate-90' : 'bi-list rotate-0'"
+            ></i>
         </button>
 
         <!-- Fondo oscuro al abrir en móvil: toca fuera para cerrar -->
         <div
-            class="sidebar-backdrop d-md-none"
+            class="fixed inset-0 bg-black/50 z-[1040] md:hidden"
             x-show="sidebarOpen"
             x-cloak
             @click="sidebarOpen = false"
         ></div>
 
         <div
-            class="modern-sidebar vh-100 position-fixed transition-all duration-300"
-            :class="{ 'sidebar-active': sidebarOpen }"
+            class="fixed top-0 left-0 h-screen w-[260px] bg-[rgba(20,20,25,0.95)] backdrop-blur-md border-r border-white/5 z-[1050] transition-transform duration-300 -translate-x-full md:!translate-x-0"
+            :class="{ 'translate-x-0': sidebarOpen }"
         >
 
-            <div class="p-4 sidebar-brand">
-                <h5 class="text-white fw-bold">OLLIN<span class="text-primary">CHECK</span></h5>
+            <div class="p-[1.5rem] pt-[4.5rem] md:pt-[1.5rem]">
+                <h5 class="text-white font-bold text-lg">OLLIN<span class="text-blue-600">CHECK</span></h5>
             </div>
-            <nav class="nav flex-column mt-2">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+
+            <nav class="flex flex-col mt-2">
+                <a href="{{ route('admin.dashboard') }}"
+                   class="flex items-center px-[25px] py-[15px] transition-colors duration-300 border-l-[3px] {{ request()->routeIs('admin.dashboard') ? 'text-white bg-white/5 border-blue-600' : 'text-gray-500 border-transparent hover:text-white hover:bg-white/5 hover:border-blue-600' }}">
+                    <i class="bi bi-speedometer2 mr-2"></i> Dashboard
                 </a>
-                <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
-                    <i class="bi bi-people me-2"></i> Administración
+
+                <a href="{{ route('home') }}"
+                   class="flex items-center px-[25px] py-[15px] transition-colors duration-300 border-l-[3px] {{ request()->routeIs('home') ? 'text-white bg-white/5 border-blue-600' : 'text-gray-500 border-transparent hover:text-white hover:bg-white/5 hover:border-blue-600' }}">
+                    <i class="bi bi-people mr-2"></i> Administración
                 </a>
 
                 <a href="{{ route('admin.historial') }}"
-   class="nav-link {{ request()->routeIs('admin.historial') ? 'active' : '' }}">
-    <i class="bi bi-clock-history me-2"></i>
-    Historial de Jornadas
-</a>
+                   class="flex items-center px-[25px] py-[15px] transition-colors duration-300 border-l-[3px] {{ request()->routeIs('admin.historial') ? 'text-white bg-white/5 border-blue-600' : 'text-gray-500 border-transparent hover:text-white hover:bg-white/5 hover:border-blue-600' }}">
+                    <i class="bi bi-clock-history mr-2"></i>
+                    Historial de Jornadas
+                </a>
             </nav>
-            <div class="position-absolute bottom-0 w-100 p-3">
+
+            <div class="absolute bottom-0 w-full p-3">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn btn-outline-secondary btn-sm w-100">
+                    <button type="submit"
+                            class="w-full inline-flex items-center justify-center gap-2 border border-gray-500 text-gray-300 hover:bg-white/5 rounded-lg px-3 py-1.5 text-sm transition-colors">
                         <i class="bi bi-box-arrow-left"></i> Salir
                     </button>
                 </form>

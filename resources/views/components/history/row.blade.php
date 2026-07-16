@@ -1,9 +1,9 @@
-<tr>
+<tr class="border-t border-white/10 hover:bg-white/5">
 
     {{-- Becario --}}
-    <td>
+    <td class="px-4 py-3">
 
-        <strong>
+        <strong class="text-white">
 
             {{ $asistencia->user->name }}
 
@@ -11,7 +11,7 @@
 
         <br>
 
-        <small class="text-secondary">
+        <small class="text-gray-400">
 
             {{ $asistencia->user->email }}
 
@@ -20,14 +20,14 @@
     </td>
 
     {{-- Fecha --}}
-    <td>
+    <td class="px-4 py-3">
 
         {{ \Carbon\Carbon::parse($asistencia->fecha)->format('d/m/Y') }}
 
     </td>
 
     {{-- Entrada --}}
-    <td class="d-none d-md-table-cell">
+    <td class="hidden md:table-cell px-4 py-3">
 
       @if($asistencia->hora_entrada)
 
@@ -42,7 +42,7 @@
     </td>
 
     {{-- Salida --}}
-    <td class="d-none d-md-table-cell">
+    <td class="hidden md:table-cell px-4 py-3">
 
         @if($asistencia->hora_salida)
 
@@ -56,9 +56,9 @@
     </td>
 
     {{-- Número de pausas --}}
-    <td class="d-none d-md-table-cell">
+    <td class="hidden md:table-cell px-4 py-3">
 
-        <span class="badge bg-info">
+        <span class="inline-flex items-center justify-center rounded-full bg-cyan-600 text-white text-sm px-2.5 py-1">
 
             {{ $asistencia->pausas->count() }}
 
@@ -67,25 +67,25 @@
     </td>
 
     {{-- Tiempo total pausas --}}
-    <td class="d-none d-md-table-cell">
+    <td class="hidden md:table-cell px-4 py-3">
 
         {{ $asistencia->tiempoPausas() }}
 
     </td>
 
     {{-- Tiempo trabajado --}}
-    <td>
+    <td class="px-4 py-3">
 
         {{ $asistencia->formatoTiempo($asistencia->tiempoTrabajado()) }}
 
     </td>
 
     {{-- Horas extra --}}
-    <td class="d-none d-md-table-cell">
+    <td class="hidden md:table-cell px-4 py-3">
 
         @if($asistencia->tiempoHorasExtras() > 0)
 
-            <span class="text-success fw-bold">
+            <span class="text-green-500 font-bold">
 
                 {{ $asistencia->horasExtrasTotalFormato() }}
 
@@ -93,7 +93,7 @@
 
         @else
 
-            <span class="text-secondary">
+            <span class="text-gray-400">
 
                 00:00:00
 
@@ -105,14 +105,14 @@
 
 
     {{-- Acción --}}
-    <td>
+    <td class="px-4 py-3">
 
     <a
     href="{{ route('admin.historial.reporte', $asistencia->user->id) }}"
-    class="btn btn-outline-primary btn-sm"
+    class="inline-flex items-center gap-1 border border-blue-500 text-blue-400 hover:bg-blue-500/10 rounded-lg px-3 py-1.5 text-sm transition-colors no-underline"
 >
 
-    <i class="bi bi-file-earmark-text me-1"></i>
+    <i class="bi bi-file-earmark-text mr-1"></i>
 
     Reporte
 
