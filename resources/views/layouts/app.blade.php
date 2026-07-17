@@ -1,7 +1,21 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
+
+    {{-- Script bloqueante: decide el tema ANTES de que el navegador pinte nada.
+         Debe ir aquí, sin defer/async, para evitar el flash de tema incorrecto. --}}
+    <script>
+        (function () {
+            var guardado = localStorage.getItem('theme');
+            var prefiereOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var esOscuro = guardado ? guardado === 'dark' : prefiereOscuro;
+            if (esOscuro) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Checador') }}</title>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])

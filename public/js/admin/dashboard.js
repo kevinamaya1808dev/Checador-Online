@@ -3,7 +3,7 @@
 
     // ---- Configuración ----
     const POLLING_MS = 1750; // frecuencia de sincronización con el servidor
-    const TICK_MS = 1200;    // frecuencia del reloj visual (avance local)
+    const TICK_MS = 1000;    // frecuencia del reloj visual (1 segundo para reloj fluido)
 
     // ---- Estado en memoria ----
     let estadoAsistencias = {}; // keyed por user_id
@@ -48,7 +48,7 @@
         let activos = 0, descanso = 0, finalizados = 0;
 
         data.forEach(a => {
-            if (a.sin_registro) return; // no cuenta en ninguna tarjeta
+            if (a.sin_registro) return;
             if (a.turno_terminado) finalizados++;
             else if (a.en_pausa) descanso++;
             else activos++;
@@ -207,7 +207,6 @@
             .then(res => res.json())
             .then(data => {
                 const usuariosServidor = [];
-
                 const tbody = document.getElementById('tabla-asistencias');
                 const vacioTabla = document.getElementById('tabla-vacia');
                 if (vacioTabla && data.length > 0) vacioTabla.remove();
@@ -216,22 +215,60 @@
                 const vacioCards = document.getElementById('tarjetas-vacio');
                 if (vacioCards && data.length > 0) vacioCards.remove();
 
+                const ahora = Date.now();
+
                 data.forEach(a => {
                     usuariosServidor.push(String(a.user_id));
 
+                    const prev = estadoAsistencias[a.user_id];
+                    let baseTime = ahora;
+                    let pTrabajado = a.trabajado_segundos;
+                    let pPausas = a.pausas_segundos;
+                    let pExtras = a.extras_segundos;
+                    let pExtrasEnt = a.extras_entrada_segundos;
+                    let pExtrasSal = a.extras_salida_segundos;
+
+                    // ANTI-JUMPING LOGIC:
+                    // Si el estado no ha cambiado, evitamos resetear los valores con los del servidor
+                    // para evitar micro-saltos por latencia. Mantenemos la base anterior y dejamos fluir el reloj.
+                    if (prev && prev.enPausa === a.en_pausa && prev.turnoTerminado === a.turno_terminado && prev.extrasCreciendo === a.extras_creciendo) {
+                        const deltaPrev = (ahora - prev.lastSync) / 1000;
+                        const trabajadoEstimado = prev.baseTrabajado + (!a.en_pausa ? deltaPrev : 0);
+                        
+                        // Si la diferencia entre nuestro cálculo local y el servidor es mínima (< 5s), ignoramos la del server
+                        if (Math.abs(trabajadoEstimado - a.trabajado_segundos) < 5) {
+                            baseTime = prev.lastSync;
+                            pTrabajado = prev.baseTrabajado;
+                            pPausas = prev.basePausas;
+                            pExtras = prev.baseExtras;
+                            pExtrasEnt = prev.baseExtrasEntrada;
+                            pExtrasSal = prev.baseExtrasSalida;
+                        }
+                    }
+
+                    // Guardamos la nueva "Base" en memoria
                     estadoAsistencias[a.user_id] = {
-                        trabajado: a.trabajado_segundos,
-                        pausas: a.pausas_segundos,
-                        extras: a.extras_segundos,
-                        extrasEntrada: a.extras_entrada_segundos,
-                        extrasSalida: a.extras_salida_segundos,
+                        baseTrabajado: pTrabajado,
+                        basePausas: pPausas,
+                        baseExtras: pExtras,
+                        baseExtrasEntrada: pExtrasEnt,
+                        baseExtrasSalida: pExtrasSal,
+                        lastSync: baseTime,
                         enPausa: a.en_pausa,
                         turnoTerminado: a.turno_terminado,
                         extrasCreciendo: a.extras_creciendo,
-                        sinRegistro: a.sin_registro,
+                        sinRegistro: a.sin_registro
                     };
 
-                    // Tabla (desktop/tablet)
+                    // Calculamos el valor interpolado actual para la primera renderización tras recibir el fetch
+                    const deltaCalculado = (ahora - baseTime) / 1000;
+                    a.trabajado_segundos = pTrabajado + (!a.en_pausa && !a.turnoTerminado && !a.sin_registro ? deltaCalculado : 0);
+                    a.pausas_segundos = pPausas + (a.en_pausa && !a.turnoTerminado && !a.sin_registro ? deltaCalculado : 0);
+                    a.extras_segundos = pExtras + (a.extras_creciendo && !a.turnoTerminado && !a.sin_registro ? deltaCalculado : 0);
+                    a.extras_salida_segundos = pExtrasSal + (a.extras_creciendo && !a.turnoTerminado && !a.sin_registro ? deltaCalculado : 0);
+                    a.extras_entrada_segundos = pExtrasEnt;
+
+                    // Render Tabla
                     let fila = document.querySelector(`tr[data-user="${a.user_id}"]`);
                     if (!fila) {
                         fila = crearFila(a);
@@ -240,7 +277,7 @@
                         actualizarFila(a);
                     }
 
-                    // Tarjeta (móvil)
+                    // Render Tarjeta
                     let tarjeta = document.querySelector(`[data-user-card="${a.user_id}"]`);
                     if (!tarjeta) {
                         tarjeta = crearTarjeta(a);
@@ -250,32 +287,19 @@
                     }
                 });
 
-                // Elimina filas y tarjetas de usuarios que ya no vienen del servidor
+                // Limpieza de usuarios inactivos
                 tbody.querySelectorAll('tr[data-user]').forEach(fila => {
-                    if (!usuariosServidor.includes(fila.dataset.user)) {
-                        fila.remove();
-                    }
+                    if (!usuariosServidor.includes(fila.dataset.user)) fila.remove();
                 });
-
                 contenedorCards.querySelectorAll('[data-user-card]').forEach(tarjeta => {
-                    if (!usuariosServidor.includes(tarjeta.dataset.userCard)) {
-                        tarjeta.remove();
-                    }
+                    if (!usuariosServidor.includes(tarjeta.dataset.userCard)) tarjeta.remove();
                 });
-
                 Object.keys(estadoAsistencias).forEach(userId => {
-                    if (!usuariosServidor.includes(String(userId))) {
-                        delete estadoAsistencias[userId];
-                    }
+                    if (!usuariosServidor.includes(String(userId))) delete estadoAsistencias[userId];
                 });
 
-                if (tbody.querySelectorAll('tr[data-user]').length === 0) {
-                    renderTablaVacia(tbody);
-                }
-
-                if (contenedorCards.querySelectorAll('[data-user-card]').length === 0) {
-                    renderTarjetasVacio(contenedorCards);
-                }
+                if (tbody.querySelectorAll('tr[data-user]').length === 0) renderTablaVacia(tbody);
+                if (contenedorCards.querySelectorAll('[data-user-card]').length === 0) renderTarjetasVacio(contenedorCards);
 
                 actualizarTarjetasResumen(data);
             })
@@ -283,37 +307,51 @@
     }
 
     // ---- Reloj visual local (entre sincronizaciones) ----
-    // ---- Reloj visual local (entre sincronizaciones) ----
     function tick() {
         const ahora = Date.now();
-        const deltaSegundos = (ahora - ultimoTickTimestamp) / 1000;
-        ultimoTickTimestamp = ahora;
 
         Object.keys(estadoAsistencias).forEach(userId => {
             const e = estadoAsistencias[userId];
             if (e.turnoTerminado || e.sinRegistro) return;
 
-            if (e.enPausa) e.pausas += deltaSegundos;
-            else e.trabajado += deltaSegundos;
+            // Calculamos cuánto tiempo real ha pasado desde que guardamos el tiempo base
+            const deltaSegundos = (ahora - e.lastSync) / 1000;
 
-            if (e.extrasCreciendo) {
-                e.extras += deltaSegundos;
-                e.extrasSalida += deltaSegundos;
+            let tTrabajado = e.baseTrabajado;
+            let tPausas = e.basePausas;
+            let tExtras = e.baseExtras;
+            let tExtrasSalida = e.baseExtrasSalida;
+            let tExtrasEntrada = e.baseExtrasEntrada;
+
+            if (e.enPausa) {
+                tPausas += deltaSegundos;
+            } else {
+                tTrabajado += deltaSegundos;
             }
 
-            // Tabla
-            actualizarTexto('pausas-' + userId, 'bi-cup-hot', formatoHMS(e.pausas));
-            actualizarTexto('trabajado-' + userId, 'bi-stopwatch', formatoHMS(e.trabajado));
-            actualizarExtras(userId, e);
+            if (e.extrasCreciendo) {
+                tExtras += deltaSegundos;
+                tExtrasSalida += deltaSegundos;
+            }
 
-            // Tarjeta
-            actualizarTextoCard('pausas-card-' + userId, 'bi-cup-hot', formatoHMS(e.pausas));
-            actualizarTextoCard('trabajado-card-' + userId, 'bi-stopwatch', formatoHMS(e.trabajado));
-            actualizarExtrasCard(userId, e);
+            const dataExtras = {
+                extras: tExtras,
+                extrasEntrada: tExtrasEntrada,
+                extrasSalida: tExtrasSalida
+            };
+
+            // Actualizamos la UI sin alterar el estado guardado, solo calculamos la diferencia
+            actualizarTexto('pausas-' + userId, 'bi-cup-hot', formatoHMS(tPausas));
+            actualizarTexto('trabajado-' + userId, 'bi-stopwatch', formatoHMS(tTrabajado));
+            actualizarExtras(userId, dataExtras);
+
+            actualizarTextoCard('pausas-card-' + userId, 'bi-cup-hot', formatoHMS(tPausas));
+            actualizarTextoCard('trabajado-card-' + userId, 'bi-stopwatch', formatoHMS(tTrabajado));
+            actualizarExtrasCard(userId, dataExtras);
         });
     }
 
-    // ---- Control de polling (se pausa si la pestaña está oculta) ----
+    // ---- Control de polling ----
     function iniciarPolling() {
         clearInterval(intervaloSincronizacion);
         intervaloSincronizacion = setInterval(sincronizar, POLLING_MS);
@@ -323,7 +361,7 @@
         if (document.hidden) {
             clearInterval(intervaloSincronizacion);
         } else {
-            sincronizar(); // trae el estado actual de inmediato al volver
+            sincronizar();
             iniciarPolling();
         }
     });
@@ -331,6 +369,6 @@
     // ---- Arranque ----
     sincronizar();
     iniciarPolling();
-    setInterval(tick, TICK_MS);
+    setInterval(tick, TICK_MS); // tick funciona a 1000ms
 
 })();

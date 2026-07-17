@@ -14,10 +14,10 @@ class EstadoTurnoPresenter
     public bool $puedeSalir;
 
     private const INFO = [
-        'inactivo'   => ['label' => 'Esperando turno', 'desc' => 'Aún no has registrado tu entrada.', 'texto' => 'text-slate-300', 'icon' => 'bi-hourglass-split'],
-        'trabajando' => ['label' => 'Trabajando', 'desc' => 'Tu turno está activo.', 'texto' => 'text-green-400', 'icon' => 'bi-briefcase-fill'],
-        'pausado'    => ['label' => 'En pausa', 'desc' => 'Descanso en curso.', 'texto' => 'text-amber-400', 'icon' => 'bi-cup-hot'],
-        'terminado'  => ['label' => 'Turno finalizado', 'desc' => 'Registro guardado correctamente.', 'texto' => 'text-red-400', 'icon' => 'bi-flag-fill'],
+        'inactivo'   => ['label' => 'Esperando turno', 'desc' => 'Aún no has registrado tu entrada.', 'texto' => 'text-slate-600 dark:text-slate-300', 'icon' => 'bi-hourglass-split'],
+        'trabajando' => ['label' => 'Trabajando', 'desc' => 'Tu turno está activo.', 'texto' => 'text-green-700 dark:text-green-400', 'icon' => 'bi-briefcase-fill'],
+        'pausado'    => ['label' => 'En pausa', 'desc' => 'Descanso en curso.', 'texto' => 'text-amber-700 dark:text-amber-400', 'icon' => 'bi-cup-hot'],
+        'terminado'  => ['label' => 'Turno finalizado', 'desc' => 'Registro guardado correctamente.', 'texto' => 'text-red-700 dark:text-red-400', 'icon' => 'bi-flag-fill'],
     ];
 
     private const BANNER = [
@@ -33,7 +33,7 @@ class EstadoTurnoPresenter
         $this->estado = $estadoRaw ?? 'inactivo';
 
         $this->info = self::INFO[$this->estado] ?? [
-            'label' => ucfirst($this->estado), 'desc' => '', 'texto' => 'text-slate-300', 'icon' => 'bi-question-circle',
+            'label' => ucfirst($this->estado), 'desc' => '', 'texto' => 'text-slate-600 dark:text-slate-300', 'icon' => 'bi-question-circle',
         ];
 
         $this->banner = self::BANNER[$this->estado] ?? [

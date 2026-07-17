@@ -63,14 +63,16 @@
             onclick="openModal('modalSalida')"
         />
     </form>
-    <div class="bg-slate-800/50 border border-white/[0.06] rounded-2xl mt-auto p-4 flex gap-3 items-start">
-                        <span class="w-8 h-8 rounded-lg bg-blue-500/15 border border-blue-400/25 flex items-center justify-center shrink-0">
-                            <i class="bi bi-info-circle-fill text-blue-400 text-sm"></i>
-                        </span>
-                        <div>
-                            <p class="font-bold text-sm mb-0">Recuerda registrar tus pausas</p>
-                            <p class="text-slate-400 mb-0 text-[0.75rem]">Para llevar un control correcto de tu tiempo laboral.</p>
-                        </div>
+
+    {{-- Info Box --}}
+    <div class="bg-slate-50 dark:bg-slate-800/50 border border-gray-200 dark:border-white/[0.06] rounded-2xl mt-auto p-4 flex gap-3 items-start transition-colors duration-300">
+        <span class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-500/15 border border-blue-200 dark:border-blue-400/25 flex items-center justify-center shrink-0">
+            <i class="bi bi-info-circle-fill text-blue-600 dark:text-blue-400 text-sm"></i>
+        </span>
+        <div>
+            <p class="font-bold text-sm mb-0 text-gray-900 dark:text-white">Recuerda registrar tus pausas</p>
+            <p class="text-gray-500 dark:text-slate-400 mb-0 text-[0.75rem]">Para llevar un control correcto de tu tiempo laboral.</p>
+        </div>
+    </div>
 
 </div>
-
