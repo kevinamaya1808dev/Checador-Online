@@ -66,3 +66,12 @@ Route::middleware(['auth', 'role:becario'])->group(function () {
     Route::post('/iniciar-pausa', [BecarioController::class, 'iniciarPausa'])->name('becario.iniciarPausa');
     Route::post('/finalizar-pausa', [BecarioController::class, 'finalizarPausa'])->name('becario.finalizarPausa');
 });
+
+// [POLLING DE ROL]: Endpoint ligero para detectar cambios de rol en tiempo real.
+// Solo requiere 'auth', sin restricción de rol, para que cualquier usuario autenticado
+// (admin o becario) pueda consultar su propio rol actual sin ser bloqueado.
+Route::middleware('auth')->get('/api/rol-actual', function () {
+    return response()->json([
+        'role' => Auth::user()->role,
+    ]);
+})->name('api.rol-actual');

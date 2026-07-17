@@ -3,6 +3,10 @@
 
 @section('content')
 
+<script>
+    window.ROL_ACTUAL = "{{ auth()->user()->role }}";
+</script>
+
 @php
     $presenter = $presenter ?? new \App\Support\EstadoTurnoPresenter($estado ?? null);
     $inicial = auth()->check() ? mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) : 'U';
@@ -13,7 +17,7 @@
 <x-becario.toasts />
 
 {{-- Fondo principal: Transición entre blanco y oscuro --}}
-<div class="relative min-h-screen bg-white dark:bg-slate-950 text-gray-900 dark:text-white overflow-hidden transition-colors duration-300">
+<div class="relative min-h-screen text-gray-900 dark:text-white overflow-hidden transition-colors duration-300">
     
     {{-- Blobs decorativos: Solo visibles en modo oscuro para no ensuciar el diseño claro --}}
     <div class="pointer-events-none absolute inset-0 -z-0 overflow-hidden hidden dark:block">

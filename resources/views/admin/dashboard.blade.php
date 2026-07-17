@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section('content')
+<script>
+    window.ROL_ACTUAL = "{{ auth()->user()->role }}";
+</script>
 <div class="w-full px-3 md:px-4">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-center sm:text-left mb-4 gap-2">
         <h2 class="text-gray-900 dark:text-white font-bold mb-0 text-lg sm:text-xl lg:text-3xl transition-colors">
