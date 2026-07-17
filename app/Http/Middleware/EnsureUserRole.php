@@ -24,11 +24,14 @@ class EnsureUserRole
         }
 
         // [BLOQUEO DE SEGURIDAD]: Validación estricta de rol
-        // Si el usuario existe pero su rol no coincide, abortar con error 403 (Prohibido).
-        // Usar abort(403) es más seguro que redirigir, ya que detiene el ciclo 
-        // de la petición por completo, evitando cualquier posible bug de redirección.
+        // Si el usuario existe pero su rol no coincide, en vez de mostrar un error 403,
+        // lo redirigimos a SU propio dashboard según su rol actual. Así, si un becario
+        // escribe manualmente una ruta de admin (o viceversa), es enviado de vuelta
+        // a la vista que le corresponde en lugar de quedar atascado en una pantalla de error.
         if ($request->user()->role !== $role) {
-            abort(403, 'Acceso denegado: No cuenta con los permisos necesarios.');
+            return redirect()->route(
+                $request->user()->role === 'admin' ? 'admin.dashboard' : 'becario.dashboard'
+            );
         }
 
         return $next($request);
