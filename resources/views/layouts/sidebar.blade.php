@@ -3,9 +3,10 @@
         
         <div x-data="{ sidebarOpen: false, isCollapsed: false }">
 
-            <button class="fixed top-4 left-4 z-[1060] md:hidden p-2 bg-gray-800 text-white rounded-lg"
+            {{-- Único botón responsive (logo) --}}
+            <button class="fixed top-4 left-4 z-[1070] md:hidden p-1.5 bg-stone-100 dark:bg-[#141419] border border-stone-200 dark:border-white/10 rounded-lg shadow"
                     @click="sidebarOpen = !sidebarOpen">
-                <i class="bi" :class="sidebarOpen ? 'bi-x-lg' : 'bi-list'"></i>
+                <img src="{{ asset('images/isotipo.webp') }}" alt="Logo" class="w-7 h-7 object-contain">
             </button>
 
             <div class="fixed inset-0 bg-black/50 z-[1040] md:hidden" x-show="sidebarOpen" x-cloak @click="sidebarOpen = false"></div>
@@ -17,12 +18,20 @@
                    }">
 
                 <div @click="isCollapsed = !isCollapsed" 
-                     class="flex items-center gap-3 p-4 h-[70px] cursor-pointer hover:bg-stone-200 dark:hover:bg-white/5 transition-colors">
+                     class="hidden md:flex items-center gap-3 p-4 h-[70px] cursor-pointer hover:bg-stone-200 dark:hover:bg-white/5 transition-colors">
                     
                     <img src="{{ asset('images/isotipo.webp') }}" alt="Logo" class="w-8 h-8 object-contain shrink-0">
                     
                     <h5 class="text-gray-900 dark:text-white font-bold text-lg whitespace-nowrap overflow-hidden transition-opacity duration-300" 
                         x-show="!isCollapsed || sidebarOpen">
+                        OLLIN<span class="text-blue-600">CHECK</span>
+                    </h5>
+                </div>
+
+                {{-- Header dentro del aside solo para móvil, sin comportamiento de click --}}
+                <div class="flex md:hidden items-center gap-3 p-4 h-[70px]">
+                    <img src="{{ asset('images/isotipo.webp') }}" alt="Logo" class="w-8 h-8 object-contain shrink-0">
+                    <h5 class="text-gray-900 dark:text-white font-bold text-lg whitespace-nowrap overflow-hidden">
                         OLLIN<span class="text-blue-600">CHECK</span>
                     </h5>
                 </div>

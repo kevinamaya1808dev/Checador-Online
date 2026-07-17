@@ -283,17 +283,22 @@
     }
 
     // ---- Reloj visual local (entre sincronizaciones) ----
+    // ---- Reloj visual local (entre sincronizaciones) ----
     function tick() {
+        const ahora = Date.now();
+        const deltaSegundos = (ahora - ultimoTickTimestamp) / 1000;
+        ultimoTickTimestamp = ahora;
+
         Object.keys(estadoAsistencias).forEach(userId => {
             const e = estadoAsistencias[userId];
             if (e.turnoTerminado || e.sinRegistro) return;
 
-            if (e.enPausa) e.pausas += 1;
-            else e.trabajado += 1;
+            if (e.enPausa) e.pausas += deltaSegundos;
+            else e.trabajado += deltaSegundos;
 
             if (e.extrasCreciendo) {
-                e.extras += 1;
-                e.extrasSalida += 1;
+                e.extras += deltaSegundos;
+                e.extrasSalida += deltaSegundos;
             }
 
             // Tabla

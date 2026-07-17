@@ -1,0 +1,103 @@
+{{-- resources/views/components/becario/accion-boton.blade.php --}}
+@props([
+    'color'       => 'blue',   // blue | amber | red
+    'icon'        => 'bi-box-arrow-in-right',
+    'iconRotate'  => '-rotate-3',
+    'titulo'      => '',
+    'descripcion' => '',
+    'disabled'    => false,
+    'destacar'    => false,
+    'as'          => 'submit', // 'submit' | 'button'
+    'onclick'     => null,
+])
+
+@php
+    $paletas = [
+        'blue' => [
+            'border'       => 'border-blue-500/40',
+            'hoverBorder'  => 'hover:border-blue-400/70',
+            'hoverShadow'  => 'hover:shadow-[0_18px_35px_-15px_rgba(37,99,235,0.55)]',
+            'bar'          => 'bg-blue-500',
+            'glow'         => 'bg-blue-500/10',
+            'iconBg'       => 'bg-gradient-to-br from-blue-500 to-blue-700',
+            'iconShadow'   => 'shadow-[0_8px_20px_-4px_rgba(37,99,235,0.65)]',
+            'texto'        => 'text-blue-300',
+            'badgeTexto'   => 'text-blue-300',
+            'badgeBg'      => 'bg-blue-500/10',
+            'badgeBorder'  => 'border-blue-400/30',
+            'dot'          => 'bg-blue-400',
+            'destacarRing' => 'ring-1 ring-blue-400/40 shadow-[0_0_30px_-8px_rgba(59,130,246,0.5)]',
+        ],
+        'amber' => [
+            'border'       => 'border-amber-500/40',
+            'hoverBorder'  => 'hover:border-amber-400/70',
+            'hoverShadow'  => 'hover:shadow-[0_18px_35px_-15px_rgba(217,119,6,0.55)]',
+            'bar'          => 'bg-amber-500',
+            'glow'         => 'bg-amber-500/10',
+            'iconBg'       => 'bg-gradient-to-br from-amber-500 to-amber-700',
+            'iconShadow'   => 'shadow-[0_8px_20px_-4px_rgba(217,119,6,0.65)]',
+            'texto'        => 'text-amber-300',
+            'badgeTexto'   => 'text-amber-300',
+            'badgeBg'      => 'bg-amber-500/10',
+            'badgeBorder'  => 'border-amber-400/30',
+            'dot'          => 'bg-amber-400',
+            'destacarRing' => 'ring-1 ring-amber-400/40 shadow-[0_0_30px_-8px_rgba(245,158,11,0.5)]',
+        ],
+        'red' => [
+            'border'       => 'border-red-500/40',
+            'hoverBorder'  => 'hover:border-red-400/70',
+            'hoverShadow'  => 'hover:shadow-[0_18px_35px_-15px_rgba(220,38,38,0.55)]',
+            'bar'          => 'bg-red-500',
+            'glow'         => 'bg-red-500/10',
+            'iconBg'       => 'bg-gradient-to-br from-red-500 to-red-700',
+            'iconShadow'   => 'shadow-[0_8px_20px_-4px_rgba(185,28,28,0.65)]',
+            'texto'        => 'text-red-300',
+            'badgeTexto'   => 'text-red-300',
+            'badgeBg'      => 'bg-red-500/10',
+            'badgeBorder'  => 'border-red-400/30',
+            'dot'          => 'bg-red-400',
+            'destacarRing' => 'ring-1 ring-red-400/40 shadow-[0_0_30px_-8px_rgba(239,68,68,0.5)]',
+        ],
+    ];
+
+    $p = $paletas[$color] ?? $paletas['blue'];
+
+    $baseClasses = "group relative isolate w-full text-left overflow-hidden rounded-2xl border p-4 sm:p-5 flex items-center gap-4
+                    bg-slate-900/60 {$p['border']}
+                    transition-all duration-300 ease-out
+                    hover:-translate-y-1 {$p['hoverBorder']} {$p['hoverShadow']}
+                    active:translate-y-0 active:scale-[0.98]
+                    disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none disabled:hover:translate-y-0 disabled:hover:shadow-none
+                    " . ($destacar ? $p['destacarRing'] : '');
+@endphp
+
+<button
+    type="{{ $as === 'submit' ? 'submit' : 'button' }}"
+    @if($onclick) onclick="{{ $onclick }}" @endif
+    @disabled($disabled)
+    {{ $attributes->merge(['class' => $baseClasses]) }}
+>
+    <span class="absolute left-0 top-0 h-full w-1 {{ $p['bar'] }} origin-center scale-y-0 group-hover:scale-y-100 transition-transform duration-300 rounded-r"></span>
+    <span class="pointer-events-none absolute -right-8 -top-8 w-28 h-28 rounded-full {{ $p['glow'] }} blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+    @if($destacar)
+        <span class="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider {{ $p['badgeTexto'] }} {{ $p['badgeBg'] }} border {{ $p['badgeBorder'] }} rounded-full px-2 py-0.5">
+            <span class="w-1.5 h-1.5 rounded-full {{ $p['dot'] }} animate-pulse"></span>
+            Disponible
+        </span>
+    @endif
+
+    <span class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-xl text-white
+                 {{ $p['iconBg'] }} {{ $p['iconShadow'] }}
+                 transition-transform duration-300 group-hover:scale-110 group-hover:{{ $iconRotate }}">
+        <i class="bi {{ $icon }}"></i>
+    </span>
+
+    <span class="relative flex-1 min-w-0">
+        <span class="block font-bold text-base sm:text-lg {{ $p['texto'] }} tracking-tight">{{ $titulo }}</span>
+        <span class="block text-sm text-slate-400 mt-0.5">{{ $descripcion }}</span>
+    </span>
+
+    <i class="bi bi-chevron-right relative text-white/0 group-hover:text-white/50 transition-all duration-300 group-hover:translate-x-1"></i>
+</button>
+
