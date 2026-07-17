@@ -29,6 +29,21 @@
             @csrf @method('PUT')
             
             <div class="px-6 py-5">
+                <!-- Alerta de Contraseña Dinámica para Edición (Oculta por defecto) -->
+<div id="passwordAlertEdit" class="hidden overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 -translate-y-4 mb-6">
+    <div class="flex items-start gap-3 p-4 text-sm text-red-800 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl shadow-sm">
+        <div class="flex items-center justify-center shrink-0 w-8 h-8 rounded-lg bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400">
+            <i class="bi bi-shield-exclamation text-lg"></i>
+        </div>
+        <div class="flex-1 pt-1.5">
+            <span class="font-bold block mb-0.5 text-red-900 dark:text-red-300">Error de Seguridad</span>
+            <span id="passwordAlertMessageEdit">Las contraseñas no coinciden.</span>
+        </div>
+        <button type="button" onclick="ocultarAlertaContrasenaEdit()" class="text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 p-1.5 rounded-lg transition-colors mt-0.5">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+</div>
                 <div class="mb-6">
                     <label class="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-500 dark:text-gray-500 uppercase mb-4">
                         <i class="bi bi-key-fill text-gray-400 dark:text-gray-600"></i> Datos de acceso
@@ -125,4 +140,60 @@ function actualizarCorreoAuto() {
     document.getElementById('edit_email_prefix').value = nuevoPrefix;
     document.getElementById('full_email_hidden').value = nuevoPrefix + "@ollintem.com.mx";
 }
+
+// ---- LÓGICA DE VALIDACIÓN PARA EL MODAL DE EDICIÓN ----
+
+function mostrarAlertaContrasenaEdit(mensaje) {
+    const alertBox = document.getElementById('passwordAlertEdit');
+    const alertMsg = document.getElementById('passwordAlertMessageEdit');
+    
+    alertMsg.textContent = mensaje;
+    alertBox.classList.remove('hidden');
+    
+    setTimeout(() => {
+        alertBox.classList.remove('opacity-0', '-translate-y-4');
+        alertBox.classList.add('opacity-100', 'translate-y-0');
+    }, 10);
+}
+
+function ocultarAlertaContrasenaEdit() {
+    const alertBox = document.getElementById('passwordAlertEdit');
+    
+    alertBox.classList.remove('opacity-100', 'translate-y-0');
+    alertBox.classList.add('opacity-0', '-translate-y-4');
+    
+    setTimeout(() => {
+        alertBox.classList.add('hidden');
+    }, 300);
+}
+
+// Interceptar el envío del formulario de edición
+document.getElementById('formEditar').addEventListener('submit', function(e) {
+    // Buscamos los inputs de contraseña específicamente dentro de este formulario
+    const password = this.querySelector('input[name="password"]').value;
+    const passwordConfirm = this.querySelector('input[name="password_confirmation"]').value;
+    
+    // COMO ES OPCIONAL: Solo validamos si el usuario escribió al menos un carácter
+    if (password !== '' || passwordConfirm !== '') {
+        
+        if (password.length < 8) {
+            e.preventDefault(); // Detiene el envío
+            mostrarAlertaContrasenaEdit('La nueva contraseña debe tener al menos 8 caracteres.');
+            return;
+        }
+
+        if (password !== passwordConfirm) {
+            e.preventDefault(); // Detiene el envío
+            mostrarAlertaContrasenaEdit('Las contraseñas no coinciden. Por favor, verifícalas e inténtalo de nuevo.');
+            return;
+        }
+    }
+    
+    // Si todo está correcto (o si están vacías), ocultamos alertas y dejamos que se envíe
+    ocultarAlertaContrasenaEdit();
+});
+
+// Ocultar la alerta automáticamente cuando el usuario intente corregir
+document.querySelector('#formEditar input[name="password"]').addEventListener('input', ocultarAlertaContrasenaEdit);
+document.querySelector('#formEditar input[name="password_confirmation"]').addEventListener('input', ocultarAlertaContrasenaEdit);
 </script>

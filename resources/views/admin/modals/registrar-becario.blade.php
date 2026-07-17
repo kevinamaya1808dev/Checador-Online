@@ -31,9 +31,38 @@
 
         <div class="h-px bg-[#EAE4D8] dark:bg-white/[0.08]"></div>
 
-        <form action="{{ route('admin.becarios.store') }}" method="POST">
+       <form id="formRegistrarBecario" action="{{ route('admin.becarios.store') }}" method="POST">
             @csrf
             <div class="px-6 py-5">
+
+                <!-- Alerta de Contraseña Dinámica (Oculta por defecto) -->
+<div id="passwordAlert" class="hidden overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 -translate-y-4 mb-6">
+    <div class="flex items-start gap-3 p-4 text-sm text-red-800 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl shadow-sm">
+        <div class="flex items-center justify-center shrink-0 w-8 h-8 rounded-lg bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400">
+            <i class="bi bi-shield-exclamation text-lg"></i>
+        </div>
+        <div class="flex-1 pt-1.5">
+            <span class="font-bold block mb-0.5 text-red-900 dark:text-red-300">Error de Seguridad</span>
+            <span id="passwordAlertMessage">Las contraseñas no coinciden.</span>
+        </div>
+        <button type="button" onclick="ocultarAlertaContrasena()" class="text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 p-1.5 rounded-lg transition-colors mt-0.5">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Opcional: Mostrar errores que vengan del backend de Laravel -->
+@if($errors->has('password'))
+<div class="mb-6 flex items-start gap-3 p-4 text-sm text-red-800 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl shadow-sm">
+    <div class="flex items-center justify-center shrink-0 w-8 h-8 rounded-lg bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400">
+        <i class="bi bi-shield-exclamation text-lg"></i>
+    </div>
+    <div class="flex-1 pt-1.5">
+        <span class="font-bold block mb-0.5 text-red-900 dark:text-red-300">Error del Servidor</span>
+        <span>{{ $errors->first('password') }}</span>
+    </div>
+</div>
+@endif
                 
                 <div class="mb-6">
                     <label class="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-500 dark:text-gray-500 uppercase mb-4">
@@ -105,4 +134,63 @@ function generarEmailAuto() {
     document.getElementById('email_prefix').value = emailBase;
     document.getElementById('email_corporativo').value = emailBase + "@ollintem.com.mx";
 }
+
+// Funciones para la alerta dinámica
+function mostrarAlertaContrasena(mensaje) {
+    const alertBox = document.getElementById('passwordAlert');
+    const alertMsg = document.getElementById('passwordAlertMessage');
+    
+    // Cambiar el mensaje
+    alertMsg.textContent = mensaje;
+    
+    // Quitar el hidden para que ocupe espacio
+    alertBox.classList.remove('hidden');
+    
+    // Pequeño retraso para que el navegador procese el renderizado y aplique la animación
+    setTimeout(() => {
+        alertBox.classList.remove('opacity-0', '-translate-y-4');
+        alertBox.classList.add('opacity-100', 'translate-y-0');
+    }, 10);
+}
+
+function ocultarAlertaContrasena() {
+    const alertBox = document.getElementById('passwordAlert');
+    
+    // Iniciar animación de salida
+    alertBox.classList.remove('opacity-100', 'translate-y-0');
+    alertBox.classList.add('opacity-0', '-translate-y-4');
+    
+    // Esperar a que termine la animación para ocultar el div
+    setTimeout(() => {
+        alertBox.classList.add('hidden');
+    }, 300);
+}
+
+// Validación al enviar el formulario
+document.getElementById('formRegistrarBecario').addEventListener('submit', function(e) {
+    // Obtener los valores de los inputs de contraseña
+    const password = document.querySelector('input[name="password"]').value;
+    const passwordConfirm = document.querySelector('input[name="password_confirmation"]').value;
+    
+    // 1. Validar longitud mínima
+    if (password.length < 8) {
+        e.preventDefault(); // Detiene el envío
+        mostrarAlertaContrasena('La contraseña debe tener al menos 8 caracteres para ser segura.');
+        return;
+    }
+
+    // 2. Validar que coincidan
+    if (password !== passwordConfirm) {
+        e.preventDefault(); // Detiene el envío
+        mostrarAlertaContrasena('Las contraseñas no coinciden. Por favor, verifícalas e inténtalo de nuevo.');
+        return;
+    }
+    
+    // Si todo está bien, ocultamos cualquier alerta previa y el formulario se enviará normalmente
+    ocultarAlertaContrasena();
+});
+
+// Opcional: Ocultar la alerta automáticamente cuando el usuario empiece a escribir de nuevo
+document.querySelector('input[name="password"]').addEventListener('input', ocultarAlertaContrasena);
+document.querySelector('input[name="password_confirmation"]').addEventListener('input', ocultarAlertaContrasena);
 </script>
