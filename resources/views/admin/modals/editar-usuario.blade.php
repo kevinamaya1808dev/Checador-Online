@@ -1,34 +1,34 @@
 <div id="modalEditarUsuario" 
-     class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 dark:bg-black/70 backdrop-blur-sm dark:backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 ease-out" 
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 dark:bg-black/70 backdrop-blur-sm dark:backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 ease-out p-4" 
      role="dialog" aria-modal="true">
     
-    <div class="modal-dialog relative w-full max-w-2xl mx-4 bg-white dark:bg-[#15181d] text-gray-800 dark:text-white border border-[#EAE4D8] dark:border-white/10 rounded-2xl shadow-2xl dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] overflow-hidden transform scale-95 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
+    <div class="modal-dialog relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-white dark:bg-[#15181d] text-gray-800 dark:text-white border border-[#EAE4D8] dark:border-white/10 rounded-2xl shadow-2xl dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] overflow-hidden transform scale-95 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
 
         <div class="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-0 dark:opacity-90"></div>
 
-       <div class="flex items-center justify-between px-6 pt-6 pb-4 bg-[#F4F0E6] dark:bg-[#1a1d23]">
-            <div class="flex items-center gap-4">
+       <div class="shrink-0 flex items-center justify-between px-6 pt-6 pb-4 bg-[#F4F0E6] dark:bg-[#1a1d23]">
+            <div class="flex items-center gap-4 min-w-0">
                 <div class="flex items-center justify-center shrink-0 w-11 h-11 rounded-xl bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-700 dark:text-blue-400 text-xl dark:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
                     <i class="bi bi-pencil-square"></i>
                 </div>
-                <div>
-                    <h5 class="text-lg font-bold text-gray-900 dark:text-white m-0">
+                <div class="min-w-0">
+                    <h5 class="text-lg font-bold text-gray-900 dark:text-white m-0 truncate">
                         Editar Empleado: <span id="nombre_actual_display" class="text-blue-700 dark:text-blue-400"></span>
                     </h5>
                 </div>
             </div>
 
-            <button type="button" class="btn-close-modal text-gray-500 dark:text-gray-500 hover:text-gray-800 dark:hover:text-white dark:hover:bg-white/10 rounded-lg p-1.5 -mr-1.5 transition-colors" aria-label="Cerrar">
+            <button type="button" class="btn-close-modal shrink-0 text-gray-500 dark:text-gray-500 hover:text-gray-800 dark:hover:text-white dark:hover:bg-white/10 rounded-lg p-1.5 -mr-1.5 transition-colors" aria-label="Cerrar">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
 
-        <div class="h-px bg-[#EAE4D8] dark:bg-white/[0.08]"></div>
+        <div class="shrink-0 h-px bg-[#EAE4D8] dark:bg-white/[0.08]"></div>
 
-        <form id="formEditar" method="POST">
+        <form id="formEditar" method="POST" class="flex flex-col min-h-0 flex-grow">
             @csrf @method('PUT')
             
-            <div class="px-6 py-5">
+            <div class="px-6 py-5 overflow-y-auto flex-grow min-h-0">
                 <!-- Alerta de Contraseña Dinámica para Edición (Oculta por defecto) -->
 <div id="passwordAlertEdit" class="hidden overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 -translate-y-4 mb-6">
     <div class="flex items-start gap-3 p-4 text-sm text-red-800 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl shadow-sm">
@@ -59,13 +59,13 @@
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Usuario de Acceso</label>
-                            <div class="flex rounded-lg shadow-sm">
-                                <span class="inline-flex items-center px-4 py-2.5 bg-gray-50 dark:bg-white/[0.06] border border-r-0 border-[#EAE4D8] dark:border-white/10 rounded-l-lg text-gray-500 dark:text-gray-500">
+                            <div class="flex flex-col sm:flex-row rounded-lg shadow-sm">
+                                <span class="inline-flex items-center px-4 py-2.5 bg-gray-50 dark:bg-white/[0.06] border border-b-0 sm:border-b sm:border-r-0 border-[#EAE4D8] dark:border-white/10 rounded-t-lg sm:rounded-t-none sm:rounded-l-lg text-gray-500 dark:text-gray-500">
                                     <i class="bi bi-envelope"></i>
                                 </span>
                                 <input type="text" id="edit_email_prefix" readonly
-                                       class="w-full px-4 py-2.5 bg-gray-50 dark:bg-white/[0.02] border-y border-[#EAE4D8] dark:border-white/10 text-gray-500 dark:text-gray-500 focus:outline-none cursor-not-allowed">
-                                <span class="inline-flex items-center px-4 py-2.5 bg-gray-50 dark:bg-white/[0.06] border border-l-0 border-[#EAE4D8] dark:border-white/10 rounded-r-lg text-gray-500 dark:text-gray-500 text-sm">
+                                       class="w-full min-w-0 px-4 py-2.5 bg-gray-50 dark:bg-white/[0.02] border-x sm:border-x-0 sm:border-y border-[#EAE4D8] dark:border-white/10 text-gray-500 dark:text-gray-500 focus:outline-none cursor-not-allowed">
+                                <span class="inline-flex items-center px-4 py-2.5 bg-gray-50 dark:bg-white/[0.06] border border-t-0 sm:border-t sm:border-l-0 border-[#EAE4D8] dark:border-white/10 rounded-b-lg sm:rounded-b-none sm:rounded-r-lg text-gray-500 dark:text-gray-500 text-sm">
                                     @ollintem.com.mx
                                 </span>
                             </div>
@@ -100,7 +100,7 @@
                 <p class="mt-2 text-xs text-gray-500 dark:text-gray-600">Déjalo en blanco si no deseas cambiarla.</p>
             </div>
 
-            <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 px-6 py-4 bg-[#F4F0E6] dark:bg-white/[0.03] border-t border-[#EAE4D8] dark:border-white/[0.08]">
+            <div class="shrink-0 flex flex-col-reverse sm:flex-row justify-end gap-3 px-6 py-4 bg-[#F4F0E6] dark:bg-white/[0.03] border-t border-[#EAE4D8] dark:border-white/[0.08]">
                 <button type="button" class="btn-close-modal w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-white/5 border border-[#EAE4D8] dark:border-white/10 rounded-lg hover:bg-gray-50 dark:hover:bg-white/10 dark:hover:text-white transition-colors focus:outline-none">
                     Cancelar
                 </button>

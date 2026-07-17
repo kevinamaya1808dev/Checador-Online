@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AsistenciaController extends Controller
 {
     public function registrarEntrada() {
+        if (!Auth::check()) return redirect('/login');
+        
         Asistencia::create([
             'user_id' => Auth::id(),
             'hora_entrada' => now(),
@@ -18,6 +19,8 @@ class AsistenciaController extends Controller
     }
 
     public function registrarSalida() {
+        if (!Auth::check()) return redirect('/login');
+
         $asistencia = Asistencia::where('user_id', Auth::id())
             ->where('fecha', now()->toDateString())
             ->first();

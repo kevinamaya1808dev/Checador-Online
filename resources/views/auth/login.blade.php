@@ -4,20 +4,33 @@
 
 <div class="min-h-screen flex justify-center items-center relative overflow-hidden p-5 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-200 dark:from-[#06101b] dark:via-[#0d1626] dark:to-[#09131e] transition-colors duration-300">
 
-    <!-- Imagen de fondo mantenida igual -->
-    <div class="absolute inset-0 bg-center bg-no-repeat bg-[length:900px] opacity-[0.04] dark:opacity-[0.08] blur-[5px] scale-[1.15]" style="background-image:url('{{ asset('images/ollintem-logo.png') }}')"></div>
+   <!-- Fondo para TEMA CLARO (se muestra por defecto, se oculta en oscuro) -->
+    <div class="absolute inset-0 bg-center bg-no-repeat bg-[length:900px] opacity-[0.04] blur-[5px] scale-[1.15] block dark:hidden" 
+         style="background-image:url('{{ asset('images/ollintem-logo-blanc.png') }}')"></div>
+
+    <!-- Fondo para TEMA OSCURO (se oculta en claro, se muestra en oscuro) -->
+    <div class="absolute inset-0 bg-center bg-no-repeat bg-[length:900px] opacity-[0.08] blur-[5px] scale-[1.15] hidden dark:block" 
+         style="background-image:url('{{ asset('images/ollintem-logo.png') }}')"></div>
 
     <!-- Capa de superposición: clara en día, oscura en noche -->
-    <div class="absolute inset-0 bg-white/40 dark:bg-[#050a14]/55 transition-colors duration-300"></div>
+   <div class="absolute inset-0 bg-white/20 dark:bg-[#050a14]/40 transition-colors duration-300"></div>
 
     <!-- Tarjeta principal -->
     <div class="relative z-10 w-full max-w-[390px] bg-white/80 dark:bg-[#121926]/[.82] border border-gray-200 dark:border-white/[.08] backdrop-blur-2xl rounded-2xl shadow-[0_15px_45px_rgba(0,0,0,.1)] dark:shadow-[0_15px_45px_rgba(0,0,0,.50)] overflow-hidden transition-all duration-300">
 
         <div class="text-center px-5 pt-[18px] pb-1.5">
-            <img src="{{ asset('images/ollintem-logo.png') }}" class="w-[170px] mx-auto mb-3">
-            <h2 class="text-gray-800 dark:text-white text-[2rem] font-bold mb-0.5 leading-[1.15]">Bienvenido de nuevo</h2>
-            <p class="text-gray-500 dark:text-gray-400 mb-0">Inicia sesión en tu espacio de trabajo</p>
-        </div>
+    
+    <!-- Logo para el TEMA CLARO (se muestra en modo claro, se oculta en oscuro) -->
+    <img src="{{ asset('images/ollintem-logo-blanc.png') }}" 
+         class="w-[170px] mx-auto mb-3 block dark:hidden">
+
+    <!-- Logo para el TEMA OSCURO (se oculta en modo claro, se muestra en oscuro) -->
+    <img src="{{ asset('images/ollintem-logo.png') }}" 
+         class="w-[170px] mx-auto mb-3 hidden dark:block">
+
+    <h2 class="text-gray-800 dark:text-white text-[2rem] font-bold mb-0.5 leading-[1.15]">Bienvenido de nuevo</h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-0">Inicia sesión en tu espacio de trabajo</p>
+</div>
 
         <div class="p-5">
 

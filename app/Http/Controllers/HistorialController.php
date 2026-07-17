@@ -4,148 +4,71 @@ namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HistorialController extends Controller
 {
-   public function index(Request $request)
-{
-    $query = Asistencia::with([
-        'user',
-        'pausas'
-    ]);
-
-    /*
-    |--------------------------------------------------------------------------
-    | BUSCADOR
-    |--------------------------------------------------------------------------
-    */
-
-    if ($request->filled('search')) {
-
-        $buscar = $request->search;
-
-        $query->whereHas('user', function ($q) use ($buscar) {
-
-            $q->where('name', 'like', "%{$buscar}%")
-              ->orWhere('email', 'like', "%{$buscar}%");
-
-        });
-
+    private function authorizeAdmin()
+    {
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'Acceso denegado.');
+        }
     }
 
-/*
-|--------------------------------------------------------------------------
-| FILTRO POR SEMANA DEL MES
-|--------------------------------------------------------------------------
-*/
+    public function index(Request $request)
+    {
+        $this->authorizeAdmin();
 
-if ($request->filled('semana')) {
+        $query = Asistencia::with(['user', 'pausas']);
 
-    switch ($request->semana) {
+        if ($request->filled('search')) {
+            $buscar = $request->search;
+            $query->whereHas('user', function ($q) use ($buscar) {
+                $q->where('name', 'like', "%{$buscar}%")
+                  ->orWhere('email', 'like', "%{$buscar}%");
+            });
+        }
 
-        case 1:
-            $query->whereDay('fecha', '>=', 1)
-                  ->whereDay('fecha', '<=', 7);
-            break;
+        if ($request->filled('semana')) {
+            switch ($request->semana) {
+                case 1: $query->whereDay('fecha', '>=', 1)->whereDay('fecha', '<=', 7); break;
+                case 2: $query->whereDay('fecha', '>=', 8)->whereDay('fecha', '<=', 14); break;
+                case 3: $query->whereDay('fecha', '>=', 15)->whereDay('fecha', '<=', 21); break;
+                case 4: $query->whereDay('fecha', '>=', 22)->whereDay('fecha', '<=', 28); break;
+                case 5: $query->whereDay('fecha', '>=', 29); break;
+            }
+        }
 
-        case 2:
-            $query->whereDay('fecha', '>=', 8)
-                  ->whereDay('fecha', '<=', 14);
-            break;
+        if ($request->filled('mes')) {
+            $query->whereMonth('fecha', $request->mes);
+        }
 
-        case 3:
-            $query->whereDay('fecha', '>=', 15)
-                  ->whereDay('fecha', '<=', 21);
-            break;
+        switch ($request->get('order')) {
+            case 'az':
+                $query->join('users', 'users.id', '=', 'asistencias.user_id')
+                      ->orderBy('users.name', 'asc')
+                      ->select('asistencias.*');
+                break;
+            case 'za':
+                $query->join('users', 'users.id', '=', 'asistencias.user_id')
+                      ->orderBy('users.name', 'desc')
+                      ->select('asistencias.*');
+                break;
+            case 'oldest':
+                $query->orderBy('fecha', 'asc');
+                break;
+            default:
+                $query->orderBy('fecha', 'desc');
+                break;
+        }
 
-        case 4:
-            $query->whereDay('fecha', '>=', 22)
-                  ->whereDay('fecha', '<=', 28);
-            break;
+        $meses = Asistencia::selectRaw('MONTH(fecha) as numero_mes')
+            ->distinct()
+            ->orderBy('numero_mes')
+            ->get();
 
-        case 5:
-            $query->whereDay('fecha', '>=', 29);
-            break;
+        $asistencias = $query->paginate(15)->withQueryString();
 
+        return view('admin.historial.index', compact('asistencias', 'meses'));
     }
-
-}
-
-/*
-|--------------------------------------------------------------------------
-| FILTRO MES
-|--------------------------------------------------------------------------
-*/
-
-if ($request->filled('mes')) {
-
-    $query->whereMonth(
-        'fecha',
-        $request->mes
-    );
-
-}
-
-    /*
-    |--------------------------------------------------------------------------
-    | ORDENAMIENTO
-    |--------------------------------------------------------------------------
-    */
-
-    switch ($request->get('order')) {
-
-        case 'az':
-
-            $query->join('users', 'users.id', '=', 'asistencias.user_id')
-                  ->orderBy('users.name', 'asc')
-                  ->select('asistencias.*');
-
-            break;
-
-        case 'za':
-
-            $query->join('users', 'users.id', '=', 'asistencias.user_id')
-                  ->orderBy('users.name', 'desc')
-                  ->select('asistencias.*');
-
-            break;
-
-        case 'oldest':
-
-            $query->orderBy('fecha', 'asc');
-
-            break;
-
-        default:
-
-            $query->orderBy('fecha', 'desc');
-
-            break;
-    }
-
-    /*
-|--------------------------------------------------------------------------
-| DATOS PARA FILTROS
-|--------------------------------------------------------------------------
-*/
-
-
-
-$meses = Asistencia::selectRaw('MONTH(fecha) as numero_mes')
-    ->distinct()
-    ->orderBy('numero_mes')
-    ->get();
-
-    $asistencias = $query
-        ->paginate(15)
-        ->withQueryString();
-
-    return view(
-    'admin.historial.index',
-    compact(
-        'asistencias',
-        'meses'
-    )
-);
-}
 }

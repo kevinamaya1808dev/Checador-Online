@@ -7,11 +7,24 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+    /**
+     * CAPA DE SEGURIDAD: Validación interna para evitar acceso de no administradores.
+     */
+    private function authorizeAdmin()
+    {
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'Acceso no autorizado.');
+        }
+    }
+
     public function index()
     {
+        $this->authorizeAdmin();
+
         $hoy = now()->toDateString();
 
         $totalBecarios = User::where('role', 'becario')->count();
@@ -29,6 +42,8 @@ class AdminController extends Controller
 
     public function show(Asistencia $asistencia)
     {
+        $this->authorizeAdmin();
+        
         $asistencia->load(['user', 'pausas']);
 
         return response()->json($asistencia);
@@ -36,6 +51,8 @@ class AdminController extends Controller
 
     public function storeBecario(Request $request)
     {
+        $this->authorizeAdmin();
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
@@ -54,6 +71,8 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->authorizeAdmin();
+
         $request->validate(['name' => 'required', 'role' => 'required']);
 
         $user = User::findOrFail($id);
@@ -65,13 +84,10 @@ class AdminController extends Controller
         return back()->with('success', 'Usuario actualizado con éxito.');
     }
 
-    /**
-     * Devuelve UNA fila por cada becario registrado, con su
-     * asistencia de HOY (si existe) o valores por defecto si aún
-     * no ha marcado entrada.
-     */
     public function tiempos()
     {
+        $this->authorizeAdmin();
+
         $hoy = today()->toDateString();
         $finJornada = Carbon::parse($hoy . ' 18:00:00');
 
@@ -108,7 +124,8 @@ class AdminController extends Controller
                     'turno_terminado'         => false,
                     'extras_creciendo'        => false,
                     'sin_registro'            => true,
-                    'estado' => ['texto' => 'Sin registrar', 'clase' => 'text-bg-dark'],
+                    // Conversión a Tailwind: text-bg-dark -> bg-gray-800 text-white
+                    'estado' => ['texto' => 'Sin registrar', 'clase' => 'bg-gray-800 text-white px-2 py-1 rounded-md'],
                 ];
             }
 
@@ -116,11 +133,14 @@ class AdminController extends Controller
             $turnoTerminado = (bool) $a->hora_salida;
 
             if ($turnoTerminado) {
-                $estado = ['texto' => 'Turno terminado', 'clase' => 'text-bg-secondary'];
+                // Conversión a Tailwind: text-bg-secondary -> bg-gray-500 text-white
+                $estado = ['texto' => 'Turno terminado', 'clase' => 'bg-gray-500 text-white px-2 py-1 rounded-md'];
             } elseif ($enPausa) {
-                $estado = ['texto' => 'En descanso', 'clase' => 'text-bg-info text-dark'];
+                // Conversión a Tailwind: text-bg-info text-dark -> bg-sky-500 text-white
+                $estado = ['texto' => 'En descanso', 'clase' => 'bg-sky-500 text-white px-2 py-1 rounded-md'];
             } else {
-                $estado = ['texto' => 'Activo', 'clase' => 'text-bg-success'];
+                // Conversión a Tailwind: text-bg-success -> bg-green-600 text-white
+                $estado = ['texto' => 'Activo', 'clase' => 'bg-green-600 text-white px-2 py-1 rounded-md'];
             }
 
             return [
