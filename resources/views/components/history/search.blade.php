@@ -69,11 +69,11 @@
                 <div class="lg:col-span-2">
                     <div class="grid gap-2">
                         <button class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-4 py-2.5 transition-colors shadow-sm">
-                            <i class="bi bi-search"></i> Buscar
+                           <ion-icon name="search-outline"></ion-icon> Buscar
                         </button>
                         <a href="{{ route('admin.historial') }}"
                            class="inline-flex items-center justify-center gap-2 border border-[#EAE4D8] dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg px-4 py-2.5 transition-colors no-underline">
-                            <i class="bi bi-arrow-counterclockwise"></i> Limpiar
+                            <ion-icon name="refresh-outline"></ion-icon> Limpiar
                         </a>
                     </div>
                 </div>

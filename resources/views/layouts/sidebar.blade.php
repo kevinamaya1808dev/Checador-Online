@@ -10,11 +10,11 @@
         {{-- Sidebar: drawer en móvil, riel de iconos siempre visible en desktop --}}
         <aside class="fixed top-0 left-0 h-screen w-64 z-[1050] bg-stone-100 dark:bg-[#141419] border-r border-stone-200 dark:border-white/10 transition-all duration-300 ease-in-out md:translate-x-0 flex flex-col"
                :class="{
-                    'translate-x-0': sidebarOpen,
-                    '-translate-x-full': !sidebarOpen,
-                    'md:w-20': sidebarCollapsed,
-                    'md:w-64': !sidebarCollapsed
-               }">
+                   'translate-x-0': sidebarOpen,
+                   '-translate-x-full': !sidebarOpen,
+                   'md:w-20': sidebarCollapsed,
+                   'md:w-64': !sidebarCollapsed
+              }">
 
             {{-- Logo --}}
             <div class="flex items-center gap-3 h-16 shrink-0 px-4 md:justify-center"
@@ -29,7 +29,7 @@
             {{-- Toggle colapsar/expandir: justo debajo del logo, solo icono, solo desktop --}}
             <button @click="sidebarCollapsed = !sidebarCollapsed"
                     class="hidden md:flex items-center justify-center mx-3 mb-2 rounded-xl p-3 text-gray-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 shrink-0">
-                <i class="bi bi-list text-xl shrink-0"></i>
+                 <ion-icon name="reorder-four-outline"></ion-icon>
             </button>
 
             {{-- Navegación: centrada verticalmente, estilo Instagram --}}
@@ -37,9 +37,9 @@
 
                 @php
                     $links = [
-                        ['route' => 'admin.dashboard', 'icon' => 'bi-speedometer2', 'label' => 'Dashboard'],
-                        ['route' => 'home', 'icon' => 'bi-people', 'label' => 'Administración'],
-                        ['route' => 'admin.historial', 'icon' => 'bi-clock-history', 'label' => 'Historial'],
+                        ['route' => 'admin.dashboard', 'icon' => 'speedometer-outline', 'label' => 'Dashboard'],
+                        ['route' => 'home', 'icon' => 'people-outline', 'label' => 'Administración'],
+                        ['route' => 'admin.historial', 'icon' => 'time-outline', 'label' => 'Historial'],
                     ];
                 @endphp
 
@@ -51,7 +51,7 @@
                                   : 'text-gray-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white' }}"
                        :class="!sidebarCollapsed && 'md:justify-start'">
 
-                        <i class="bi {{ $link['icon'] }} text-xl shrink-0"></i>
+                        <ion-icon name="{{ $link['icon'] }}" class="text-xl shrink-0"></ion-icon>
 
                         <span class="ml-3 whitespace-nowrap overflow-hidden text-sm font-medium"
                               x-show="sidebarOpen || !sidebarCollapsed" x-cloak>
@@ -74,7 +74,7 @@
                     <button type="submit"
                             class="group relative flex items-center w-full rounded-xl p-3 text-gray-500 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300 md:justify-center"
                             :class="!sidebarCollapsed && 'md:justify-start'">
-                        <i class="bi bi-box-arrow-left text-xl shrink-0"></i>
+                            <ion-icon name="exit-outline"></ion-icon>
                         <span class="ml-3 whitespace-nowrap overflow-hidden text-sm font-medium"
                               x-show="sidebarOpen || !sidebarCollapsed" x-cloak>
                             Salir

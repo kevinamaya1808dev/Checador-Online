@@ -8,7 +8,7 @@
         @csrf
         <x-becario.accion-boton
             color="blue"
-            icon="bi-box-arrow-in-right"
+            icon="enter-outline"
             titulo="Registrar entrada"
             descripcion="Inicia el registro de tu turno"
             :disabled="! $presenter->puedeEntrada"
@@ -21,7 +21,7 @@
     <div>
         <x-becario.accion-boton
             color="amber"
-            icon="bi-cup-hot"
+            icon="cafe-outline"
             iconRotate="rotate-3"
             titulo="Gestionar pausa"
             descripcion="Justificación obligatoria"
@@ -38,7 +38,7 @@
         @csrf
         <x-becario.accion-boton
             color="blue"
-            icon="bi-play-fill"
+            icon="play-outline"
             titulo="Finalizar pausa"
             descripcion="Reanuda tus actividades"
             :disabled="! $presenter->puedeReanudar"
@@ -53,7 +53,7 @@
         @csrf
         <x-becario.accion-boton
             color="red"
-            icon="bi-box-arrow-left"
+            icon="exit-outline"
             iconRotate="rotate-3"
             titulo="Registrar salida"
             descripcion="Finaliza tu turno"
@@ -67,7 +67,7 @@
     {{-- Info Box --}}
     <div class="bg-slate-50 dark:bg-slate-800/50 border border-gray-200 dark:border-white/[0.06] rounded-2xl mt-auto p-4 flex gap-3 items-start transition-colors duration-300">
         <span class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-500/15 border border-blue-200 dark:border-blue-400/25 flex items-center justify-center shrink-0">
-            <i class="bi bi-info-circle-fill text-blue-600 dark:text-blue-400 text-sm"></i>
+            <ion-icon name="information-circle-outline"></ion-icon>
         </span>
         <div>
             <p class="font-bold text-sm mb-0 text-gray-900 dark:text-white">Recuerda registrar tus pausas</p>

@@ -8,7 +8,7 @@
                 href="{{ route('admin.historial') }}"
                 class="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-slate-500 text-gray-600 dark:text-slate-300 px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-white/5 hover:border-gray-400 transition-colors"
             >
-                <i class="bi bi-arrow-left"></i>
+                <ion-icon name="arrow-back-outline"></ion-icon>
                 Regresar al historial
             </a>
         </div>
@@ -36,13 +36,13 @@
 
                 <a href="{{ route('admin.reportes.excel', $user) }}"
                     class="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 transition-colors">
-                    <i class="bi bi-file-earmark-excel"></i>
+                   <ion-icon name="document-text-outline"></ion-icon>
                     Exportar Excel
                 </a>
 
                 <a href="{{ route('admin.reportes.pdf.becario', $user) }}"
                     class="inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-4 py-2 transition-colors">
-                    <i class="bi bi-file-earmark-pdf"></i>
+                    <ion-icon name="document-text-outline"></ion-icon>
                     Exportar PDF
                 </a>
 

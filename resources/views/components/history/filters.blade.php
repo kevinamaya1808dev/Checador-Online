@@ -44,7 +44,7 @@
                     disabled
                 >
 
-                    <i class="bi bi-funnel"></i>
+                    <ion-icon name="funnel-outline"></ion-icon>
 
                     Filtrar
 

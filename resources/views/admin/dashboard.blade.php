@@ -6,7 +6,7 @@
 <div class="w-full px-3 md:px-4">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-center sm:text-left mb-4 gap-2">
         <h2 class="text-gray-900 dark:text-white font-bold mb-0 text-lg sm:text-xl lg:text-3xl transition-colors">
-            <i class="bi bi-clock-history text-blue-600 dark:text-cyan-400 mr-2"></i>Panel de Control: Asistencias
+           <ion-icon name="time-outline" class="text-blue-600 dark:text-cyan-400 mr-2"></ion-icon>Panel de Control: Asistencias
         </h2>
     </div>
 
@@ -55,7 +55,7 @@
                             <tbody id="tabla-asistencias">
                                 <tr id="tabla-vacia" class="hover:bg-[#F9F6EE] dark:hover:bg-white/5 transition-colors">
                                     <td colspan="8" class="text-center text-gray-500 dark:text-gray-400 py-10">
-                                        <i class="bi bi-clock-history text-2xl block mb-2"></i>
+                                        <ion-icon name="time-outline" class="text-2xl block mb-2"></ion-icon>
                                         No existen asistencias activas actualmente
                                     </td>
                                 </tr>
@@ -66,7 +66,7 @@
                     {{-- Tarjetas (móvil) --}}
                     <div id="tarjetas-asistencias" class="block md:hidden p-3">
                         <p id="tarjetas-vacio" class="text-center text-gray-500 dark:text-gray-400 py-4 mb-0 transition-colors">
-                            <i class="bi bi-clock-history text-2xl block mb-2"></i>
+                            <ion-icon name="time-outline" class="text-2xl block mb-2"></ion-icon>
                             No existen asistencias activas actualmente
                         </p>
                     </div>

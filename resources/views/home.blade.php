@@ -4,7 +4,7 @@
 <div class="w-full px-3 sm:px-4">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
         <h2 class="text-gray-900 dark:text-white font-bold mb-0 text-xl sm:text-3xl">
-            <i class="bi bi-people-fill text-blue-600 dark:text-blue-400 mr-2"></i>Administración de Usuarios
+            <ion-icon name="people" class="text-blue-600 dark:text-blue-400 mr-2"></ion-icon>Administración de Usuarios
         </h2>
         
         @include('admin.modals.registrar-becario')
@@ -51,7 +51,7 @@
                                             class="w-7 h-7 sm:w-[34px] sm:h-[34px] rounded-full p-0 inline-flex items-center justify-center border-none text-white text-[0.75rem] sm:text-[0.95rem] transition-all duration-200 bg-gradient-to-br from-cyan-500 to-cyan-600 shadow-[0_2px_6px_rgba(8,145,178,0.3)] hover:text-white hover:-translate-y-[2px] hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(8,145,178,0.4)] focus:outline-none focus:ring-2 focus:ring-cyan-300 dark:focus:ring-cyan-400/50"
                                             title="Editar"
                                             onclick="prepararEdicion('{{ $user->id }}', '{{ addslashes($user->name) }}', '{{ $user->role }}', '{{ $user->email }}')">
-                                        <i class="bi bi-pencil-fill"></i>
+                                        <ion-icon name="pencil"></ion-icon>
                                     </button>
 
                                     @if($user->id != 1)
@@ -60,7 +60,7 @@
                                         <button type="submit"
                                                 class="w-7 h-7 sm:w-[34px] sm:h-[34px] rounded-full p-0 inline-flex items-center justify-center border-none text-white text-[0.75rem] sm:text-[0.95rem] transition-all duration-200 bg-gradient-to-br from-red-500 to-red-600 shadow-[0_2px_6px_rgba(220,38,38,0.3)] hover:text-white hover:-translate-y-[2px] hover:scale-[1.05] hover:shadow-[0_4px_12px_rgba(220,38,38,0.4)] focus:outline-none focus:ring-2 focus:ring-red-300 dark:focus:ring-red-400/50"
                                                 title="Eliminar">
-                                            <i class="bi bi-trash-fill"></i>
+                                            <ion-icon name="trash"></ion-icon>
                                         </button>
                                     </form>
                                     @endif

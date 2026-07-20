@@ -2,7 +2,7 @@
     <div class="p-5 flex flex-wrap justify-between items-center gap-4">
         <div>
             <h2 class="font-bold text-gray-900 dark:text-white mb-1">
-                <i class="bi bi-clock-history text-blue-600 dark:text-blue-500 mr-2"></i>
+                <ion-icon name="calendar-outline" class="text-blue-600 dark:text-blue-500 mr-2"></ion-icon>
                 Historial de Jornadas
             </h2>
             <p class="text-gray-600 dark:text-gray-400 mb-0">

@@ -5,7 +5,7 @@
         <span class="absolute left-0 top-0 h-full w-1 bg-green-500/70"></span>
         
         <span class="w-11 h-11 rounded-xl flex items-center justify-center text-lg text-white bg-gradient-to-br from-green-500 to-green-700 shadow-[0_8px_18px_-4px_rgba(34,197,94,0.5)] shrink-0">
-            <i class="bi bi-clock"></i>
+          <ion-icon name="time-outline"></ion-icon>
         </span>
         
         <div class="min-w-0">
@@ -19,7 +19,7 @@
         <span class="absolute left-0 top-0 h-full w-1 bg-amber-500/70"></span>
         
         <span class="w-11 h-11 rounded-xl flex items-center justify-center text-lg text-white bg-gradient-to-br from-amber-500 to-amber-700 shadow-[0_8px_18px_-4px_rgba(217,119,6,0.5)] shrink-0">
-            <i class="bi bi-cup-hot"></i>
+            <ion-icon name="cafe-outline"></ion-icon>
         </span>
         
         <div class="min-w-0">

@@ -5,7 +5,9 @@
     <div class="flex items-center gap-4">
         
         <span class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-xl sm:text-2xl text-white {{ $estadoBanner['iconBg'] }} {{ $estadoBanner['iconSh'] }} {{ $estadoBanner['pulse'] ? 'anillo-vivo' : '' }} shrink-0 transition-all">
-            <i class="bi {{ $estadoInfo['icon'] }}"></i>
+            <!-- Reemplazo 100% Tailwind v3 + Ionicons -->
+<ion-icon name="{{ $estadoInfo['icon'] }}" class="text-xl shrink-0 text-blue-600 dark:text-blue-400"></ion-icon>
+
         </span>
 
         <div>

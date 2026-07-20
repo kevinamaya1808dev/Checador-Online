@@ -33,7 +33,7 @@
     <div class="flex items-center gap-4">
         
         <span class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-xl sm:text-2xl text-white {{ $estadoBanner['iconBg'] }} {{ $estadoBanner['iconSh'] }} {{ $estadoBanner['pulse'] ? 'anillo-vivo' : '' }} shrink-0 transition-all">
-            <i class="bi {{ $estadoInfo['icon'] }}"></i>
+           <ion-icon name="{{ $estadoInfo['icon'] }}"></ion-icon>
         </span>
 
         <div>
@@ -49,7 +49,7 @@
         <div class="group relative overflow-hidden bg-white dark:bg-slate-800/50 border border-[#EAE4D8] dark:border-white/[0.06] rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 hover:border-green-500/30 hover:-translate-y-0.5">
             <span class="absolute left-0 top-0 h-full w-1 bg-green-500/70"></span>
             <span class="w-11 h-11 rounded-xl flex items-center justify-center text-lg text-white bg-gradient-to-br from-green-500 to-green-700 shadow-[0_8px_18px_-4px_rgba(34,197,94,0.5)] shrink-0">
-                <i class="bi bi-clock"></i>
+               <ion-icon name="time-outline"></ion-icon>
             </span>
             <div class="min-w-0">
                 <p class="uppercase text-gray-500 dark:text-slate-400 mb-0 text-[0.65rem] tracking-[1px]">Tiempo trabajado</p>
@@ -59,7 +59,7 @@
         <div class="group relative overflow-hidden bg-white dark:bg-slate-800/50 border border-[#EAE4D8] dark:border-white/[0.06] rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 hover:border-amber-500/30 hover:-translate-y-0.5">
             <span class="absolute left-0 top-0 h-full w-1 bg-amber-500/70"></span>
             <span class="w-11 h-11 rounded-xl flex items-center justify-center text-lg text-white bg-gradient-to-br from-amber-500 to-amber-700 shadow-[0_8px_18px_-4px_rgba(217,119,6,0.5)] shrink-0">
-                <i class="bi bi-cup-hot"></i>
+                <ion-icon name="cafe-outline"></ion-icon>
             </span>
             <div class="min-w-0">
                 <p class="uppercase text-gray-500 dark:text-slate-400 mb-0 text-[0.65rem] tracking-[1px]">Tiempo en pausa</p>

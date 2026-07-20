@@ -14,7 +14,7 @@
 
 @vite(['resources/css/becario-dashboard.css'])
 
-<x-becario.toasts />
+
 
 {{-- Fondo principal: Transición entre blanco y oscuro --}}
 <div class="relative min-h-screen text-gray-900 dark:text-white overflow-hidden transition-colors duration-300">

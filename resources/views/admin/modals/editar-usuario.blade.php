@@ -9,7 +9,7 @@
        <div class="shrink-0 flex items-center justify-between px-6 pt-6 pb-4 bg-[#F4F0E6] dark:bg-[#1a1d23]">
             <div class="flex items-center gap-4 min-w-0">
                 <div class="flex items-center justify-center shrink-0 w-11 h-11 rounded-xl bg-blue-100 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-700 dark:text-blue-400 text-xl dark:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
-                    <i class="bi bi-pencil-square"></i>
+                  <ion-icon name="pencil-outline"></ion-icon>
                 </div>
                 <div class="min-w-0">
                     <h5 class="text-lg font-bold text-gray-900 dark:text-white m-0 truncate">
@@ -33,20 +33,20 @@
 <div id="passwordAlertEdit" class="hidden overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 -translate-y-4 mb-6">
     <div class="flex items-start gap-3 p-4 text-sm text-red-800 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl shadow-sm">
         <div class="flex items-center justify-center shrink-0 w-8 h-8 rounded-lg bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400">
-            <i class="bi bi-shield-exclamation text-lg"></i>
+            <ion-icon name="alert-circle-outline"></ion-icon>
         </div>
         <div class="flex-1 pt-1.5">
             <span class="font-bold block mb-0.5 text-red-900 dark:text-red-300">Error de Seguridad</span>
             <span id="passwordAlertMessageEdit">Las contraseñas no coinciden.</span>
         </div>
         <button type="button" onclick="ocultarAlertaContrasenaEdit()" class="text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 p-1.5 rounded-lg transition-colors mt-0.5">
-            <i class="bi bi-x-lg"></i>
+            <ion-icon name="close-outline"></ion-icon>
         </button>
     </div>
 </div>
                 <div class="mb-6">
                     <label class="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-500 dark:text-gray-500 uppercase mb-4">
-                        <i class="bi bi-key-fill text-gray-400 dark:text-gray-600"></i> Datos de acceso
+                        <ion-icon name="key-outline" class="text-gray-400 dark:text-gray-600"></ion-icon> Datos de acceso
                     </label>
                     
                     <div class="space-y-4">
@@ -61,7 +61,7 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Usuario de Acceso</label>
                             <div class="flex flex-col sm:flex-row rounded-lg shadow-sm">
                                 <span class="inline-flex items-center px-4 py-2.5 bg-gray-50 dark:bg-white/[0.06] border border-b-0 sm:border-b sm:border-r-0 border-[#EAE4D8] dark:border-white/10 rounded-t-lg sm:rounded-t-none sm:rounded-l-lg text-gray-500 dark:text-gray-500">
-                                    <i class="bi bi-envelope"></i>
+                                     <ion-icon name="mail-outline"></ion-icon>
                                 </span>
                                 <input type="text" id="edit_email_prefix" readonly
                                        class="w-full min-w-0 px-4 py-2.5 bg-gray-50 dark:bg-white/[0.02] border-x sm:border-x-0 sm:border-y border-[#EAE4D8] dark:border-white/10 text-gray-500 dark:text-gray-500 focus:outline-none cursor-not-allowed">

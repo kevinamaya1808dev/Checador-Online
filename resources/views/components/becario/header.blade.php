@@ -29,7 +29,7 @@
         <form action="{{ route('logout') }}" method="POST" class="mb-0">
             @csrf
             <button type="submit" class="inline-flex items-center gap-1.5 text-sm border border-red-500/60 text-red-600 dark:text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 rounded-full px-3.5 py-1.5 transition-colors duration-200">
-                <i class="bi bi-power"></i> Salir
+                <ion-icon name="power-outline"></ion-icon> Salir
             </button>
         </form>
     </div>

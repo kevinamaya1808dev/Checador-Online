@@ -10,7 +10,7 @@
         <div class="flex items-center justify-between px-6 pt-6 pb-4">
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-center shrink-0 w-11 h-11 rounded-xl bg-red-100 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-500 text-xl shadow-sm dark:shadow-[0_0_15px_rgba(239,68,68,0.15)] transition-colors">
-                    <i class="bi bi-box-arrow-left"></i>
+                    <ion-icon name="exit-outline"></ion-icon>
                 </div>
                 <div>
                     <p class="text-xs font-bold tracking-widest text-gray-500 dark:text-gray-400 uppercase mb-1">Confirmación</p>
@@ -46,7 +46,7 @@
                 type="button" 
                 id="confirmarSalida" 
                 class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-red-600 rounded-lg shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:bg-red-500 hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-red-500 focus:outline-none">
-                <i class="bi bi-check-lg text-lg"></i>
+                <ion-icon name="checkmark-outline" class="text-lg"></ion-icon>
                 Sí, finalizar turno
             </button>
         </div>

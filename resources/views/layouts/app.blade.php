@@ -3,6 +3,10 @@
 <head>
     <meta charset="utf-8">
 
+    <link rel="icon" href="{{ asset('images/isotipo.webp') }}" type="image/webp">
+
+    <title>{{ config('app.name', 'OllinCheck') }}</title>
+
     {{-- Script bloqueante: decide el tema ANTES de que el navegador pinte nada. --}}
     <script>
         (function () {
@@ -14,11 +18,12 @@
             }
         })();
     </script>
+    <script type="module" src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Checador') }}</title>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>[x-cloak] { display: none !important; }</style>
 
 </head>
@@ -61,10 +66,10 @@ class="bg-[#F9F6EE] dark:bg-slate-950 text-gray-800 dark:text-gray-300 [font-fam
             aria-label="Cambiar tema">
             <span class="theme-toggle__track">
                 <span class="theme-toggle__icon theme-toggle__icon--sun">
-                    <i class="bi bi-sun-fill"></i>
+                    <ion-icon name="sunny"></ion-icon>
                 </span>
                 <span class="theme-toggle__icon theme-toggle__icon--moon">
-                    <i class="bi bi-moon-stars-fill"></i>
+                    <ion-icon name="moon"></ion-icon>
                 </span>
                 <span class="theme-toggle__thumb"></span>
             </span>
@@ -114,10 +119,10 @@ class="bg-[#F9F6EE] dark:bg-slate-950 text-gray-800 dark:text-gray-300 [font-fam
 window.mostrarToast = function(tipo, titulo, mensaje) {
     const contenedor = document.getElementById('toast-container');
     const config = {
-        success: { icono: 'bi-check-circle-fill', colorIcono: 'text-green-500 dark:text-green-400', bgIcono: 'bg-green-100 dark:bg-green-500/20', borde: 'border-green-200 dark:border-green-500/20', fondo: 'bg-white dark:bg-[#1a1d23]' },
-        error: { icono: 'bi-x-circle-fill', colorIcono: 'text-red-500 dark:text-red-400', bgIcono: 'bg-red-100 dark:bg-red-500/20', borde: 'border-red-200 dark:border-red-500/20', fondo: 'bg-white dark:bg-[#1a1d23]' },
-        warning: { icono: 'bi-exclamation-triangle-fill', colorIcono: 'text-yellow-500 dark:text-yellow-400', bgIcono: 'bg-yellow-100 dark:bg-yellow-500/20', borde: 'border-yellow-200 dark:border-yellow-500/20', fondo: 'bg-white dark:bg-[#1a1d23]' },
-        info: { icono: 'bi-info-circle-fill', colorIcono: 'text-blue-500 dark:text-blue-400', bgIcono: 'bg-blue-100 dark:bg-blue-500/20', borde: 'border-blue-200 dark:border-blue-500/20', fondo: 'bg-white dark:bg-[#1a1d23]' }
+        success: { icono: 'checkmark-circle', colorIcono: 'text-green-500 dark:text-green-400', bgIcono: 'bg-green-100 dark:bg-green-500/20', borde: 'border-green-200 dark:border-green-500/20', fondo: 'bg-white dark:bg-[#1a1d23]' },
+        error: { icono: 'close-circle', colorIcono: 'text-red-500 dark:text-red-400', bgIcono: 'bg-red-100 dark:bg-red-500/20', borde: 'border-red-200 dark:border-red-500/20', fondo: 'bg-white dark:bg-[#1a1d23]' },
+        warning: { icono: 'warning', colorIcono: 'text-yellow-500 dark:text-yellow-400', bgIcono: 'bg-yellow-100 dark:bg-yellow-500/20', borde: 'border-yellow-200 dark:border-yellow-500/20', fondo: 'bg-white dark:bg-[#1a1d23]' },
+        info: { icono: 'information-circle', colorIcono: 'text-blue-500 dark:text-blue-400', bgIcono: 'bg-blue-100 dark:bg-blue-500/20', borde: 'border-blue-200 dark:border-blue-500/20', fondo: 'bg-white dark:bg-[#1a1d23]' }
     };
 
     const estilo = config[tipo] || config.info;
@@ -125,14 +130,14 @@ window.mostrarToast = function(tipo, titulo, mensaje) {
     toast.className = `flex items-start gap-3 w-80 p-4 border ${estilo.borde} ${estilo.fondo} rounded-xl shadow-lg dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] transform translate-x-full opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto`;
     toast.innerHTML = `
         <div class="flex items-center justify-center shrink-0 w-8 h-8 rounded-lg ${estilo.bgIcono} ${estilo.colorIcono}">
-            <i class="bi ${estilo.icono} text-lg"></i>
+            <ion-icon name="${estilo.icono}" class="text-lg"></ion-icon>
         </div>
         <div class="flex-1 pt-0.5">
             <h6 class="text-sm font-bold text-gray-900 dark:text-white mb-0.5">${titulo}</h6>
             <p class="text-xs text-gray-500 dark:text-gray-400 m-0">${mensaje}</p>
         </div>
         <button type="button" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors p-1" onclick="cerrarToast(this.parentElement)">
-            <i class="bi bi-x-lg"></i>
+            <ion-icon name="close"></ion-icon>
         </button>
     `;
     contenedor.appendChild(toast);
@@ -175,4 +180,7 @@ window.cerrarToast = function(elemento) {
     .theme-toggle--dark:active .theme-toggle__thumb { transform: translateX(34px) scale(0.92); }
     @keyframes aurora-drift-1 { 0% { transform: translateX(-5%) translateY(0) rotate(-6deg) scaleY(1); } 50% { transform: translateX(8%) translateY(4%) rotate(3deg) scaleY(1.15); } 100% { transform: translateX(-8%) translateY(-3%) rotate(-3deg) scaleY(1); } }
     @keyframes aurora-drift-2 { 0% { transform: translateX(6%) translateY(2%) rotate(4deg) scaleY(1); } 50% { transform: translateX(-10%) translateY(-4%) rotate(-5deg) scaleY(1.2); } 100% { transform: translateX(5%) translateY(3%) rotate(2deg) scaleY(1); } }
-    @keyframes aurora-drift-3 { 0% { transform: translateX(-8%) translateY(-2%) rotate(-4deg) scaleY(1); } 50% { transform: translateX(10%) translateY(5%) rotate(6deg) scaleY(1.1); } 100% { transform: translateX(-6%)
+    @keyframes aurora-drift-3 { 0% { transform: translateX(-8%) translateY(-2%) rotate(-4deg) scaleY(1); } 50% { transform: translateX(10%) translateY(5%) rotate(6deg) scaleY(1.1); } 100% { transform: translateX(-6%) translateY(-2%) rotate(-4deg) scaleY(1); } }
+</style>
+</body>
+</html>

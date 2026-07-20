@@ -14,7 +14,7 @@
                  hover:text-white hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(153,27,27,0.55)] hover:brightness-110
                  focus-visible:text-white focus-visible:-translate-y-0.5 focus-visible:shadow-[0_6px_16px_rgba(153,27,27,0.55)] focus-visible:brightness-110
                  active:translate-y-0 active:scale-[0.97]">
-            <i class="bi bi-file-earmark-pdf-fill text-base"></i>
+            <ion-icon name="document-text-outline"></ion-icon>
             Descargar PDF
         </a>
 
@@ -24,7 +24,7 @@
                  hover:text-white hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(6,95,70,0.55)] hover:brightness-110
                  focus-visible:text-white focus-visible:-translate-y-0.5 focus-visible:shadow-[0_6px_16px_rgba(6,95,70,0.55)] focus-visible:brightness-110
                  active:translate-y-0 active:scale-[0.97]">
-            <i class="bi bi-file-earmark-excel-fill text-base"></i>
+          <ion-icon name="document-text-outline"></ion-icon>
             Exportar Excel
         </a>
 

@@ -10,7 +10,7 @@
         <div class="flex items-center justify-between px-6 pt-6 pb-4">
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-center shrink-0 w-11 h-11 rounded-xl bg-amber-100 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-600 dark:text-amber-500 text-xl shadow-sm dark:shadow-[0_0_15px_rgba(245,158,11,0.15)] transition-colors">
-                    <i class="bi bi-cup-hot-fill"></i>
+                    <ion-icon name="cafe-outline"></ion-icon>
                 </div>
                 <div>
                     <p class="text-xs font-bold tracking-widest text-gray-500 dark:text-gray-400 uppercase mb-1">Confirmación</p>
@@ -46,7 +46,7 @@
                 type="button" 
                 id="confirmarFinalizarPausa" 
                 class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] hover:bg-blue-500 hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)] hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                <i class="bi bi-check-lg text-lg"></i>
+                <ion-icon name="checkmark-outline" class="text-lg"></ion-icon>
                 Sí, finalizar descanso
             </button>
         </div>

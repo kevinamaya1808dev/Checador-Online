@@ -1,7 +1,7 @@
 <div class="bg-white dark:bg-gray-900 border border-[#EAE4D8] dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
     <div class="flex justify-between items-center px-5 py-4 border-b border-[#EAE4D8] dark:border-gray-700">
         <h5 class="mb-0 text-gray-900 dark:text-white font-bold text-lg">
-            <i class="bi bi-table mr-2 text-blue-500"></i> Registros
+            <ion-icon name="grid-outline"class="mr-2 text-blue-500"></ion-icon> Registros
         </h5>
         <span class="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-sm px-3 py-1 font-medium">
             {{ $asistencias->total() }} registros
@@ -28,7 +28,7 @@
                 @empty
                     <tr>
                         <td colspan="9" class="text-center py-10 text-gray-500 dark:text-gray-400">
-                            <i class="bi bi-folder-x text-4xl"></i>
+                            <ion-icon name="folder-outline"class="text-4xl"></ion-icon>
                             <p class="mt-2">No existen registros.</p>
                         </td>
                     </tr>

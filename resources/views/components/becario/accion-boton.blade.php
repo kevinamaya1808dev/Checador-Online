@@ -1,13 +1,13 @@
 @props([
-    'color'       => 'blue',   // blue | amber | red
-    'icon'        => 'bi-box-arrow-in-right',
-    'iconRotate'  => '-rotate-3',
-    'titulo'      => '',
-    'descripcion' => '',
-    'disabled'    => false,
-    'destacar'    => false,
-    'as'          => 'submit', // 'submit' | 'button'
-    'onclick'     => null,
+    'color'         => 'blue',   // blue | amber | red
+    'icon'          => 'log-in-outline',
+    'iconRotate'    => '-rotate-3',
+    'titulo'        => '',
+    'descripcion'   => '',
+    'disabled'      => false,
+    'destacar'      => false,
+    'as'            => 'submit', // 'submit' | 'button'
+    'onclick'       => null,
 ])
 
 @php
@@ -87,9 +87,9 @@
     @endif
 
     <span class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex-shrink-0 flex items-center justify-center text-xl text-white
-                 {{ $p['iconBg'] }} {{ $p['iconShadow'] }}
-                 transition-transform duration-300 group-hover:scale-110 group-hover:{{ $iconRotate }}">
-        <i class="bi {{ $icon }}"></i>
+               {{ $p['iconBg'] }} {{ $p['iconShadow'] }}
+               transition-transform duration-300 group-hover:scale-110 group-hover:{{ $iconRotate }}">
+        <ion-icon name="{{ $icon }}"></ion-icon>
     </span>
 
     <span class="relative flex-1 min-w-0">
@@ -97,5 +97,5 @@
         <span class="block text-sm text-gray-500 dark:text-slate-400 mt-0.5">{{ $descripcion }}</span>
     </span>
 
-    <i class="bi bi-chevron-right relative text-gray-300 dark:text-white/0 group-hover:text-gray-500 dark:group-hover:text-white/50 transition-all duration-300 group-hover:translate-x-1"></i>
+    <ion-icon name="chevron-forward-outline" class="relative text-gray-300 dark:text-white/0 group-hover:text-gray-500 dark:group-hover:text-white/50 transition-all duration-300 group-hover:translate-x-1"></ion-icon>
 </button>

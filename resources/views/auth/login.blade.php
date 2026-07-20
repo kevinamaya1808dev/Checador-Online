@@ -4,7 +4,7 @@
 
 <div class="min-h-screen flex justify-center items-center relative overflow-hidden p-5 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-200 dark:from-[#06101b] dark:via-[#0d1626] dark:to-[#09131e] transition-colors duration-300">
 
-   <!-- Fondo para TEMA CLARO (se muestra por defecto, se oculta en oscuro) -->
+    <!-- Fondo para TEMA CLARO (se muestra por defecto, se oculta en oscuro) -->
     <div class="absolute inset-0 bg-center bg-no-repeat bg-[length:900px] opacity-[0.04] blur-[5px] scale-[1.15] block dark:hidden" 
          style="background-image:url('{{ asset('images/ollintem-logo-blanc.png') }}')"></div>
 
@@ -20,17 +20,17 @@
 
         <div class="text-center px-5 pt-[18px] pb-1.5">
     
-    <!-- Logo para el TEMA CLARO (se muestra en modo claro, se oculta en oscuro) -->
-    <img src="{{ asset('images/ollintem-logo-blanc.png') }}" 
-         class="w-[170px] mx-auto mb-3 block dark:hidden">
+            <!-- Logo para el TEMA CLARO -->
+            <img src="{{ asset('images/ollintem-logo-blanc.png') }}" 
+                 class="w-[170px] mx-auto mb-3 block dark:hidden">
 
-    <!-- Logo para el TEMA OSCURO (se oculta en modo claro, se muestra en oscuro) -->
-    <img src="{{ asset('images/ollintem-logo.png') }}" 
-         class="w-[170px] mx-auto mb-3 hidden dark:block">
+            <!-- Logo para el TEMA OSCURO -->
+            <img src="{{ asset('images/ollintem-logo.png') }}" 
+                 class="w-[170px] mx-auto mb-3 hidden dark:block">
 
-    <h2 class="text-gray-800 dark:text-white text-[2rem] font-bold mb-0.5 leading-[1.15]">Bienvenido de nuevo</h2>
-    <p class="text-gray-500 dark:text-gray-400 mb-0">Inicia sesión en tu espacio de trabajo</p>
-</div>
+            <h2 class="text-gray-800 dark:text-white text-[2rem] font-bold mb-0.5 leading-[1.15]">Bienvenido de nuevo</h2>
+            <p class="text-gray-500 dark:text-gray-400 mb-0">Inicia sesión en tu espacio de trabajo</p>
+        </div>
 
         <div class="p-5">
 
@@ -40,13 +40,18 @@
                 <div class="mb-3">
                     <label class="text-gray-700 dark:text-white font-medium dark:font-normal block mb-1.5">Correo electrónico</label>
 
-                    <input
-                        type="email"
-                        name="email"
-                        value="{{ old('email') }}"
-                        class="w-full bg-gray-50 dark:bg-[#0f1724] border {{ $errors->has('email') ? 'border-red-500' : 'border-gray-300 dark:border-white/[.08]' }} text-gray-900 dark:text-white p-3.5 rounded-xl box-border focus:bg-white dark:focus:bg-[#101b2c] focus:border-[#1f8fff] focus:shadow-[0_0_0_.20rem_rgba(0,132,255,.25)] focus:outline-none transition-colors"
-                        required
-                        autofocus>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
+                            <ion-icon name="mail-outline" class="text-lg"></ion-icon>
+                        </span>
+                        <input
+                            type="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            class="w-full bg-gray-50 dark:bg-[#0f1724] border {{ $errors->has('email') ? 'border-red-500' : 'border-gray-300 dark:border-white/[.08]' }} text-gray-900 dark:text-white p-3.5 pl-11 rounded-xl box-border focus:bg-white dark:focus:bg-[#101b2c] focus:border-[#1f8fff] focus:shadow-[0_0_0_.20rem_rgba(0,132,255,.25)] focus:outline-none transition-colors"
+                            required
+                            autofocus>
+                    </div>
 
                     @error('email')
                         <span class="block text-red-500 dark:text-red-400 text-sm mt-1.5">
@@ -58,11 +63,16 @@
                 <div class="mb-3">
                     <label class="text-gray-700 dark:text-white font-medium dark:font-normal block mb-1.5">Contraseña</label>
 
-                    <input
-                        type="password"
-                        name="password"
-                        class="w-full bg-gray-50 dark:bg-[#0f1724] border {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300 dark:border-white/[.08]' }} text-gray-900 dark:text-white p-3.5 rounded-xl box-border focus:bg-white dark:focus:bg-[#101b2c] focus:border-[#1f8fff] focus:shadow-[0_0_0_.20rem_rgba(0,132,255,.25)] focus:outline-none transition-colors"
-                        required>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
+                            <ion-icon name="lock-closed-outline" class="text-lg"></ion-icon>
+                        </span>
+                        <input
+                            type="password"
+                            name="password"
+                            class="w-full bg-gray-50 dark:bg-[#0f1724] border {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300 dark:border-white/[.08]' }} text-gray-900 dark:text-white p-3.5 pl-11 rounded-xl box-border focus:bg-white dark:focus:bg-[#101b2c] focus:border-[#1f8fff] focus:shadow-[0_0_0_.20rem_rgba(0,132,255,.25)] focus:outline-none transition-colors"
+                            required>
+                    </div>
 
                     @error('password')
                         <span class="block text-red-500 dark:text-red-400 text-sm mt-1.5">
@@ -83,9 +93,9 @@
                     </label>
                 </div>
 
-                <!-- El botón se mantiene igual porque sus colores combinan perfecto en ambos temas -->
-                <button class="w-full p-3 border-0 rounded-xl bg-gradient-to-r from-[#0d6efd] to-[#0b84ff] text-white font-semibold transition-all duration-300 cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_12px_25px_rgba(13,110,253,.35)]">
-                    Acceder al sistema
+                <button class="w-full p-3 border-0 rounded-xl bg-gradient-to-r from-[#0d6efd] to-[#0b84ff] text-white font-semibold transition-all duration-300 cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_12px_25px_rgba(13,110,253,.35)] flex items-center justify-center gap-2">
+                    <span>Acceder al sistema</span>
+                    <ion-icon name="log-in-outline" class="text-xl"></ion-icon>
                 </button>
 
                 @if(Route::has('password.request'))
@@ -104,4 +114,4 @@
 
 </div>
 
-@endsectiongit 
+@endsection
