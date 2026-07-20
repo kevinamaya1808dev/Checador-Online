@@ -33,7 +33,7 @@
             </button>
 
             
-            <nav class="flex flex-col gap-2 px-3 flex-grow justify-center overflow-y-auto">
+            <nav class="flex flex-col gap-2 px-3 flex-grow justify-center overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
 
                 <?php
                     $links = [
@@ -46,8 +46,8 @@
                 <?php $__currentLoopData = $links; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <a href="<?php echo e(route($link['route'])); ?>"
                        class="group relative flex items-center rounded-xl p-3 transition-colors duration-200 md:justify-center
-                              <?php echo e(request()->routeIs($link['route']) 
-                                  ? 'bg-blue-600/10 text-blue-600 dark:bg-blue-500/15 dark:text-blue-400' 
+                              <?php echo e(request()->routeIs($link['route'])
+                                  ? 'bg-blue-600/10 text-blue-600 dark:bg-blue-500/15 dark:text-blue-400'
                                   : 'text-gray-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'); ?>"
                        :class="!sidebarCollapsed && 'md:justify-start'">
 
