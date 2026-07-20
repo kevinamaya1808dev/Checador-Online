@@ -98,14 +98,6 @@
                     <ion-icon name="log-in-outline" class="text-xl"></ion-icon>
                 </button>
 
-                @if(Route::has('password.request'))
-                    <div class="text-center mt-4">
-                        <a class="text-gray-500 dark:text-gray-400 no-underline hover:text-gray-900 dark:hover:text-white transition-colors" href="{{ route('password.request') }}">
-                            ¿Olvidaste tu contraseña?
-                        </a>
-                    </div>
-                @endif
-
             </form>
 
         </div>

@@ -82,6 +82,7 @@
                             <div class="flex flex-col sm:flex-row rounded-lg shadow-sm">
                                 <span class="inline-flex items-center px-4 py-2.5 bg-gray-50 dark:bg-white/[0.06] border border-b-0 sm:border-b sm:border-r-0 border-[#EAE4D8] dark:border-white/10 rounded-t-lg sm:rounded-t-none sm:rounded-l-lg text-gray-500 dark:text-gray-500">
                                    <ion-icon name="mail-outline"></ion-icon>
+                                </span>
                                 <input type="text" id="email_prefix" readonly placeholder="usuario"
                                        class="w-full min-w-0 px-4 py-2.5 bg-gray-50 dark:bg-white/[0.02] border-x sm:border-x-0 sm:border-y border-[#EAE4D8] dark:border-white/10 text-gray-500 dark:text-gray-500 focus:outline-none cursor-not-allowed">
                                 <span class="inline-flex items-center px-4 py-2.5 bg-gray-50 dark:bg-white/[0.06] border border-t-0 sm:border-t sm:border-l-0 border-[#EAE4D8] dark:border-white/10 rounded-b-lg sm:rounded-b-none sm:rounded-r-lg text-gray-500 dark:text-gray-500 text-sm">

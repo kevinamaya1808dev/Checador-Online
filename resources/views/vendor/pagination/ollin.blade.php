@@ -20,14 +20,14 @@
         @if ($paginator->onFirstPage())
             <li>
                 <span class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm bg-white dark:bg-transparent border border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600">
-                    <i class="bi bi-chevron-left"></i>
+                    <ion-icon name="chevron-back-outline"></ion-icon>
                 </span>
             </li>
         @else
             <li>
                 <a href="{{ $paginator->previousPageUrl() }}"
                    class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm bg-white dark:bg-gray-800 border border-[#EAE4D8] dark:border-gray-700 text-gray-700 dark:text-gray-300 transition-all duration-200 hover:bg-blue-50 dark:hover:bg-gray-700 hover:border-blue-400 dark:hover:text-white hover:-translate-y-0.5">
-                    <i class="bi bi-chevron-left"></i>
+                   <ion-icon name="chevron-back-outline"></ion-icon>
                 </a>
             </li>
         @endif
@@ -65,13 +65,13 @@
             <li>
                 <a href="{{ $paginator->nextPageUrl() }}"
                    class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm bg-white dark:bg-gray-800 border border-[#EAE4D8] dark:border-gray-700 text-gray-700 dark:text-gray-300 transition-all duration-200 hover:bg-blue-50 dark:hover:bg-gray-700 hover:border-blue-400 dark:hover:text-white hover:-translate-y-0.5">
-                    <i class="bi bi-chevron-right"></i>
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
                 </a>
             </li>
         @else
             <li>
                 <span class="inline-flex items-center justify-center rounded-lg min-w-[1.9rem] px-2 py-1 text-[0.8rem] sm:min-w-[2.25rem] sm:px-3 sm:py-1.5 sm:text-sm bg-white dark:bg-transparent border border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600">
-                    <i class="bi bi-chevron-right"></i>
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
                 </span>
             </li>
         @endif
