@@ -58,23 +58,21 @@ class="bg-[#F9F6EE] dark:bg-slate-950 text-gray-800 dark:text-gray-300 [font-fam
         @endif
     @endauth
 
-    {{-- Header: franja fija arriba, solo para reservar espacio al botón de tema --}}
-    <header class="fixed top-0 right-0 h-16 z-[1070] flex items-center px-4">
-        <button @click="toggleTheme()" 
-            class="theme-toggle"
-            :class="isDark ? 'theme-toggle--dark' : 'theme-toggle--light'"
-            aria-label="Cambiar tema">
-            <span class="theme-toggle__track">
-                <span class="theme-toggle__icon theme-toggle__icon--sun">
-                    <ion-icon name="sunny"></ion-icon>
-                </span>
-                <span class="theme-toggle__icon theme-toggle__icon--moon">
-                    <ion-icon name="moon"></ion-icon>
-                </span>
-                <span class="theme-toggle__thumb"></span>
+    {{-- Botón de tema: flotante e independiente, ya no vive dentro de un <header> --}}
+    <button @click="toggleTheme()" 
+        class="theme-toggle fixed top-4 right-4 z-[1070]"
+        :class="isDark ? 'theme-toggle--dark' : 'theme-toggle--light'"
+        aria-label="Cambiar tema">
+        <span class="theme-toggle__track">
+            <span class="theme-toggle__icon theme-toggle__icon--sun">
+                <ion-icon name="sunny"></ion-icon>
             </span>
-        </button>
-    </header>
+            <span class="theme-toggle__icon theme-toggle__icon--moon">
+                <ion-icon name="moon"></ion-icon>
+            </span>
+            <span class="theme-toggle__thumb"></span>
+        </span>
+    </button>
 
     @auth
         @if(auth()->user()->role === 'admin')
@@ -82,7 +80,7 @@ class="bg-[#F9F6EE] dark:bg-slate-950 text-gray-800 dark:text-gray-300 [font-fam
         @endif
     @endauth
 
-    {{-- Main: pt-16 en todas las vistas para reservar el espacio del header --}}
+    {{-- Main: pt-16 en todas las vistas para reservar el espacio de los botones flotantes --}}
     <main class="flex-grow min-w-0 pt-16 transition-all duration-300 ease-in-out"
               :class="{ 
                   'md:ml-20': ({{ auth()->check() && auth()->user()->role === 'admin' ? 'true' : 'false' }}) && sidebarCollapsed,

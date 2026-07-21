@@ -28,20 +28,8 @@
     function actualizarExtras(id, e) {
         const el = document.getElementById('extras-' + id);
         if (!el) return;
-        el.innerHTML = `
-            <div>
-                <i class="bi bi-alarm mr-1"></i>
-                <strong>Total:</strong> ${formatoHMS(e.extras)}
-            </div>
-            <small class="block mt-1">
-                <i class="bi bi-box-arrow-in-right mr-1"></i>
-                Entrada: ${formatoHMS(e.extrasEntrada)}
-            </small>
-            <small class="block">
-                <i class="bi bi-box-arrow-left mr-1"></i>
-                Salida: ${formatoHMS(e.extrasSalida)}
-            </small>
-        `;
+        el.innerHTML = `<i class="bi bi-alarm mr-1"></i>${formatoHMS(e.extras)}`;
+        el.title = `Entrada: ${formatoHMS(e.extrasEntrada)} · Salida: ${formatoHMS(e.extrasSalida)}`;
     }
 
     function actualizarTarjetasResumen(data) {
@@ -64,21 +52,21 @@
         tr.className = 'hover:bg-white/5';
         tr.setAttribute('data-user', a.user_id);
         tr.innerHTML = `
-            <td class="pl-4 py-3">
-                <div class="flex items-center gap-2">
+            <td class="py-3 text-center">
+                <div class="flex items-center justify-center gap-2">
                     <div class="w-9 h-9 rounded-full bg-gray-500/25 border border-gray-500 flex items-center justify-center text-cyan-400 font-bold text-sm flex-shrink-0">
                         ${a.user_inicial}
                     </div>
                     <span class="text-black dark:text-white font-bold">${a.user_name}</span>
                 </div>
             </td>
-            <td class="py-3">${a.fecha}</td>
-            <td class="py-3"><span id="entrada-${a.user_id}" class="inline-flex items-center rounded-full bg-green-500/25 text-green-400 px-3 py-2 text-sm font-medium"><i class="bi bi-box-arrow-in-right mr-1"></i>${a.hora_entrada}</span></td>
-            <td class="py-3"><span id="salida-${a.user_id}" class="inline-flex items-center rounded-full bg-red-500/25 text-red-400 px-3 py-2 text-sm font-medium"><i class="bi bi-box-arrow-left mr-1"></i>${a.hora_salida}</span></td>
-            <td class="py-3"><span id="pausas-${a.user_id}" class="inline-flex items-center rounded-full bg-yellow-500/25 text-yellow-400 px-3 py-2 text-sm font-medium"><i class="bi bi-cup-hot mr-1"></i>${formatoHMS(a.pausas_segundos)}</span></td>
-            <td class="py-3"><span id="trabajado-${a.user_id}" class="inline-flex items-center rounded-full bg-cyan-500/25 text-cyan-400 px-3 py-2 text-sm font-medium"><i class="bi bi-stopwatch mr-1"></i>${formatoHMS(a.trabajado_segundos)}</span></td>
-            <td class="py-3"><span id="extras-${a.user_id}" class="inline-flex items-center rounded-full bg-blue-500/25 text-blue-400 px-3 py-2 text-sm font-medium"><i class="bi bi-alarm mr-1"></i>${formatoHMS(a.extras_segundos)}</span></td>
-            <td class="py-3"><span id="estado-${a.user_id}" class="inline-flex items-center rounded-full px-3 py-2 text-sm font-medium ${a.estado.clase}">${a.estado.texto}</span></td>
+            <td class="py-3 text-center">${a.fecha}</td>
+            <td class="py-3 text-center"><span id="entrada-${a.user_id}" class="inline-flex items-center rounded-full bg-green-500/25 text-green-400 px-3 py-2 text-sm font-medium"><i class="bi bi-box-arrow-in-right mr-1"></i>${a.hora_entrada}</span></td>
+            <td class="py-3 text-center"><span id="salida-${a.user_id}" class="inline-flex items-center rounded-full bg-red-500/25 text-red-400 px-3 py-2 text-sm font-medium"><i class="bi bi-box-arrow-left mr-1"></i>${a.hora_salida}</span></td>
+            <td class="py-3 text-center"><span id="pausas-${a.user_id}" class="inline-flex items-center rounded-full bg-yellow-500/25 text-yellow-400 px-3 py-2 text-sm font-medium"><i class="bi bi-cup-hot mr-1"></i>${formatoHMS(a.pausas_segundos)}</span></td>
+            <td class="py-3 text-center"><span id="trabajado-${a.user_id}" class="inline-flex items-center rounded-full bg-cyan-500/25 text-cyan-400 px-3 py-2 text-sm font-medium"><i class="bi bi-stopwatch mr-1"></i>${formatoHMS(a.trabajado_segundos)}</span></td>
+            <td class="py-3 text-center"><span id="extras-${a.user_id}" class="inline-flex items-center rounded-full bg-blue-500/25 text-blue-400 px-3 py-2 text-sm font-medium" title="Entrada: ${formatoHMS(a.extras_entrada_segundos)} · Salida: ${formatoHMS(a.extras_salida_segundos)}"><i class="bi bi-alarm mr-1"></i>${formatoHMS(a.extras_segundos)}</span></td>
+            <td class="py-3 text-center"><span id="estado-${a.user_id}" class="inline-flex items-center rounded-full px-3 py-2 text-sm font-medium ${a.estado.clase}">${a.estado.texto}</span></td>
         `;
         return tr;
     }
@@ -136,16 +124,16 @@
         div.className = 'bg-white/[0.03] border border-white/10 rounded-xl overflow-hidden';
         div.setAttribute('data-user-card', a.user_id);
         div.innerHTML = `
-            <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-white/10">
+            <div class="flex items-center justify-center gap-2 px-4 py-3 border-b border-white/10 relative">
                 <div class="flex items-center gap-2 min-w-0">
                     <div class="w-8 h-8 rounded-full bg-gray-500/25 border border-gray-500 flex items-center justify-center text-cyan-400 font-bold text-xs flex-shrink-0">
                         ${a.user_inicial}
                     </div>
                     <span class="text-white font-semibold text-sm whitespace-nowrap overflow-hidden text-ellipsis">${a.user_name}</span>
                 </div>
-                <span id="estado-card-${a.user_id}" class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${a.estado.clase}">${a.estado.texto}</span>
+                <span id="estado-card-${a.user_id}" class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium absolute right-4 ${a.estado.clase}">${a.estado.texto}</span>
             </div>
-            <div class="grid grid-cols-2">
+            <div class="grid grid-cols-2 text-center">
                 <div class="p-2.5 px-4 border-r border-b border-white/[0.08]">
                     <p class="m-0 text-[0.72rem] uppercase text-gray-400">Entrada</p>
                     <p id="entrada-card-${a.user_id}" class="mt-0.5 text-[0.85rem] text-green-500"><i class="bi bi-box-arrow-in-right mr-1"></i>${a.hora_entrada}</p>
@@ -163,7 +151,7 @@
                     <p id="trabajado-card-${a.user_id}" class="mt-0.5 text-[0.85rem] text-cyan-400"><i class="bi bi-stopwatch mr-1"></i>${formatoHMS(a.trabajado_segundos)}</p>
                 </div>
             </div>
-            <div id="extras-card-${a.user_id}" class="px-4 py-2.5 text-[0.8rem] text-gray-400 border-t border-white/[0.08]">
+            <div id="extras-card-${a.user_id}" class="px-4 py-2.5 text-[0.8rem] text-gray-400 border-t border-white/[0.08] text-center">
                 <i class="bi bi-alarm mr-1"></i>
                 <strong>Extras:</strong> ${formatoHMS(a.extras_segundos)}
                 <span class="mx-1">·</span>
@@ -188,7 +176,7 @@
 
         const estado = document.getElementById('estado-card-' + a.user_id);
         if (estado) {
-            estado.className = 'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ' + a.estado.clase;
+            estado.className = 'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium absolute right-4 ' + a.estado.clase;
             estado.textContent = a.estado.texto;
         }
     }

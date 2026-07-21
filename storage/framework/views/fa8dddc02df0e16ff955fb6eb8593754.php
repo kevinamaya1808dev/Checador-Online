@@ -13,21 +13,21 @@
     <div class="grid grid-cols-3 gap-3 mb-4">
 
         <div class="bg-white dark:bg-gray-900 border border-[#EAE4D8] dark:border-gray-700 shadow-lg rounded-2xl h-full transition-colors">
-            <div class="px-2 sm:px-3 py-2 sm:py-3">
+            <div class="px-2 sm:px-3 py-2 sm:py-3 text-center">
                 <div class="text-gray-500 dark:text-gray-400 text-[0.68rem] sm:text-sm">Becarios Activos</div>
                 <h2 id="card-activos" class="text-green-600 dark:text-green-500 font-bold mb-0 text-lg sm:text-2xl">0</h2>
             </div>
         </div>
 
         <div class="bg-white dark:bg-gray-900 border border-[#EAE4D8] dark:border-gray-700 shadow-lg rounded-2xl h-full transition-colors">
-            <div class="px-2 sm:px-3 py-2 sm:py-3">
+            <div class="px-2 sm:px-3 py-2 sm:py-3 text-center">
                 <div class="text-gray-500 dark:text-gray-400 text-[0.68rem] sm:text-sm">En Descanso</div>
                 <h2 id="card-descanso" class="text-blue-600 dark:text-cyan-400 font-bold mb-0 text-lg sm:text-2xl">0</h2>
             </div>
         </div>
 
         <div class="bg-white dark:bg-gray-900 border border-[#EAE4D8] dark:border-gray-700 shadow-lg rounded-2xl h-full transition-colors">
-            <div class="px-2 sm:px-3 py-2 sm:py-3">
+            <div class="px-2 sm:px-3 py-2 sm:py-3 text-center">
                 <div class="text-gray-500 dark:text-gray-400 text-[0.68rem] sm:text-sm">Turnos Finalizados</div>
                 <h2 id="card-finalizados" class="text-yellow-600 dark:text-yellow-400 font-bold mb-0 text-lg sm:text-2xl">0</h2>
             </div>
@@ -39,17 +39,17 @@
 
                     
                     <div class="overflow-x-auto hidden md:block">
-                        <table class="w-full text-gray-800 dark:text-white mb-0 align-middle transition-colors" style="min-width: 800px;">
+                        <table class="w-full text-gray-800 dark:text-white mb-0 align-middle text-center transition-colors" style="min-width: 800px;">
                             <thead>
                                 <tr class="text-gray-600 dark:text-gray-400 bg-[#F4F0E6] dark:bg-white/[0.03] border-b border-[#EAE4D8] dark:border-gray-700 transition-colors">
-                                    <th class="pl-4 py-3 font-semibold uppercase text-xs">Becario</th>
-                                    <th class="py-3 font-semibold uppercase text-xs">Fecha</th>
-                                    <th class="py-3 font-semibold uppercase text-xs">Entrada</th>
-                                    <th class="py-3 font-semibold uppercase text-xs">Salida</th>
-                                    <th class="py-3 font-semibold uppercase text-xs">Pausas</th>
-                                    <th class="py-3 font-semibold uppercase text-xs">Tiempo Total</th>
-                                    <th class="py-3 font-semibold uppercase text-xs">Horas Extras</th>
-                                    <th class="py-3 font-semibold uppercase text-xs">Estado</th>
+                                    <th class="py-3 font-semibold uppercase text-xs text-center">Becario</th>
+                                    <th class="py-3 font-semibold uppercase text-xs text-center">Fecha</th>
+                                    <th class="py-3 font-semibold uppercase text-xs text-center">Entrada</th>
+                                    <th class="py-3 font-semibold uppercase text-xs text-center">Salida</th>
+                                    <th class="py-3 font-semibold uppercase text-xs text-center">Pausas</th>
+                                    <th class="py-3 font-semibold uppercase text-xs text-center">Tiempo Total</th>
+                                    <th class="py-3 font-semibold uppercase text-xs text-center">Horas Extras</th>
+                                    <th class="py-3 font-semibold uppercase text-xs text-center">Estado</th>
                                 </tr>
                             </thead>
                             <tbody id="tabla-asistencias">

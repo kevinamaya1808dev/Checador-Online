@@ -14,17 +14,8 @@
 
 @vite(['resources/css/becario-dashboard.css'])
 
-
-
-{{-- Fondo principal: Transición entre blanco y oscuro --}}
+{{-- Fondo principal: transparente, deja ver el fondo aurora del layout --}}
 <div class="relative min-h-screen text-gray-900 dark:text-white overflow-hidden transition-colors duration-300">
-    
-    {{-- Blobs decorativos: Solo visibles en modo oscuro para no ensuciar el diseño claro --}}
-    <div class="pointer-events-none absolute inset-0 -z-0 overflow-hidden hidden dark:block">
-        <div class="absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-blue-600/10 blur-[110px]"></div>
-        <div class="absolute top-1/3 -right-32 w-[420px] h-[420px] rounded-full bg-amber-500/10 blur-[120px]"></div>
-        <div class="absolute bottom-0 left-1/4 w-[360px] h-[360px] rounded-full bg-red-600/5 blur-[110px]"></div>
-    </div>
 
     <div class="relative max-w-[1320px] mx-auto py-5 px-3 md:px-4">
 
