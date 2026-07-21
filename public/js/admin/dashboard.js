@@ -69,7 +69,7 @@
                     <div class="w-9 h-9 rounded-full bg-gray-500/25 border border-gray-500 flex items-center justify-center text-cyan-400 font-bold text-sm flex-shrink-0">
                         ${a.user_inicial}
                     </div>
-                    <span class="text-white font-bold">${a.user_name}</span>
+                    <span class="text-black dark:text-white font-bold">${a.user_name}</span>
                 </div>
             </td>
             <td class="py-3">${a.fecha}</td>

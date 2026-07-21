@@ -23,7 +23,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Checador') }}</title>
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js',])
     <style>[x-cloak] { display: none !important; }</style>
 
 </head>
@@ -165,7 +165,7 @@ window.cerrarToast = function(elemento) {
     .dark .aurora-cyan { background: radial-gradient(ellipse at center, #22d3ee 0%, transparent 70%); }
     .dark .aurora-green { background: radial-gradient(ellipse at center, #34d399 0%, transparent 70%); }
     .theme-toggle { -webkit-appearance: none; appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; }
-    .theme-toggle__track { position: relative; display: flex; align-items: center; width: 68px; height: 34px; border-radius: 999px; padding: 3px; background: rgba(234, 228, 216, 0.9); border: 1px solid rgba(0, 0, 0, 0.06); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06); backdrop-filter: blur(10px); transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; }
+    .theme-toggle__track { position: relative; display: flex; justify-content: space-between; width: 68px; height: 34px; border-radius: 999px; padding: 3px; background: rgba(234, 228, 216, 0.9); border: 1px solid rgba(0, 0, 0, 0.06); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06); backdrop-filter: blur(10px); transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; }
     .theme-toggle--dark .theme-toggle__track { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(59, 130, 246, 0.08); }
     .theme-toggle__thumb { position: absolute; top: 3px; left: 3px; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(145deg, #ffffff, #f0ece0); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); transform: translateX(0); transition: transform 0.4s cubic-bezier(0.68, -0.4, 0.32, 1.4), background 0.4s ease; }
     .theme-toggle--dark .theme-toggle__thumb { transform: translateX(34px); background: linear-gradient(145deg, #3b4256, #1e2536); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 12px rgba(59, 130, 246, 0.35); }
